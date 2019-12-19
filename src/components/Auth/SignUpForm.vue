@@ -18,7 +18,6 @@
                     v-validate="'required'"
                     v-model="name"
                   />
-                  <span v-show="errors.has('name')" class="is-danger">{{ errors.first('name') }}</span>
                   
                   <v-text-field
                     label="Username"
