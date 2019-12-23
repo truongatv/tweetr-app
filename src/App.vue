@@ -18,7 +18,7 @@
 
       <v-spacer></v-spacer>
 
-      <AuthButton />
+      <Header />
     </v-app-bar>
 
     <v-content>
@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import AuthButton from '@/components/AuthButton'
+import Header from '@/components/Header'
 export default {
   name: 'App',
 
   components: {
-    AuthButton
+    Header
   },
 
   data: () => ({

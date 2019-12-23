@@ -1,20 +1,20 @@
 <template>
   <div>
-    <router-link to="/login" tag="v-btn">
-      <v-btn v-if="!loginStatus" text>
+    <!-- <router-link to="/login" tag="v-btn"> -->
+      <v-btn v-if="!loginStatus" text to="/login">
         <span class="mr-2">Login</span>
       </v-btn>
-    </router-link>
+    <!-- </router-link> -->
     <v-btn v-if="loginStatus" @click="logout" text>
       <span class="mr-2">Logout</span>
       <v-icon>mdi-logout</v-icon>
     </v-btn>
-    <router-link to="/signup" tag="v-btn">
-      <v-btn v-if="!loginStatus" text>
+    <!-- <router-link to="/signup" tag="v-btn"> -->
+      <v-btn v-if="!loginStatus" text to="/signup">
         <span class="mr-2">Signup</span>
         <v-icon>mdi-account</v-icon>
       </v-btn>
-    </router-link>
+    <!-- </router-link> -->
   </div>
 </template>
 

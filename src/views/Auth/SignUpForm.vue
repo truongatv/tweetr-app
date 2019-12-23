@@ -120,7 +120,7 @@ export default {
           localStorage.setItem("tweetr-token", response.data.data.token);
 
           // redirect to user home
-          this.$router.push("/");
+          this.$router.push({ path: '/' });
         })
         .catch(error => {
           // display error notification

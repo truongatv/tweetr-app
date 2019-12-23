@@ -5,10 +5,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    current_component: 'Test'
   },
-  mutations: {
+  getters: {
+    currentComponent: state => {
+      return state.current_component
+    }
   },
   actions: {
+  },
+  mutations: {
+    setCurrentComponent (state, current_component) {
+      Vue.set(state, 'current_component', current_component)
+    }
   },
   modules: {
   }
