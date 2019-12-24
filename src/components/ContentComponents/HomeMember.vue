@@ -1,23 +1,28 @@
 <template>
-  <v-card class="mx-auto">
-    <v-list>
-      <template v-for="(item, index) in items">
-        <v-subheader v-if="item.header" :key="item.header" v-text="item.header"></v-subheader>
+  <div>
+    <v-card class="mx-auto">
+      <v-list>
+        <template v-for="(item, index) in items">
+          <v-subheader v-if="item.header" :key="item.header" v-text="item.header"></v-subheader>
 
-        <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+          <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
 
-        <v-list-item v-else :key="item.title" @click="">
-          <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
-          </v-list-item-avatar>
-
-          <v-list-item-content>
-            <v-list-item-title v-html="item.title"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-list>
-  </v-card>
+          <v-list-item v-else :key="item.title" @click>
+            <v-list-item-avatar>
+              <v-img :src="item.avatar"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="item.title"></v-list-item-title>
+            </v-list-item-content>
+            <v-btn text icon color="red">
+              <v-icon>mdi-account-remove</v-icon>
+            </v-btn>
+          </v-list-item>
+        </template>
+      </v-list>
+    </v-card>
+    <v-btn class="mt-3" elevation="3" block color="primary">Edit Member</v-btn>
+  </div>
 </template>
 
 
