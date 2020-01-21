@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" height="350px" elevation="5">
+  <v-card class="mx-auto" elevation="5">
     <v-list-item two-line>
       <v-list-item-avatar>
         <img src="https://randomuser.me/api/portraits/women/81.jpg" />
@@ -7,7 +7,7 @@
       <v-list-item-content>
         <v-list-item-title>Jane Smith</v-list-item-title>
       </v-list-item-content>
-      <v-btn icon color="gray" >
+      <v-btn icon color="gray">
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
     </v-list-item>

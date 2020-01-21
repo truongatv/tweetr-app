@@ -1,8 +1,8 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+  <v-data-table :headers="headers" :items="desserts" sort-by="date" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>My CRUD</v-toolbar-title>
+        <v-toolbar-title>Tổng tiền: </v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
@@ -18,16 +18,16 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                    <v-text-field v-model="editedItem.name" label="Tên sản phẩm"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                    <v-text-field v-model="editedItem.date" label="Ngày tháng"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.payer" label="Gía tiền"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.price" label="price (g)"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
@@ -61,32 +61,29 @@ export default {
     dialog: false,
     headers: [
       {
-        text: "Dessert (100g serving)",
+        text: "Tên sản phẩm",
         align: "left",
         sortable: false,
         value: "name"
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
+      { text: "Ngày tháng", value: "date" },
+      { text: "Người thanh toán", value: "payer" },
+      { text: "Gía tiền", value: "price" },
       { text: "Actions", value: "action", sortable: false }
     ],
     desserts: [],
     editedIndex: -1,
     editedItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      date: 0,
+      payer: 0,
+      price: 0
     },
     defaultItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      date: 0,
+      payer: 0,
+      price: 0
     }
   }),
   computed: {
@@ -107,73 +104,63 @@ export default {
       this.desserts = [
         {
           name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0
+          date: 159,
+          payer: 6.0,
+          price: 24,
         },
         {
           name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3
+          date: 237,
+          payer: 9.0,
+          price: 37
         },
         {
           name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0
+          date: 262,
+          payer: 16.0,
+          price: 23
         },
         {
           name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3
+          date: 305,
+          payer: 3.7,
+          price: 67
         },
         {
           name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9
+          date: 356,
+          payer: 16.0,
+          price: 49
         },
         {
           name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0
+          date: 375,
+          payer: 0.0,
+          price: 94
         },
         {
           name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0
+          date: 392,
+          payer: 0.2,
+          price: 98
         },
         {
           name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5
+          date: 408,
+          payer: 3.2,
+          price: 87
         },
         {
           name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9
+          date: 452,
+          payer: 25.0,
+          price: 51
         },
         {
           name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7
+          date: 518,
+          payer: 26.0,
+          price: 65
         }
       ];
     },

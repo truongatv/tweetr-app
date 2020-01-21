@@ -1,11 +1,14 @@
-export const item = {
-    home_member_component: 'HomeMember',
-    personal_fee_component: 'PersonalFee',
-    profile: 'Profile'
+export const component = {
+    home_member: 'HomeMember',
+    personal_fee: 'PersonalFee',
+    profile: 'Profile',
+    home_fee: 'HomeFee'
 };
 
 export const menu = [
-    { text: "Profile", icon: "mdi-account", component_name: "Profile" },
-    { text: "Home member", icon: "mdi-clock", component_name: "HomeMember" },
-    { text: "Personal Fee", icon: "mdi-account", component_name: "PersonalFee" }
+    { text: "Thông tin cá nhân", icon: "mdi-account", component_name: "Profile" },
+    { text: "Thành viên", icon: "mdi-clock", component_name: "HomeMember" },
+    { text: "Phí cá nhân", icon: "mdi-account", component_name: "PersonalFee" },
+    { text: "Phí gia đình", icon: "mdi-home", component_name: "HomeFee" }
+    
 ];
