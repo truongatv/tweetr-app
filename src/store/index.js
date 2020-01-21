@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    current_component: 'Test'
+    current_component: 'HomeMember'
   },
   getters: {
     currentComponent: state => {

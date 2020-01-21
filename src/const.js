@@ -12,3 +12,11 @@ export const menu = [
     { text: "Phí gia đình", icon: "mdi-home", component_name: "HomeFee" }
     
 ];
+
+export const label = {
+    name_product: 'Tên sản phẩm',
+    date: 'Ngày tháng',
+    price: 'Gía tiền',
+    payer: 'Người thanh toán',
+    edit: 'Sửa'
+}

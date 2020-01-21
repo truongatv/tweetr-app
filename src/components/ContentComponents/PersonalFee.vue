@@ -18,19 +18,16 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Tên sản phẩm"></v-text-field>
+                    <v-text-field v-model="editedItem.name" :label=label.name_product></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.date" label="Ngày tháng"></v-text-field>
+                    <v-text-field v-model="editedItem.date" :label=label.date></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.payer" label="Gía tiền"></v-text-field>
+                    <v-text-field v-model="editedItem.payer" :label=label.price></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.price" label="price (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.price" :label=label.payer></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -45,7 +42,7 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.action="{ item }">
+    <template v-slot:item.edit="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
       <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
@@ -56,20 +53,22 @@
 </template>
 
 <script>
+import { label } from "@/const"
 export default {
   data: () => ({
+    label: label,
     dialog: false,
     headers: [
       {
-        text: "Tên sản phẩm",
+        text: label.name_product,
         align: "left",
         sortable: false,
         value: "name"
       },
-      { text: "Ngày tháng", value: "date" },
-      { text: "Người thanh toán", value: "payer" },
-      { text: "Gía tiền", value: "price" },
-      { text: "Actions", value: "action", sortable: false }
+      { text: label.date, value: "date" },
+      { text: label.payer, value: "payer" },
+      { text: label.price, value: "price" },
+      { text: label.edit, value: "edit", sortable: false }
     ],
     desserts: [],
     editedIndex: -1,

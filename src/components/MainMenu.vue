@@ -34,12 +34,9 @@ import { menu } from "../const";
 export default {
   data: () => ({
     item: 1,
-    items: [],
+    items: menu,
     current_menu: ""
   }),
-  created() {
-    this.items = menu;
-  },
   methods: {
     changeMenu(component_name) {
       this.$store.commit("setCurrentComponent", component_name);
