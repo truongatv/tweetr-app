@@ -104,64 +104,64 @@ export default {
         {
           name: "Frozen Yogurt",
           date: 159,
-          payer: 6.0,
+          payer: 'Truong',
           price: 24,
         },
         {
           name: "Ice cream sandwich",
           date: 237,
-          payer: 9.0,
+          payer: 'Son',
           price: 37
         },
         {
           name: "Eclair",
           date: 262,
-          payer: 16.0,
+          payer: 'Truong',
           price: 23
         },
         {
           name: "Cupcake",
           date: 305,
-          payer: 3.7,
+          payer: 'Truong',
           price: 67
         },
         {
           name: "Gingerbread",
           date: 356,
-          payer: 16.0,
+          payer: 'Son',
           price: 49
         },
         {
           name: "Jelly bean",
           date: 375,
-          payer: 0.0,
+          payer: 'Truong',
           price: 94
         },
         {
           name: "Lollipop",
           date: 392,
-          payer: 0.2,
+          payer: 'Son',
           price: 98
         },
         {
           name: "Honeycomb",
           date: 408,
-          payer: 3.2,
+          payer: 'Son',
           price: 87
         },
         {
           name: "Donut",
           date: 452,
-          payer: 25.0,
+          payer: 'Truong',
           price: 51
         },
         {
           name: "KitKat",
           date: 518,
-          payer: 26.0,
+          payer: 'Son',
           price: 65
         }
-      ];
+      ]
     },
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);

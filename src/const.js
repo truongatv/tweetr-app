@@ -3,7 +3,7 @@ export const component = {
     personal_fee: 'PersonalFee',
     profile: 'Profile',
     home_fee: 'HomeFee'
-};
+}
 
 export const menu = [
     { text: "Thông tin cá nhân", icon: "mdi-account", component_name: "Profile" },
@@ -11,12 +11,27 @@ export const menu = [
     { text: "Phí cá nhân", icon: "mdi-account", component_name: "PersonalFee" },
     { text: "Phí gia đình", icon: "mdi-home", component_name: "HomeFee" }
     
-];
+]
 
 export const label = {
     name_product: 'Tên sản phẩm',
-    date: 'Ngày tháng',
+    date: 'Ngày thanh toán',
     price: 'Gía tiền',
     payer: 'Người thanh toán',
-    edit: 'Sửa'
+    edit: 'Sửa',
+    email: 'E-mail'
+}
+
+export const button = {
+    edit_member: 'Thay đổi thành viên',
+    done: 'Xong',
+    yes: 'Có',
+    no: 'Không',
+    add: 'Thêm',
+    cancel: 'Đóng',
+    save: 'Lưu thay đổi'
+}
+
+export const error = {
+    email: 'Nhập email'
 }

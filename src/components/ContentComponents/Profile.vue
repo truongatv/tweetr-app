@@ -5,9 +5,10 @@
         <v-card-text>
           <v-flex class="mb-4">
             <v-avatar size="96" class="mr-4">
-              <img src="https://randomuser.me/api/portraits/women/81.jpg" alt="Avatar" />
+              <img id="img" src="https://randomuser.me/api/portraits/women/81.jpg" alt="Avatar" />
             </v-avatar>
             <v-btn @click="openAvatarPicker">Change Avatar</v-btn>
+            <input type="file" id="file-upload" style="display:none" @change="onFileChange" />
           </v-flex>
           <v-text-field v-model="form.firstName" label="Full name"></v-text-field>
           <v-text-field v-model="form.homeName" label="Home Name"></v-text-field>
@@ -34,17 +35,36 @@ export default {
         lastName: "Doe",
         contactEmail: "john@doe.com",
         avatar: "MALE_CAUCASIAN_BLOND_BEARD",
-        homeName: 'truongatv'
+        homeName: "truongatv"
       },
       showAvatarPicker: false
     };
   },
   methods: {
     openAvatarPicker() {
-      this.showAvatarPicker = true;
+      document.getElementById("file-upload").click();
     },
-    selectAvatar(avatar) {
-      this.form.avatar = avatar;
+    onFileChange(e) {
+      var self = this;
+      var files = e.target.files || e.dataTransfer.files
+      if (files.length > 0) {
+        var reader = new FileReader()
+        reader.onload = function (e) {
+          document.getElementById("img").setAttribute('src', e.target.result);
+        }
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    },
+    uploadFile() {
+      var self = this;
+      axios
+        .post("URL", self.formData)
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };

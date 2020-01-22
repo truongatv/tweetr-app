@@ -7,7 +7,7 @@
       <v-list-item-content>
         <v-list-item-title>Jane Smith</v-list-item-title>
       </v-list-item-content>
-      <v-btn icon color="gray">
+      <v-btn icon color="gray" @click="editProfile()">
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
     </v-list-item>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { menu } from "../const";
+import { menu } from "../const"
 export default {
   data: () => ({
     item: 1,
@@ -39,7 +39,10 @@ export default {
   }),
   methods: {
     changeMenu(component_name) {
-      this.$store.commit("setCurrentComponent", component_name);
+      this.$store.commit("setCurrentComponent", component_name)
+    },
+    editProfile() {
+      this.$store.commit("setCurrentComponent", 'Profile')
     }
   }
 };

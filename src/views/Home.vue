@@ -5,7 +5,7 @@
         <MainMenu />
       </v-col>
       <v-col cols="8">
-        <v-card class="pa-2" outlined tile><Content /></v-card>
+        <Content />
       </v-col>
     </v-row>
   </v-container>
