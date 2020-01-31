@@ -1,10 +1,29 @@
 <template>
   <div>
-    <v-card class="mx-auto">
+    <!-- home detail -->
+    <v-card>
+      <v-subheader>Thông tin nhà ở</v-subheader>
+      <v-card-text>
+        <v-text-field label="Tên nhà"></v-text-field>
+        <v-text-field label="Địa chỉ"></v-text-field>
+        <v-text-field label="Người quản lý" disabled></v-text-field>
+      </v-card-text>
+      <!-- <v-alert v-if="response.status" class="ml-2 mr-2" :type=response.status border="left" outlined dense text>
+        {{response.message}}
+      </v-alert> -->
+      <v-card-actions>
+        <v-btn color="primary" @click.native="">
+          <v-icon left dark>mdi-check</v-icon>Save Changes
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    
+    <!-- member detail -->
+    <v-card class="mx-auto mt-2">
       <v-list>
-        <template v-for="(item, index) in items">
-          <div class="d-flex pr-5" v-if="item.header" :key="item.header">
-            <v-subheader v-text="item.header"></v-subheader>
+         <v-subheader>Thành viên</v-subheader>
+        <template v-for="(item, index) in home_infos">
+          <!-- <div class="d-flex pr-5" v-if="item.header" :key="item.header">
             <v-btn
               v-if="flag.flag_edit_member"
               color="blue"
@@ -15,14 +34,14 @@
               <v-icon>mdi-account-plus</v-icon>
             </v-btn>
           </div>
-          <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+          <v-divider :key="index"></v-divider> -->
 
-          <v-list-item v-else :key="item.title">
+          <v-list-item :key="item.user_id">
             <v-list-item-avatar>
-              <v-img :src="item.avatar"></v-img>
+              <v-img src="@/static/avatar/default_avatar.png"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-html="item.title"></v-list-item-title>
+              <v-list-item-title v-html="item.username"></v-list-item-title>
             </v-list-item-content>
             <v-btn text icon color="red" v-if="flag.flag_edit_member" @click="showDialog(index)">
               <v-icon>mdi-account-remove</v-icon>
@@ -81,7 +100,7 @@ import { button, error, label } from "@/const"
 export default {
   data: () => ({
     items: [
-      { header: "Member" },
+      { header: "Thành viên" },
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         title: "Brunch this weekend?",
@@ -92,8 +111,6 @@ export default {
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-        subtitle:
-          "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
       },
       { divider: true, inset: true },
       {
@@ -117,6 +134,7 @@ export default {
           "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
       }
     ],
+    home_infos: {},
     button_label: button,
     error: error,
     flag: {
@@ -152,6 +170,19 @@ export default {
       this.items.splice(this.flag.removeIndex, 1);
       this.flag.dialog = false;
     }
-  }
+  },
+  created() {
+    //get home info
+    const token = localStorage.getItem("tweetr-token")
+    axios
+      .get('/home/home_info', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+      })
+      .then(response => {
+        this.home_infos = response.data.data
+      })
+  },
 };
 </script>

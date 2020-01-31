@@ -62,7 +62,7 @@ export default {
         var reader = new FileReader();
         reader.onload = function(e) {
           document.getElementById("img").setAttribute("src", e.target.result);
-        };
+        }
         reader.readAsDataURL(e.target.files[0]);
       }
     },
