@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isHomeInfoLoaded">
     <!-- home detail -->
     <v-card>
       <v-subheader>Thông tin nhà ở</v-subheader>
@@ -33,7 +33,7 @@
                 <v-icon>mdi-account-plus</v-icon>
               </v-btn>
         </div>
-        <template v-for="(item, index) in home_infos">
+        <template v-for="item in home_infos">
           <v-list-item :key="item.user_id">
             <v-list-item-avatar>
               <v-img src="@/static/avatar/default_avatar.png"></v-img>
@@ -41,7 +41,7 @@
             <v-list-item-content>
               <v-list-item-title v-html="item.username"></v-list-item-title>
             </v-list-item-content>
-            <v-btn text icon color="red" v-if="flag.flag_edit_member" @click="showDialog(index)">
+            <v-btn text icon color="red" v-if="flag.flag_edit_member" @click="showDialog(item)">
               <v-icon>mdi-account-remove</v-icon>
             </v-btn>
           </v-list-item>
@@ -53,8 +53,8 @@
           <v-card-title class="headline">Bạn có muốn xóa ?</v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" text @click="flag.dialog = false">{{button_label.no}}</v-btn>
-            <v-btn color="green darken-1" text @click="removeMember()">{{button_label.yes}}</v-btn>
+            <v-btn color="red darken-1" text @click="removeMember(0)">{{button_label.no}}</v-btn>
+            <v-btn color="green darken-1" text @click="removeMember(1)">{{button_label.yes}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -148,6 +148,24 @@ export default {
       v => /.+@.+\..+/.test(v) || error.email
     ]
   }),
+  created() {
+    //get home info
+    const token = localStorage.getItem("tweetr-token")
+    axios
+      .get('/home/home_info', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+      })
+      .then(response => {
+        this.home_infos = response.data.data
+      })
+  },
+  computed: {
+    isHomeInfoLoaded () {
+      return Object.keys(this.home_infos).length > 0
+    }
+  },
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
@@ -160,28 +178,27 @@ export default {
     editMemberDone() {
       this.flag.flag_edit_member = false;
     },
-    showDialog(index) {
-      this.flag.removeIndex = index;
+    showDialog(item) {
+      this.flag.removeMember = item;
       this.flag.dialog = true;
     },
-    removeMember() {
-      this.items.splice(this.flag.removeIndex, 1);
+    removeMember(removeFlag) {
+      if(removeFlag == 1) {
+        axios
+          .put('/home/remove_member', {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+          })
+          .then(response => {
+            if(response) {
+              this.home_infos.splice(this.flag.removeMember, 1);
+            }
+          })
+      }
       this.flag.dialog = false;
+
     }
-  },
-  created() {
-    //get home info
-    const token = localStorage.getItem("tweetr-token")
-    axios
-      .get('/home/home_info', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-      })
-      .then(response => {
-        this.home_infos = response.data.data
-        console.log(this.home_infos[0].home_name)
-      })
   },
 };
 </script>
