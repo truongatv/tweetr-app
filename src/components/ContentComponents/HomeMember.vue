@@ -4,9 +4,9 @@
     <v-card>
       <v-subheader>Thông tin nhà ở</v-subheader>
       <v-card-text>
-        <v-text-field label="Tên nhà"></v-text-field>
-        <v-text-field label="Địa chỉ"></v-text-field>
-        <v-text-field label="Người quản lý" disabled></v-text-field>
+        <v-text-field label="Tên nhà" v-model="home_infos[0].home_name"></v-text-field>
+        <v-text-field label="Địa chỉ" v-model="home_infos[0].address"></v-text-field>
+        <v-text-field label="Người quản lý" v-model="home_infos[0].admin_id" disabled></v-text-field>
       </v-card-text>
       <!-- <v-alert v-if="response.status" class="ml-2 mr-2" :type=response.status border="left" outlined dense text>
         {{response.message}}
@@ -21,21 +21,19 @@
     <!-- member detail -->
     <v-card class="mx-auto mt-2">
       <v-list>
-         <v-subheader>Thành viên</v-subheader>
+        <div class="d-flex pr-5">
+            <v-subheader>Thành viên</v-subheader>
+              <v-btn
+                v-if="flag.flag_edit_member"
+                color="blue"
+                icon
+                class="ml-auto"
+                @click="flag.dialog_add_member = true"
+              >
+                <v-icon>mdi-account-plus</v-icon>
+              </v-btn>
+        </div>
         <template v-for="(item, index) in home_infos">
-          <!-- <div class="d-flex pr-5" v-if="item.header" :key="item.header">
-            <v-btn
-              v-if="flag.flag_edit_member"
-              color="blue"
-              icon
-              class="ml-auto"
-              @click="flag.dialog_add_member = true"
-            >
-              <v-icon>mdi-account-plus</v-icon>
-            </v-btn>
-          </div>
-          <v-divider :key="index"></v-divider> -->
-
           <v-list-item :key="item.user_id">
             <v-list-item-avatar>
               <v-img src="@/static/avatar/default_avatar.png"></v-img>
@@ -182,6 +180,7 @@ export default {
       })
       .then(response => {
         this.home_infos = response.data.data
+        console.log(this.home_infos[0].home_name)
       })
   },
 };
