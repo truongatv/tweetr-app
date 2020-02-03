@@ -20,7 +20,7 @@
     
     <!-- member detail -->
     <v-card class="mx-auto mt-2">
-      <v-list>
+      <v-list two-line>
         <div class="d-flex pr-5">
             <v-subheader>Thành viên</v-subheader>
               <v-btn
@@ -40,8 +40,9 @@
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="item.username"></v-list-item-title>
+              <v-list-item-subtitle v-if="item.user_id == item.admin_id">Quản lý</v-list-item-subtitle>
             </v-list-item-content>
-            <v-btn text icon color="red" v-if="flag.flag_edit_member" @click="showDialog(item)">
+            <v-btn text icon color="red" v-if="item.user_id !== item.admin_id && flag.flag_edit_member" @click="showDialog(item)">
               <v-icon>mdi-account-remove</v-icon>
             </v-btn>
           </v-list-item>
@@ -50,7 +51,7 @@
       <!-- dialog remove member -->
       <v-dialog v-model="flag.dialog" persistent max-width="290">
         <v-card>
-          <v-card-title class="headline">Bạn có muốn xóa ?</v-card-title>
+          <v-card-title class="headline">Bạn có muốn xóa " {{removeMemberDetail.full_name}} " ? </v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="red darken-1" text @click="removeMember(0)">{{button_label.no}}</v-btn>
@@ -67,8 +68,8 @@
           </v-form>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" text @click="flag.dialog_add_member = false">{{button_label.cancel}}</v-btn>
-            <v-btn color="blue darken-1" text @click="flag.dialog_add_member = false">{{button_label.add}}</v-btn>
+            <v-btn color="red darken-1" text @click="addMember(false)">{{button_label.cancel}}</v-btn>
+            <v-btn color="blue darken-1" text @click="addMember(true)">{{button_label.add}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -133,6 +134,8 @@ export default {
       }
     ],
     home_infos: {},
+    removeMemberDetail: {},
+    email: "",
     button_label: button,
     error: error,
     flag: {
@@ -142,7 +145,6 @@ export default {
       dialog_add_member: false
     },
     valid: true,
-    email: '',
     emailRules: [
       v => !!v || "E-mail is required",
       v => /.+@.+\..+/.test(v) || error.email
@@ -179,25 +181,66 @@ export default {
       this.flag.flag_edit_member = false;
     },
     showDialog(item) {
-      this.flag.removeMember = item;
+      this.removeMemberDetail = item;
       this.flag.dialog = true;
     },
+    //remove member from home
     removeMember(removeFlag) {
       if(removeFlag == 1) {
-        axios
-          .put('/home/remove_member', {
+        const token = localStorage.getItem("tweetr-token")
+        axios.put('/home/remove_member', 
+          {
+            remove_user_id: this.removeMemberDetail.user_id
+          },
+          {
               headers: {
                 Authorization: `Bearer ${token}`
               }
-          })
-          .then(response => {
-            if(response) {
-              this.home_infos.splice(this.flag.removeMember, 1);
-            }
-          })
+          }
+        )
+        .then(response => {
+          if(response.status == 200) {
+            this.home_infos.splice(this.home_infos.indexOf(this.removeMemberDetail), 1)
+          }
+        })
       }
       this.flag.dialog = false;
 
+    },
+    //add member to home
+    addMember(flag) {
+      if(this.email != "" && flag) {
+        const token = localStorage.getItem("tweetr-token")
+        axios.post('/home/add_member',
+          {
+            email: this.email
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(response => {
+          const addMemberData = {
+            address: this.home_infos.address,
+            admin_id: this.home_infos.admin_id,
+            full_name: response.data.data.name,
+            home_name: this.home_infos.home_name,
+            user_email: response.data.data.email,
+            user_id: response.data.data.id,
+            username: response.data.data.username
+          }
+          this.home_infos.push(addMemberData)
+          this.flag.dialog_add_member = false
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+      } else {
+        this.flag.dialog_add_member = false
+      }
+      this.email = ""
     }
   },
 };
