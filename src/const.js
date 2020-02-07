@@ -14,12 +14,18 @@ export const menu = [
 ]
 
 export const label = {
+    fullName: 'Họ tên',
+    username: 'Nick name',
     name_product: 'Tên sản phẩm',
     date: 'Ngày thanh toán',
     price: 'Gía tiền',
     payer: 'Người thanh toán',
     edit: 'Sửa',
-    email: 'E-mail'
+    email: 'E-mail',
+    addNew: 'Thêm mới',
+    password: 'Mật khẩu',
+    detail: 'Mô tả',
+    addNewMember: 'Thêm thành viên'
 }
 
 export const button = {
@@ -29,9 +35,18 @@ export const button = {
     no: 'Không',
     add: 'Thêm',
     cancel: 'Đóng',
-    save: 'Lưu thay đổi'
+    save_edit: 'Lưu thay đổi',
+    save: 'Lưu'
 }
 
-export const error = {
-    email: 'Nhập email'
+export const messages = {
+    error: {
+        email: 'Nhập email',
+        notExistUser: 'Người dùng không tồn tại',
+        userIsReadyInOtherHome: 'Người dùng đã ở một nhà nào đó!',
+        required: 'Bạn cần nhập thông tin'
+    },
+    success: {
+        addDone: 'Thêm thành công'
+    }
 }

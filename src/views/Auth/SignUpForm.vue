@@ -1,81 +1,103 @@
 <template>
   <v-app id="inspire">
     <v-content>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
-            <v-card class="elevation-12">
-              <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Sign up</v-toolbar-title>
-              </v-toolbar>
-              <v-card-text>
-                <v-form @submit.prevent="signup()" id="signup">
-                  <v-text-field
-                    label="Full name"
-                    name="Full name"
-                    prepend-inner-icon="mdi-account-card-details"
-                    type="text"
-                    v-validate="'required'"
-                    v-model="name"
-                  />
-                  
-                  <v-text-field
-                    label="Username"
-                    name="Username"
-                    prepend-inner-icon="mdi-account"
-                    type="text"
-                    v-model="username"
-                    v-validate="'required'"
-                  />
-                  <span
-                    v-show="errors.has('username')"
-                    class="is-danger"
-                  >{{ errors.first('username') }}</span>
+      <ValidationObserver ref="obs">
+        <v-container class="fill-height" fluid slot-scope="{ invalid, validated }">
+          <v-row align="center" justify="center">
+            <v-col cols="12" sm="8" md="4">
+              <v-card class="elevation-12">
+                <v-toolbar color="primary" dark flat>
+                  <v-toolbar-title>Sign up</v-toolbar-title>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form @submit.prevent="signup()" id="signup">
+                    <ValidationProvider :name="labels.fullName" rules="required">
+                      <v-text-field
+                        slot-scope="{
+                          errors,
+                          valid
+                        }"
+                        :label="labels.fullName"
+                        :name="labels.fullName"
+                        prepend-inner-icon="mdi-account-card-details"
+                        type="text"
+                        :success="valid"
+                        :error-messages="errors"
+                        v-model="name"
+                      />
+                    </ValidationProvider>
+                    <ValidationProvider :name="labels.username" rules="required">
+                      <v-text-field
+                        slot-scope="{
+                          errors,
+                          valid
+                        }"
+                        :label="labels.username"
+                        :name="labels.username"
+                        prepend-inner-icon="mdi-account"
+                        type="text"
+                        v-model="username"
+                        :success="valid"
+                        :error-messages="errors"
+                      />
+                    </ValidationProvider>
+                    <span
+                      v-show="errors.has('username')"
+                      class="is-danger"
+                    >{{ errors.first('username') }}</span>
 
-                  <v-text-field
-                    label="Email"
-                    name="Email"
-                    prepend-inner-icon="mdi-email"
-                    type="text"
-                    v-model="email"
-                    v-validate="'required|email'"
+                    <v-text-field
+                      label="Email"
+                      name="Email"
+                      prepend-inner-icon="mdi-email"
+                      type="text"
+                      v-model="email"
+                      v-validate="'required|email'"
+                    />
+                    
+                    <v-text-field
+                      id="password"
+                      label="Password"
+                      name="password"
+                      prepend-inner-icon="mdi-lock"
+                      type="password"
+                      v-model="password"
+                      v-validate="'required'"
+                    />
+                  </v-form>
+                </v-card-text>
+                <Notification
+                      :message="notification.message"
+                      :type="notification.type"
+                      v-if="notification.message"
                   />
-                  
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-inner-icon="mdi-lock"
-                    type="password"
-                    v-model="password"
-                    v-validate="'required'"
-                  />
-                </v-form>
-              </v-card-text>
-              <Notification
-                    :message="notification.message"
-                    :type="notification.type"
-                    v-if="notification.message"
-                />
-              <v-card-actions>
-                <v-spacer />
-                <v-btn type="submit" form="signup"  color="primary" :disabled="!isFormValid">SIGN UP</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn type="submit" form="signup"  color="primary" :disabled="invalid || !validated">SIGN UP</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </ValidationObserver>
     </v-content>
   </v-app>
 </template>
 
 <script>
 import Notification from "@/components/Notification";
+import {
+  ValidationProvider,
+  ValidationObserver
+} from 'vee-validate'
+import { label } from '@/const'
 
 export default {
   name: "SignUpForm",
   components: {
-    Notification
+    Notification,
+    ValidationObserver,
+    ValidationProvider
   },
   props: {
     source: String
@@ -90,7 +112,8 @@ export default {
         message: "",
         type: ""
       },
-      color: 'red'
+      color: 'red',
+      labels: label
     };
   },
   computed: {

@@ -1,60 +1,83 @@
 <template>
   <v-app id="inspire">
     <v-content>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
-            <v-card class="elevation-12">
-              <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Login form</v-toolbar-title>
+      <ValidationObserver ref="obs">
+        <v-container class="fill-height" fluid slot-scope="{ invalid, validated }">
+          <v-row align="center" justify="center">
+            <v-col cols="12" sm="8" md="4">
+              <v-card class="elevation-12">
+                <v-toolbar color="primary" dark flat>
+                  <v-toolbar-title>Login form</v-toolbar-title>
+                  <v-spacer />
+                </v-toolbar>
+                <v-card-text>
+                  <v-form @submit.prevent="login" id="login">
+                    <ValidationProvider name="email" rules="required|email">
+                      <v-text-field
+                        slot-scope="{
+                          errors,
+                          valid
+                        }"
+                        label="email"
+                        name="Email"
+                        prepend-inner-icon="mdi-account"
+                        :error-messages="errors"
+                        type="text"
+                        :success="valid"
+                        required
+                        v-model="email"
+                      />
+                    </ValidationProvider>
+                    <ValidationProvider name="password" rules="required|min:6">
+                      <v-text-field
+                        slot-scope="{
+                          errors,
+                          valid
+                        }"
+                        id="password"
+                        label="Password"
+                        name="Password"
+                        :error-messages="errors"
+                        prepend-inner-icon="mdi-lock"
+                        type="password"
+                        :success="valid"
+                        v-model="password"
+                      />
+                    </ValidationProvider>
+                  </v-form>
+                </v-card-text>
+                <Notification
+                  :message="notification.message"
+                  :type="notification.type"
+                  v-if="notification.message"
+                />
                 <v-spacer />
-              </v-toolbar>
-              <v-card-text>
-                <v-form @submit.prevent="login" id="login">
-                  <v-text-field
-                    label="email"
-                    name="Email"
-                    prepend-inner-icon="mdi-account"
-                    type="text"
-                    required
-                    v-model="email"
-                  />
-
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="Password"
-                    prepend-inner-icon="mdi-lock"
-                    type="password"
-                    v-model="password"
-                  />
-                </v-form>
-              </v-card-text>
-              <Notification
-                :message="notification.message"
-                :type="notification.type"
-                v-if="notification.message"
-              />
-              <v-spacer />
-              <v-card-actions>
-                <v-spacer />
-                <v-btn type="submit" form="login" color="primary">Login</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn type="submit" form="login" color="primary" :disabled="invalid || !validated">Login</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </ValidationObserver>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Notification from "@/components/Notification";
-
+import Notification from "@/components/Notification"
+import {
+  ValidationProvider,
+  ValidationObserver
+} from 'vee-validate'
+import {messages} from '@/const'
 export default {
   name: "LogInForm",
   components: {
-    Notification
+    Notification,
+    ValidationProvider,
+    ValidationObserver
   },
   data() {
     return {
@@ -70,6 +93,11 @@ export default {
     const token = localStorage.getItem("tweetr-token");
 
     return token ? next("/") : next();
+  },
+  computed: {
+    isFormValid() {
+      return Object.keys(this.fields).every(key => this.fields[key].valid);
+    }
   },
   methods: {
     login() {

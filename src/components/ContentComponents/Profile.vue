@@ -19,7 +19,7 @@
         </v-alert>
         <v-card-actions>
           <v-btn color="primary" :loading="loading" @click.native="updateProfile">
-            <v-icon left dark>mdi-check</v-icon>Save Changes
+            <v-icon left dark>mdi-check</v-icon>{{button_label.save}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { button, error, label } from "@/const"
 export default {
   pageTitle: "My Profile",
   data() {
@@ -35,7 +36,8 @@ export default {
       loading: false,
       form: {},
       showAvatarPicker: false,
-      response: {}
+      response: {},
+      button_label: button,
     };
   },
   created() {
