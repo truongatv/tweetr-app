@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" sort-by="date" class="elevation-1">
+  <v-data-table :headers="headers" :items="living_cost_data" sort-by="date" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Tổng tiền:</v-toolbar-title>
@@ -13,7 +13,7 @@
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
-
+            <!-- start add new cost living or edit cost living -->
             <v-card-text>
               <v-container>
                 <v-form ref="form">
@@ -22,7 +22,7 @@
                     clearable
                     :label="label.name_product"
                     :rules="rules.nameProductRules"
-                    v-model="livingCost.name"
+                    v-model="living_cost.name"
                   ></v-text-field>
                   <v-menu
                     v-model="dateSelect"
@@ -34,7 +34,7 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="livingCost.datePay"
+                        v-model="living_cost.date_pay"
                         :label="label.date"
                         prepend-inner-icon="mdi-calendar"
                         persistent-hint
@@ -43,7 +43,7 @@
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="livingCost.datePay"
+                      v-model="living_cost.date_pay"
                       no-title
                       @input="dateSelect = false"
                     ></v-date-picker>
@@ -54,7 +54,7 @@
                     dense
                     clearable
                     :label="label.price"
-                    v-model="livingCost.price"
+                    v-model="living_cost.price"
                   ></v-text-field>
                   <!-- payer user -->
                   <v-menu offset-y>
@@ -65,7 +65,7 @@
                         auto-grow
                         :label="label.payer"
                         v-on="on"
-                        v-model="livingCost.payer"
+                        v-model="living_cost.payer_name"
                       ></v-text-field>
                     </template>
                     <v-list>
@@ -80,13 +80,13 @@
                   </v-menu>
                   <!-- receiver -->
                   <v-select
-                    v-model="livingCost.receiver"
+                    v-model="living_cost.receiver"
                     :items="listMemberUser"
                     :chips="true"
                     :multiple="true"
-                    label="label"
+                    :label="label.beneficiary"
                     item-text="name"
-                    item-value="id"
+                    return-object
                   >
                     <template v-slot:selection="{ item }">
                       <v-chip>
@@ -95,16 +95,16 @@
                     </template>
                   </v-select>
 
-                  <v-textarea clearable auto-grow :label="label.detail" v-model="livingCost.detail"></v-textarea>
+                  <v-textarea clearable auto-grow :label="label.detail" v-model="living_cost.detail"></v-textarea>
                 </v-form>
               </v-container>
             </v-card-text>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">{{button.cancel}}</v-btn>
               <v-btn color="blue darken-1" text @click="saveLivingCost()">{{button.save}}</v-btn>
             </v-card-actions>
+            <!-- end add new cost living or edit cost living -->
           </v-card>
         </v-dialog>
       </v-toolbar>
@@ -113,6 +113,9 @@
         {{flag.snackbar.message}}
         <v-btn color="white" text @click="snackbar.flag = false">{{button.cancel}}</v-btn>
       </v-snackbar>
+    </template>
+    <template v-slot:item.payer_name="{ item }">
+      <v-chip>{{ item.payer_name }}</v-chip>
     </template>
     <template v-slot:item.edit="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -129,11 +132,11 @@ import { label, button, messages } from "@/const";
 export default {
   data: () => ({
     homeMember: [],
-    livingCost: {
+    living_cost: {
       name: "",
-      payer: "",
+      payer_name: "",
       price: 0,
-      datePay: new Date().toISOString().substr(0, 10),
+      date_pay: new Date().toISOString().substr(0, 10),
       detail: "",
       receiver: []
     },
@@ -160,23 +163,23 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: label.date, value: "date" },
-      { text: label.payer, value: "payer" },
+      { text: label.date, value: "date_pay" },
+      { text: label.payer, value: "payer_name" },
       { text: label.price, value: "price" },
       { text: label.edit, value: "edit", sortable: false }
     ],
-    desserts: [],
+    living_cost_data: [],
     editedIndex: -1,
     editedItem: {
       name: "",
-      date: 0,
-      payer: 0,
+      date_pay: 0,
+      payer_name: 0,
       price: 0
     },
     defaultItem: {
       name: "",
-      date: 0,
-      payer: 0,
+      date_pay: 0,
+      payer_name: 0,
       price: 0
     }
   }),
@@ -185,18 +188,17 @@ export default {
       return this.editedIndex === -1 ? label.addNew : label.edit;
     },
     computedDateFormatted() {
-      this.livingCost.datePay = this.formatDate(this.dateSelect.date);
+      this.living_cost.date_pay = this.formatDate(this.dateSelect.date);
       return this.formatDate(this.dateSelect.date);
     },
     listMemberUser() {
       let listMember = new Array();
       this.homeMember.map((item) => {
-        listMember.push({
-          id: item.id,
-          name: item.name
-        })
+        listMember.push(item
+        )
       })
-      return listMember.filter(Boolean)
+      console.log(listMember)
+      return listMember
     }
   },
   mounted() {
@@ -221,73 +223,89 @@ export default {
   },
   methods: {
     initialize() {
-      this.desserts = [
-        {
-          name: "Frozen Yogurt",
-          date: 159,
-          payer: "Truong",
-          price: 24
-        },
-        {
-          name: "Ice cream sandwich",
-          date: 237,
-          payer: "Son",
-          price: 37
-        },
-        {
-          name: "Eclair",
-          date: 262,
-          payer: "Truong",
-          price: 23
-        },
-        {
-          name: "Cupcake",
-          date: 305,
-          payer: "Truong",
-          price: 67
-        },
-        {
-          name: "Gingerbread",
-          date: 356,
-          payer: "Son",
-          price: 49
-        },
-        {
-          name: "Jelly bean",
-          date: 375,
-          payer: "Truong",
-          price: 94
-        },
-        {
-          name: "Lollipop",
-          date: 392,
-          payer: "Son",
-          price: 98
-        },
-        {
-          name: "Honeycomb",
-          date: 408,
-          payer: "Son",
-          price: 87
-        },
-        {
-          name: "Donut",
-          date: 452,
-          payer: "Truong",
-          price: 51
-        },
-        {
-          name: "KitKat",
-          date: 518,
-          payer: "Son",
-          price: 65
-        }
-      ];
+      // this.living_costs = [
+      //   {
+      //     name: "Frozen Yogurt",
+      //     date: 159,
+      //     payer: 'Truong',
+      //     price: 24,
+      //   },
+      //   {
+      //     name: "Ice cream sandwich",
+      //     date: 237,
+      //     payer: 'Son',
+      //     price: 37
+      //   },
+      //   {
+      //     name: "Eclair",
+      //     date: 262,
+      //     payer: 'Truong',
+      //     price: 23
+      //   },
+      //   {
+      //     name: "Cupcake",
+      //     date: 305,
+      //     payer: 'Truong',
+      //     price: 67
+      //   },
+      //   {
+      //     name: "Gingerbread",
+      //     date: 356,
+      //     payer: 'Son',
+      //     price: 49
+      //   },
+      //   {
+      //     name: "Jelly bean",
+      //     date: 375,
+      //     payer: 'Truong',
+      //     price: 94
+      //   },
+      //   {
+      //     name: "Lollipop",
+      //     date: 392,
+      //     payer: 'Son',
+      //     price: 98
+      //   },
+      //   {
+      //     name: "Honeycomb",
+      //     date: 408,
+      //     payer: 'Son',
+      //     price: 87
+      //   },
+      //   {
+      //     name: "Donut",
+      //     date: 452,
+      //     payer: 'Truong',
+      //     price: 51
+      //   },
+      //   {
+      //     name: "KitKat",
+      //     date: 518,
+      //     payer: 'Son',
+      //     price: 65
+      //   }
+      // ];
+      // get living costs data
+      const token = localStorage.getItem('tweetr-token')
+      axios
+        .get('/cost/get_user_cost', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          this.living_cost_data = response.data.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     },
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.living_cost_data.indexOf(item);
+      this.living_cost = Object.assign({}, item);
+      // this.homeMember = this.living_cost.receiver
       this.flag.dialog = true;
+      this.$forceUpdate()
     },
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
@@ -318,14 +336,14 @@ export default {
     },
     // handle select payer
     selectPayer(item) {
-      this.livingCost.payer = item.name;
-      this.livingCost.payerId = item.id;
+      this.living_cost.payer_name = item.name;
+      this.living_cost.payer_id = item.id;
     },
     //save living cost
     saveLivingCost() {
       const token = localStorage.getItem("tweetr-token")
-      if(this.livingCost.name !== "" || this.livingCost.price > 0 || this.livingCost.payer != "") {
-        axios.post('cost/create_cost', this.livingCost, {
+      if(this.living_cost.name !== "" && this.living_cost.price > 0 && this.living_cost.payer_name != "") {
+        axios.post('cost/create_cost', this.living_cost, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -349,11 +367,11 @@ export default {
     },
     //set default value living cose
     setDefaultLivingCost() {
-      this.livingCost= {
+      this.living_cost= {
         name: "",
-        payer: "",
+        payer_name: "",
         price: 0,
-        datePay: new Date().toISOString().substr(0, 10),
+        date_pay: new Date().toISOString().substr(0, 10),
         detail: "",
         receiver: []
       }

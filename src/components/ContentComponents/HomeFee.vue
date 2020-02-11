@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" sort-by="date" class="elevation-1">
+  <v-data-table :headers="headers" :items="livingCosts" sort-by="date" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Tổng tiền: </v-toolbar-title>
@@ -70,7 +70,7 @@ export default {
       { text: label.price, value: "price" },
       { text: label.edit, value: "edit", sortable: false }
     ],
-    desserts: [],
+    livingCosts: [],
     editedIndex: -1,
     editedItem: {
       name: "Đồ ăn",
@@ -96,72 +96,88 @@ export default {
     }
   },
   created() {
-    this.initialize();
+    this.initialize()
   },
   methods: {
     initialize() {
-      this.desserts = [
-        {
-          name: "Frozen Yogurt",
-          date: 159,
-          payer: 'Truong',
-          price: 24,
-        },
-        {
-          name: "Ice cream sandwich",
-          date: 237,
-          payer: 'Son',
-          price: 37
-        },
-        {
-          name: "Eclair",
-          date: 262,
-          payer: 'Truong',
-          price: 23
-        },
-        {
-          name: "Cupcake",
-          date: 305,
-          payer: 'Truong',
-          price: 67
-        },
-        {
-          name: "Gingerbread",
-          date: 356,
-          payer: 'Son',
-          price: 49
-        },
-        {
-          name: "Jelly bean",
-          date: 375,
-          payer: 'Truong',
-          price: 94
-        },
-        {
-          name: "Lollipop",
-          date: 392,
-          payer: 'Son',
-          price: 98
-        },
-        {
-          name: "Honeycomb",
-          date: 408,
-          payer: 'Son',
-          price: 87
-        },
-        {
-          name: "Donut",
-          date: 452,
-          payer: 'Truong',
-          price: 51
-        },
-        {
-          name: "KitKat",
-          date: 518,
-          payer: 'Son',
-          price: 65
-        }
-      ];
+      console.log("tests")
+      // this.livingCosts = [
+      //   {
+      //     name: "Frozen Yogurt",
+      //     date: 159,
+      //     payer: 'Truong',
+      //     price: 24,
+      //   },
+      //   {
+      //     name: "Ice cream sandwich",
+      //     date: 237,
+      //     payer: 'Son',
+      //     price: 37
+      //   },
+      //   {
+      //     name: "Eclair",
+      //     date: 262,
+      //     payer: 'Truong',
+      //     price: 23
+      //   },
+      //   {
+      //     name: "Cupcake",
+      //     date: 305,
+      //     payer: 'Truong',
+      //     price: 67
+      //   },
+      //   {
+      //     name: "Gingerbread",
+      //     date: 356,
+      //     payer: 'Son',
+      //     price: 49
+      //   },
+      //   {
+      //     name: "Jelly bean",
+      //     date: 375,
+      //     payer: 'Truong',
+      //     price: 94
+      //   },
+      //   {
+      //     name: "Lollipop",
+      //     date: 392,
+      //     payer: 'Son',
+      //     price: 98
+      //   },
+      //   {
+      //     name: "Honeycomb",
+      //     date: 408,
+      //     payer: 'Son',
+      //     price: 87
+      //   },
+      //   {
+      //     name: "Donut",
+      //     date: 452,
+      //     payer: 'Truong',
+      //     price: 51
+      //   },
+      //   {
+      //     name: "KitKat",
+      //     date: 518,
+      //     payer: 'Son',
+      //     price: 65
+      //   }
+      // ];
+      // get living costs data
+      // const token = localStorage.getItem('tweetr-token')
+      // axios
+      //   .get('/cost/get_user_cost', {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`
+      //     }
+      //   })
+      //   .then(response => {
+      //     console.log(response.data)
+      //     this.livingCosts = response.data.data
+      //   })
+      //   .catch(error => {
+      //     console.log(error.response)
+      //   })
     },
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);

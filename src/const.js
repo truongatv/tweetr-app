@@ -27,7 +27,8 @@ export const label = {
     detail: 'Mô tả',
     addNewMember: 'Thêm thành viên',
     homeName: 'Tên nhà',
-    address: 'Địa chỉ'
+    address: 'Địa chỉ',
+    beneficiary: 'Người sử dụng'
 }
 
 export const button = {
