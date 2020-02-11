@@ -1,109 +1,171 @@
 <template>
-  <div v-if="isHomeInfoLoaded">
+  <div>
     <!-- home detail -->
-    <v-card>
-      <v-subheader>Thông tin nhà ở</v-subheader>
-      <v-card-text>
-        <v-text-field label="Tên nhà" v-model="home_info.home_name"></v-text-field>
-        <v-text-field label="Địa chỉ" v-model="home_info.address"></v-text-field>
-        <v-text-field label="Người quản lý" v-model="home_info.admin_id" disabled></v-text-field>
-      </v-card-text>
-      <v-alert
-        v-if="response.responseHomeUpdate.status"
-        class="ml-2 mr-2"
-        :type="response.responseHomeUpdate.status"
-        border="left"
-        outlined
-        dense
-        text
-      >{{response.responseHomeUpdate.message}}</v-alert>
-      <v-card-actions>
-        <v-btn color="primary" @click.native="updateHomeInfo">
-          <v-icon left dark>mdi-check</v-icon>
-          {{button_label.save}}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+    <ValidationObserver ref="obs">
+      <v-card v-if="isHomeInfoLoaded" slot-scope="{invalid, validated}">
+        <v-subheader>Thông tin nhà ở</v-subheader>
+        <v-card-text>
+          <validationProvider :name="label.homeName" rules="required">
+            <v-text-field 
+              slot-scope="{
+                valid,
+                errors
+              }"
+              :label="label.homeName" 
+              v-model="home_infos.homeInfo.name" 
+              :readonly="!isAdmin"
+              :success="valid"
+              :error-messages="errors"
+            >
+            </v-text-field>
+          </validationProvider>
+          <validationProvider :name="label.address" rules="required" >
+            <v-text-field 
+              slot-scope="{
+                valid,
+                errors
+              }"
+              :label="label.address" 
+              v-model="home_infos.homeInfo.address" 
+              :readonly="!isAdmin"
+              :success="valid"
+              :error-messages="errors"
+            >
+            </v-text-field>
+          </validationProvider>
+          <validationProvider :name="label.address" rules="required" >
+            <v-select
+              slot-scope="{
+                valid,
+                errors
+              }"
+              v-model="home_infos.admin.name"
+              :items="listMemberUser"
+              :chips="true"
+              label="Người quản lý"
+              item-text="name"
+              item-value="admin_id"
+              :readonly="!isAdmin"
+              :success="valid"
+              :error-messages="errors"
+            >
+              <template v-slot:selection="{ item }">
+                <v-chip>
+                  <span>{{ item.name }}</span>
+                </v-chip>
+              </template>
+            </v-select>
+          </validationProvider>
+        </v-card-text>
+        <v-alert
+          v-if="response.responseHomeUpdate.status"
+          class="ml-2 mr-2"
+          :type="response.responseHomeUpdate.status"
+          border="left"
+          outlined
+          dense
+          text
+        >{{response.responseHomeUpdate.message}}</v-alert>
+        <v-card-actions v-if="isAdmin">
+          <!-- update home info -->
+          <v-btn v-if="!flag.editHomeInfo && !flag.createHome" color="warning" @click.native="flag.editHomeInfo = true">
+            {{button_label.edit}}
+          </v-btn>
+          <v-btn v-if="flag.editHomeInfo" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
+            <v-icon left dark>mdi-check</v-icon>
+            {{button_label.save}}
+          </v-btn>
+          <!-- create new home info -->
+          <v-btn v-if="flag.createHome" color="primary" @click.native="updateHomeInfo" :disabled="invalid || !validated">
+            <v-icon left dark>mdi-check</v-icon>
+            {{button_label.save}}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </ValidationObserver>
 
     <!-- member detail -->
-    <v-card class="mx-auto mt-2">
-      <v-list two-line>
-        <div class="d-flex pr-5">
-          <v-subheader>Thành viên</v-subheader>
-          <v-btn
-            v-if="flag.flag_edit_member"
-            color="blue"
-            icon
-            class="ml-auto"
-            @click="flag.dialog_add_member = true"
-          >
-            <v-icon>mdi-account-plus</v-icon>
-          </v-btn>
-        </div>
-        <template v-for="item in home_infos">
-          <v-list-item :key="item.user_id">
-            <v-list-item-avatar>
-              <v-img src="@/static/avatar/default_avatar.png"></v-img>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-html="item.username"></v-list-item-title>
-              <v-list-item-subtitle v-if="item.user_id == item.admin_id">Quản lý</v-list-item-subtitle>
-            </v-list-item-content>
+    <div v-if="isHomeInfoLoaded">
+      <v-card class="mx-auto mt-2">
+        <v-list two-line>
+          <div class="d-flex pr-5">
+            <v-subheader>Thành viên</v-subheader>
             <v-btn
-              text
+              v-if="flag.flag_edit_member"
+              color="blue"
               icon
-              color="red"
-              v-if="item.user_id !== item.admin_id && flag.flag_edit_member"
-              @click="showDialog(item)"
+              class="ml-auto"
+              @click="flag.dialog_add_member = true"
             >
-              <v-icon>mdi-account-remove</v-icon>
+              <v-icon>mdi-account-plus</v-icon>
             </v-btn>
-          </v-list-item>
-        </template>
-      </v-list>
-      <!-- dialog remove member -->
-      <v-dialog v-model="flag.dialog" persistent max-width="290">
-        <v-card>
-          <v-card-title class="headline">Bạn có muốn xóa " {{removeMemberDetail.full_name}} " ?</v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red darken-1" text @click="removeMember(0)">{{button_label.no}}</v-btn>
-            <v-btn color="green darken-1" text @click="removeMember(1)">{{button_label.yes}}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <!-- dialog add member -->
-      <v-dialog v-model="flag.dialog_add_member" persistent max-width="290">
-        <v-card class="pa-2">
-          <v-card-title class="headline">{{label.addNewMember}}</v-card-title>
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-text-field v-model="email" :rules="emailRules" v-validate="'required|email'" label="E-mail" required></v-text-field>
-          </v-form>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red darken-1" text @click="addMember(false)">{{button_label.cancel}}</v-btn>
-            <v-btn color="blue darken-1" text @click="addMember(true)" :disabled="!isFormValid">{{button_label.add}}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-card>
-    <v-btn
-      v-if="!flag.flag_edit_member"
-      class="mt-3"
-      elevation="3"
-      block
-      color="#EF5350"
-      @click="editMember()"
-    >{{button_label.edit_member}}</v-btn>
-    <v-btn
-      v-if="flag.flag_edit_member"
-      class="mt-3"
-      elevation="3"
-      block
-      color="primary"
-      @click="editMemberDone()"
-    >{{button_label.done}}</v-btn>
-
+          </div>
+          <template v-for="item in home_infos.members">
+            <v-list-item :key="item.user_id">
+              <v-list-item-avatar>
+                <v-img src="@/static/avatar/default_avatar.png"></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title v-html="item.username"></v-list-item-title>
+                <v-list-item-subtitle v-if="item.user_id == home_infos.homeInfo.admin_id">Quản lý</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-btn
+                text
+                icon
+                color="red"
+                v-if="item.user_id !== item.admin_id && flag.flag_edit_member"
+                @click="showDialog(item)"
+              >
+                <v-icon>mdi-account-remove</v-icon>
+              </v-btn>
+            </v-list-item>
+          </template>
+        </v-list>
+        <!-- dialog remove member -->
+        <v-dialog v-model="flag.dialog" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Bạn có muốn xóa " {{removeMemberDetail.full_name}} " ?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="removeMember(0)">{{button_label.no}}</v-btn>
+              <v-btn color="green darken-1" text @click="removeMember(1)">{{button_label.yes}}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <!-- dialog add member -->
+        <v-dialog v-model="flag.dialog_add_member" persistent max-width="290">
+          <v-card class="pa-2">
+            <v-card-title class="headline">{{label.addNewMember}}</v-card-title>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-text-field v-model="email" :rules="emailRules" v-validate="'required|email'" label="E-mail" required></v-text-field>
+            </v-form>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="addMember(false)">{{button_label.cancel}}</v-btn>
+              <v-btn color="blue darken-1" text @click="addMember(true)" :disabled="!isFormValid">{{button_label.add}}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-card>
+      <div v-if="isAdmin">
+        <v-btn
+          v-if="!flag.flag_edit_member"
+          class="mt-3"
+          elevation="3"
+          block
+          color="#EF5350"
+          @click="editMember()"
+        >{{button_label.edit_member}}</v-btn>
+        <v-btn
+          v-if="flag.flag_edit_member"
+          class="mt-3"
+          elevation="3"
+          block
+          color="primary"
+          @click="editMemberDone()"
+        >{{button_label.done}}</v-btn>
+      </div>
+    </div>
     <!-- show snackbars -->
     <v-snackbar v-model="snackbar.flag" :color="snackbar.color">
       {{snackbar.message}}
@@ -115,7 +177,15 @@
 
 <script>
 import { button, messages, label } from "@/const";
+import {
+  ValidationProvider,
+  ValidationObserver
+} from 'vee-validate'
 export default {
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   data: () => ({
     items: [
       { header: "Thành viên" },
@@ -153,7 +223,6 @@ export default {
       }
     ],
     home_infos: {},
-    home_info: {},
     removeMemberDetail: {},
     email: "",
     response: {
@@ -165,7 +234,9 @@ export default {
       flag_edit_member: false,
       dialog: false,
       removeIndex: -1,
-      dialog_add_member: false
+      dialog_add_member: false,
+      createHome: false,
+      editHomeInfo: false
     },
     valid: true,
     emailRules: [
@@ -189,8 +260,21 @@ export default {
       })
       .then(response => {
         this.home_infos = response.data.data;
-        this.home_info = response.data.data[0];
-      });
+      })
+      .catch(error => {
+        this.flag.createHome = true
+        let userInfo = this.$store.getters.getCurrentUserInfo
+        this.home_infos = {
+          admin: {},
+          homeInfo: {},
+          members: [{
+            'full_name': userInfo.name,
+            'user_email': userInfo.email,
+            'user_id': userInfo.id,
+            'username': userInfo.username
+          }]
+        }
+      })
   },
   computed: {
     isHomeInfoLoaded() {
@@ -198,6 +282,24 @@ export default {
     },
     isFormValid() {
       return Object.keys(this.fields).every(key => this.fields[key].valid);
+    },
+    isAdmin () {
+      let userInfo = this.$store.getters.getCurrentUserInfo
+      if((typeof this.home_infos.homeInfo !== undefined && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.createHome) {
+        return true
+      } else {
+        return false
+      }
+    },
+    listMemberUser() {
+      let listMember = new Array();
+      this.home_infos.members.map((item) => {
+        listMember.push({
+          id: item.id,
+          name: item.full_name
+        })
+      })
+      return listMember.filter(Boolean)
     }
   },
   methods: {
@@ -283,6 +385,8 @@ export default {
               this.snackbar.message = messages.error.notExistUser
             } else if(error.response.data.message == 404) {
               this.snackbar.message = messages.error.userIsReadyInOtherHome
+            } else if(error.response.data.message = 407) {
+              this.snackbar.message = messages.error.needCreateHome
             }
             this.flag.dialog_add_member = false
             this.snackbar.flag = true
@@ -302,8 +406,8 @@ export default {
         .put(
           "/home/update_home",
           {
-            name: this.home_info.home_name,
-            address: this.home_info.address
+            name: this.homeInfo.home_name,
+            address: this.homeInfo.address
           },
           {
             headers: {

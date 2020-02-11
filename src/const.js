@@ -25,7 +25,9 @@ export const label = {
     addNew: 'Thêm mới',
     password: 'Mật khẩu',
     detail: 'Mô tả',
-    addNewMember: 'Thêm thành viên'
+    addNewMember: 'Thêm thành viên',
+    homeName: 'Tên nhà',
+    address: 'Địa chỉ'
 }
 
 export const button = {
@@ -36,7 +38,8 @@ export const button = {
     add: 'Thêm',
     cancel: 'Đóng',
     save_edit: 'Lưu thay đổi',
-    save: 'Lưu'
+    save: 'Lưu',
+    edit: 'Sửa đổi thông tin'
 }
 
 export const messages = {
@@ -44,7 +47,8 @@ export const messages = {
         email: 'Nhập email',
         notExistUser: 'Người dùng không tồn tại',
         userIsReadyInOtherHome: 'Người dùng đã ở một nhà nào đó!',
-        required: 'Bạn cần nhập thông tin'
+        required: 'Bạn cần nhập thông tin',
+        needCreateHome: 'Bạn cần tạo thông tin nhà ở trước'
     },
     success: {
         addDone: 'Thêm thành công'

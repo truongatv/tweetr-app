@@ -45,25 +45,37 @@
                       v-show="errors.has('username')"
                       class="is-danger"
                     >{{ errors.first('username') }}</span>
-
-                    <v-text-field
-                      label="Email"
-                      name="Email"
-                      prepend-inner-icon="mdi-email"
-                      type="text"
-                      v-model="email"
-                      v-validate="'required|email'"
-                    />
-                    
-                    <v-text-field
-                      id="password"
-                      label="Password"
-                      name="password"
-                      prepend-inner-icon="mdi-lock"
-                      type="password"
-                      v-model="password"
-                      v-validate="'required'"
-                    />
+                    <ValidationProvider :name="labels.email" rules="required|email">
+                      <v-text-field
+                        slot-scope="{
+                          errors,
+                          valid
+                        }"
+                        :label="labels.email"
+                        :name="labels.email"
+                        prepend-inner-icon="mdi-email"
+                        type="text"
+                        v-model="email"
+                        :success="valid"
+                        :error-messages="errors"
+                      />
+                    </ValidationProvider>
+                    <ValidationProvider :name="labels.password" rules="required|min:6">
+                      <v-text-field
+                        slot-scope="{
+                          valid,
+                          errors
+                        }"
+                        id="password"
+                        :label="labels.password"
+                        :name="labels.password"
+                        prepend-inner-icon="mdi-lock"
+                        type="password"
+                        v-model="password"
+                        :success="valid"
+                        :error-messages="errors"
+                      />
+                    </ValidationProvider>
                   </v-form>
                 </v-card-text>
                 <Notification
@@ -116,11 +128,6 @@ export default {
       labels: label
     };
   },
-  computed: {
-    isFormValid() {
-      return Object.keys(this.fields).every(key => this.fields[key].valid);
-    }
-  },
   beforeRouteEnter(to, from, next) {
     const token = localStorage.getItem("tweetr-token");
 
@@ -132,7 +139,7 @@ export default {
     },
     signup() {
         axios
-        .post("http://127.0.0.1:3333/signup", {
+        .post("/signup", {
           name: this.name,
           username: this.username,
           email: this.email,

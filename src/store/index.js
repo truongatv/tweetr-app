@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    current_component: 'HomeMember'
+    current_component: 'HomeMember',
+    user_infos: {}
   },
   getters: {
     currentComponent: state => {
       return state.current_component
+    },
+    getCurrentUserInfo: state => {
+      return state.user_infos
     }
   },
   actions: {
@@ -17,6 +21,9 @@ export default new Vuex.Store({
   mutations: {
     setCurrentComponent (state, current_component) {
       Vue.set(state, 'current_component', current_component)
+    },
+    setCurrentUserInfo (state, user_infos) {
+      Vue.set(state, 'user_infos', user_infos)
     }
   },
   modules: {

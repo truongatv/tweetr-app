@@ -26,6 +26,18 @@ export default {
     else {
       next("/login");
     }
-  }
+  },
+  created() {
+    const token = localStorage.getItem('tweetr-token')
+    axios
+      .get("/account/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        this.$store.commit("setCurrentUserInfo", response.data.data[0])
+      })
+  },
 };
 </script>
