@@ -6,7 +6,7 @@
         <img v-else src="@/static/avatar/default_avatar.png" alt="avatar">
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title>{{user.username}}</v-list-item-title>
+        <v-list-item-title>{{user.name}}</v-list-item-title>
       </v-list-item-content>
       <v-btn icon color="gray" @click="editProfile()">
         <v-icon>mdi-pencil</v-icon>

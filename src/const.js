@@ -15,7 +15,6 @@ export const menu = [
 
 export const label = {
     fullName: 'Họ tên',
-    username: 'Nick name',
     name_product: 'Tên sản phẩm',
     date: 'Ngày thanh toán',
     price: 'Gía tiền',
