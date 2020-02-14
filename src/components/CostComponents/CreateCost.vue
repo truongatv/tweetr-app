@@ -1,101 +1,106 @@
 <template>
-    <v-card>
-        <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-        <!-- start add new cost living or edit cost living -->
-        <v-card-text>
-            <v-container>
-            <v-form ref="form">
-                <v-text-field
-                dense
-                clearable
-                :label="label.name_product"
-                :rules="rules.nameProductRules"
-                v-model="living_cost.name"
-                ></v-text-field>
-                <v-menu
-                v-model="dateSelect"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-                >
-                <template v-slot:activator="{ on }">
-                    <v-text-field
-                    v-model="living_cost.date_pay"
-                    :label="label.date"
-                    prepend-inner-icon="mdi-calendar"
-                    persistent-hint
-                    readonly
-                    v-on="on"
-                    ></v-text-field>
-                </template>
-                <v-date-picker
-                    v-model="living_cost.date_pay"
-                    no-title
-                    @input="dateSelect = false"
-                ></v-date-picker>
-                </v-menu>
-                <v-text-field
-                type="number"
-                prefix="$"
-                dense
-                clearable
-                :label="label.price"
-                v-model="living_cost.price"
-                ></v-text-field>
-                <!-- payer user -->
-                <v-menu offset-y>
-                <template v-slot:activator="{ on }">
-                    <v-text-field
-                    dense
-                    clearable
-                    auto-grow
-                    :label="label.payer"
-                    v-on="on"
-                    v-model="living_cost.payer_name"
-                    ></v-text-field>
-                </template>
-                <v-list>
-                    <v-list-item
-                    v-for="(item, index) in homeMember"
-                    :key="index"
-                    @click="selectPayer(item)"
-                    >
-                    <v-list-item-title>{{item.name}}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-                </v-menu>
-                <!-- receiver -->
-                <v-select
-                v-model="living_cost.receiver"
-                :items="listMemberUser"
-                :chips="true"
-                :multiple="true"
-                :label="label.beneficiary"
-                item-text="name"
-                return-object
-                >
-                <template v-slot:selection="{ item }">
-                    <v-chip>
-                    <span>{{ item.name }}</span>
-                    </v-chip>
-                </template>
-                </v-select>
+    <v-dialog v-model="dialog" max-width="500px">
+        <template v-slot:activator="{ on }">
+            <v-btn color="primary" dark class="mb-2" v-on="on">{{label.addNew}}</v-btn>
+        </template>
+        <v-card>
+            <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+            <!-- start add new cost living or edit cost living -->
+            <v-card-text>
+                <v-container>
+                    <v-form ref="form">
+                        <v-text-field
+                        dense
+                        clearable
+                        :label="label.name_product"
+                        :rules="rules.nameProductRules"
+                        v-model="living_cost.name"
+                        ></v-text-field>
+                        <v-menu
+                        v-model="dateSelect"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                        >
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                            v-model="living_cost.date_pay"
+                            :label="label.date"
+                            prepend-inner-icon="mdi-calendar"
+                            persistent-hint
+                            readonly
+                            v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker
+                            v-model="living_cost.date_pay"
+                            no-title
+                            @input="dateSelect = false"
+                        ></v-date-picker>
+                        </v-menu>
+                        <v-text-field
+                        type="number"
+                        prefix="$"
+                        dense
+                        clearable
+                        :label="label.price"
+                        v-model="living_cost.price"
+                        ></v-text-field>
+                        <!-- payer user -->
+                        <v-menu offset-y>
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                            dense
+                            clearable
+                            auto-grow
+                            :label="label.payer"
+                            v-on="on"
+                            v-model="living_cost.payer_name"
+                            ></v-text-field>
+                        </template>
+                        <v-list>
+                            <v-list-item
+                            v-for="(item, index) in homeMember"
+                            :key="index"
+                            @click="selectPayer(item)"
+                            >
+                            <v-list-item-title>{{item.name}}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                        </v-menu>
+                        <!-- receiver -->
+                        <v-select
+                        v-model="living_cost.receiver"
+                        :items="listMemberUser"
+                        :chips="true"
+                        :multiple="true"
+                        :label="label.beneficiary"
+                        item-text="name"
+                        return-object
+                        >
+                        <template v-slot:selection="{ item }">
+                            <v-chip>
+                            <span>{{ item.name }}</span>
+                            </v-chip>
+                        </template>
+                        </v-select>
 
-                <v-textarea clearable auto-grow :label="label.detail" v-model="living_cost.detail"></v-textarea>
-            </v-form>
-            </v-container>
-        </v-card-text>
-        <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close">{{button.cancel}}</v-btn>
-            <v-btn color="blue darken-1" text @click="saveLivingCost()">{{button.save}}</v-btn>
-        </v-card-actions>
-        <!-- end add new cost living or edit cost living -->
-    </v-card>
+                        <v-textarea clearable auto-grow :label="label.detail" v-model="living_cost.detail"></v-textarea>
+                    </v-form>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">{{button.cancel}}</v-btn>
+                <v-btn color="blue darken-1" text @click="saveLivingCost()">{{button.save}}</v-btn>
+            </v-card-actions>
+            <!-- end add new cost living or edit cost living -->
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -104,6 +109,10 @@ export default {
     props: {
         living_cost : {
             type: Object,
+            required: true
+        },
+        dialog: {
+            type: Boolean,
             required: true
         }
     },
@@ -138,7 +147,6 @@ export default {
                 listMember.push(item
                 )
             })
-            console.log(listMember)
             return listMember
         },
         computedDateFormatted() {
@@ -160,7 +168,7 @@ export default {
     },
     methods: {
         close() {
-            this.flag.dialog = false;
+            this.dialog = false;
             // setTimeout(() => {
             //     this.editedItem = Object.assign({}, this.defaultItem);
             //     this.editedIndex = -1;
@@ -176,13 +184,18 @@ export default {
                 }
                 })
                 .then(response => {
-                this.setDefaultLivingCost()
-                this.close()
-                this.flag.snackbar = {
-                    flag: true,
-                    message: messages.success.addDone,
-                    color: "success"
-                }
+                    // this.setDefaultLivingCost()
+                    //send emit to parent 
+                    this.$bus.emit('saveLivingCost', this.living_cost)
+                    this.close()
+                    this.flag.snackbar = {
+                        flag: true,
+                        message: messages.success.addDone,
+                        color: "success"
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response)
                 })
             } else {
                 this.flag.snackbar = {
@@ -190,17 +203,6 @@ export default {
                 message: messages.error.required,
                 color: "error"
                 }
-            }
-        },
-        //set default value living cose
-        setDefaultLivingCost() {
-            this.living_cost= {
-                name: "",
-                payer_name: "",
-                price: 0,
-                date_pay: new Date().toISOString().substr(0, 10),
-                detail: "",
-                receiver: []
             }
         },
         // handle select payer

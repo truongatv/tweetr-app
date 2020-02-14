@@ -51,7 +51,12 @@ export const messages = {
         needCreateHome: 'Bạn cần tạo thông tin nhà ở trước'
     },
     success: {
-        addDone: 'Thêm thành công'
+        addDone: 'Thêm thành công',
+        removeDone: 'Xóa thành công',
+        removeFail: 'Xóa thất bại'
+    },
+    alert: {
+        areYouSureDelete: 'Bạn có muốn xóa mục này không ?'
     }
 }
 

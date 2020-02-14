@@ -1,22 +1,17 @@
 <template>
-  <v-data-table :headers="headers" :items="living_cost_data" sort-by="date" class="elevation-1">
+  <v-data-table :headers="headers"  show-expand :items="living_cost_data" sort-by="date" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Tổng tiền:</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="flag.dialog" max-width="500px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">{{label.addNew}}</v-btn>
-          </template>
-          <CostPopup :living_cost="living_cost">
-          </CostPopup>
-        </v-dialog>
+        <CostPopup :living_cost="living_cost" :dialog="dialog">
+        </CostPopup>
       </v-toolbar>
       <!-- show snackbars -->
       <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color" right bottom>
         {{flag.snackbar.message}}
-        <v-btn color="white" text @click="snackbar.flag = false">{{button.cancel}}</v-btn>
+        <v-btn color="white" text @click="flag.snackbar.flag = false">{{button.cancel}}</v-btn>
       </v-snackbar>
     </template>
     <template v-slot:item.payer_name="{ item }">
@@ -29,15 +24,20 @@
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
+    <template v-slot:expanded-item="{ item }">
+      <DetailCost :item="item" />
+    </template>
   </v-data-table>
 </template>
 
 <script>
 import { label, button, messages } from '@/static/define/const'
 import CostPopup from './../CostComponents/CreateCost'
+import DetailCost from './../CostComponents/DetailCost'
 export default {
   components: {
-    CostPopup
+    CostPopup,
+    DetailCost
   },
   data: () => ({
     living_cost: {
@@ -50,12 +50,13 @@ export default {
     },
     label: label,
     button: button,
+    dialog: false,
     flag: {
       dialog: false,
       snackbar: {
         flag: false,
         message: "",
-        color: "#004D40"
+        color: "success"
       },
     },
     headers: [
@@ -79,6 +80,17 @@ export default {
   },
   created() {
     this.initialize();
+    //listen event from children
+    this.$bus.on('saveLivingCost', value => {
+        this.living_cost_data.push(value)
+        this.setDefaultLivingCost()
+        //show snackbar
+        this.flag.snackbar = {
+          flag: true,
+          message: messages.success.addDone,
+          color: "success"
+        }
+    })
   },
   methods: {
     initialize() {
@@ -98,13 +110,52 @@ export default {
     },
     editItem(item) {
       this.living_cost = Object.assign({}, item);
-      this.flag.dialog = true;
+      this.dialog = true;
     },
     deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
-    }
+      const token = localStorage.getItem('tweetr-token')
+      const index = this.living_cost_data.indexOf(item);
+      if(confirm(messages.alert.areYouSureDelete)) {
+       axios
+          .delete(
+            "/cost/remove_cost/" + item.id,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(response => {
+            if(response.data.data) {
+              //show snackbar
+              this.flag.snackbar = {
+                flag: true,
+                message: messages.success.removeDone,
+                color: "success"
+              }
+            } else {
+              //show snackbar
+              this.flag.snackbar = {
+                flag: true,
+                message: messages.success.removeFail,
+                color: "error"
+              }
+            }
+          });
+        this.living_cost_data.splice(index, 1);
+      }
+    },
+    //set default value living cost
+    setDefaultLivingCost() {
+      this.living_cost= {
+          name: "",
+          payer_name: "",
+          price: 0,
+          date_pay: new Date().toISOString().substr(0, 10),
+          detail: "",
+          receiver: []
+      }
+    },
   }
 };
 </script>
