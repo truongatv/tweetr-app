@@ -71,7 +71,7 @@ import {
   ValidationProvider,
   ValidationObserver
 } from 'vee-validate'
-import {messages} from '@/const'
+import {messages} from '@/static/define/const'
 export default {
   name: "LogInForm",
   components: {

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {component} from "../../const"
+import {component} from '@/static/define/const'
 import HomeMember from "@/components/ContentComponents/HomeMember"
 import Profile from "@/components/ContentComponents/Profile"
 import PersonalFee from '@/components/ContentComponents/PersonalFee'

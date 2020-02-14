@@ -26,26 +26,7 @@
                         v-model="name"
                       />
                     </ValidationProvider>
-                    <ValidationProvider :name="labels.username" rules="required">
-                      <v-text-field
-                        slot-scope="{
-                          errors,
-                          valid
-                        }"
-                        :label="labels.username"
-                        :name="labels.username"
-                        prepend-inner-icon="mdi-account"
-                        type="text"
-                        v-model="username"
-                        :success="valid"
-                        :error-messages="errors"
-                      />
-                    </ValidationProvider>
-                    <span
-                      v-show="errors.has('username')"
-                      class="is-danger"
-                    >{{ errors.first('username') }}</span>
-                    <ValidationProvider :name="labels.email" rules="required|email">
+                    <ValidationProvider :name="labels.email" rules="required|email|notExistEmail">
                       <v-text-field
                         slot-scope="{
                           errors,
@@ -102,7 +83,26 @@ import {
   ValidationProvider,
   ValidationObserver
 } from 'vee-validate'
-import { label } from '@/const'
+import { extend } from 'vee-validate';
+import { label } from '@/static/define/const'
+
+//create rule check email is exist
+extend('notExistEmail', value => {
+  //check email 
+  return axios
+    .get("/check_exist_email", {
+      params: {
+        email: value
+      }
+    })
+    .then(response => {
+      if(!response.data.data) {
+        return true
+      } else {
+        return false
+      }
+    })
+});
 
 export default {
   name: "SignUpForm",
@@ -117,7 +117,6 @@ export default {
   data() {
     return {
       name: "",
-      username: "",
       email: "",
       password: "",
       notification: {
@@ -141,7 +140,6 @@ export default {
         axios
         .post("/signup", {
           name: this.name,
-          username: this.username,
           email: this.email,
           password: this.password
         })

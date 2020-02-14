@@ -106,7 +106,7 @@
                 <v-img src="@/static/avatar/default_avatar.png"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title v-html="item.username"></v-list-item-title>
+                <v-list-item-title v-html="item.full_name"></v-list-item-title>
                 <v-list-item-subtitle v-if="item.user_id == home_infos.homeInfo.admin_id">Quản lý</v-list-item-subtitle>
               </v-list-item-content>
               <v-btn
@@ -176,7 +176,7 @@
 
 
 <script>
-import { button, messages, label } from "@/const";
+import { button, messages, label } from '@/static/define/const'
 import {
   ValidationProvider,
   ValidationObserver
@@ -270,8 +270,7 @@ export default {
           members: [{
             'full_name': userInfo.name,
             'user_email': userInfo.email,
-            'user_id': userInfo.id,
-            'username': userInfo.username
+            'user_id': userInfo.id
           }]
         }
       })
@@ -371,8 +370,7 @@ export default {
               full_name: response.data.data.name,
               home_name: this.home_infos.home_name,
               user_email: response.data.data.email,
-              user_id: response.data.data.id,
-              username: response.data.data.username
+              user_id: response.data.data.id
             }
             this.home_infos.push(addMemberData)
             this.snackbar.message = messages.success.addDone

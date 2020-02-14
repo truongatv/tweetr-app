@@ -33,8 +33,7 @@
 </template>
 
 <script>
-import { label, button, messages } from "@/const";
-import CostPopup from './../CostComponents/CreateCost'
+import { label, button, messages } from '@/static/define/const'
 export default {
   components: {
     CostPopup
