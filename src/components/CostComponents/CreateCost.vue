@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { label, button, messages } from "@/const";
+import { label, button, messages } from "@/static/define/const";
 export default {
     props: {
         living_cost : {

@@ -34,6 +34,7 @@
 
 <script>
 import { label, button, messages } from '@/static/define/const'
+import CostPopup from './../CostComponents/CreateCost'
 export default {
   components: {
     CostPopup
