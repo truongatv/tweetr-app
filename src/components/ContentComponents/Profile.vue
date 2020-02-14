@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { button, error, label } from "@/const"
+import { button, error, label } from '@/static/define/const'
 import {
   ValidationProvider,
   ValidationObserver

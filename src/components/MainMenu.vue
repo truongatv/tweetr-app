@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { menu } from "../const"
+import { menu } from '@/static/define/const'
 export default {
   data: () => ({
     item: 1,

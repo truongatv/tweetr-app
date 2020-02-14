@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { label } from "@/const"
+import { label } from '@/static/define/const'
 export default {
   data: () => ({
     label: label,

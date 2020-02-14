@@ -84,7 +84,7 @@ import {
   ValidationObserver
 } from 'vee-validate'
 import { extend } from 'vee-validate';
-import { label } from '@/const'
+import { label } from '@/static/define/const'
 
 //create rule check email is exist
 extend('notExistEmail', value => {

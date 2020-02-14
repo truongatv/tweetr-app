@@ -176,7 +176,7 @@
 
 
 <script>
-import { button, messages, label } from "@/const";
+import { button, messages, label } from '@/static/define/const'
 import {
   ValidationProvider,
   ValidationObserver

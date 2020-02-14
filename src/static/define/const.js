@@ -54,3 +54,5 @@ export const messages = {
         addDone: 'Thêm thành công'
     }
 }
+
+export const fbApi = '767356600456591'
