@@ -5,7 +5,7 @@
         <MainMenu />
       </v-col>
       <v-col cols="8">
-        <v-card class="pa-2" outlined tile><Content /></v-card>
+        <Content />
       </v-col>
     </v-row>
   </v-container>
@@ -26,6 +26,18 @@ export default {
     else {
       next("/login");
     }
-  }
+  },
+  created() {
+    const token = localStorage.getItem('tweetr-token')
+    axios
+      .get("/account/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        this.$store.commit("setCurrentUserInfo", response.data.data[0])
+      })
+  },
 };
 </script>

@@ -1,14 +1,16 @@
 <template>
-    <HomeMember v-if="componentName == item.home_member_component" />
+    <HomeMember v-if="componentName == item.home_member" />
     <Profile v-else-if="componentName == item.profile" />
-    <PersonalFee v-else-if="componentName == item.personal_fee_component" />
+    <PersonalFee v-else-if="componentName == item.personal_fee" />
+    <HomeFee v-else-if="componentName == item.home_fee" />
 </template>
 
 <script>
-import {item} from "../../const"
+import {component} from '@/static/define/const'
 import HomeMember from "@/components/ContentComponents/HomeMember"
 import Profile from "@/components/ContentComponents/Profile"
 import PersonalFee from '@/components/ContentComponents/PersonalFee'
+import HomeFee from '@/components/ContentComponents/HomeFee'
 
 export default {
     props: {
@@ -25,10 +27,11 @@ export default {
     components: {
         HomeMember,
         Profile,
-        PersonalFee
+        PersonalFee,
+        HomeFee
     },
     created() {
-        this.item = item
+        this.item = component
     },
 }
 </script>
