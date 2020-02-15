@@ -8,6 +8,10 @@ import * as rules from 'vee-validate/dist/rules';
 import axios from 'axios'
 import vi_extend from '@/i18n/validator/vi'
 
+//register event bus global
+import Bus from './components/bus'
+Vue.use(Bus)
+
 // install rules and localization
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);

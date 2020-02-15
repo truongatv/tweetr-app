@@ -11,31 +11,23 @@
               <v-btn @click="openAvatarPicker">Change Avatar</v-btn>
               <input type="file" id="file-upload" style="display:none" @change="onFileChange" />
             </v-flex>
-            <ValidationProvider :name="labels.fullName" rules="required">
+            <ValidationProvider :name="labels.full_name" rules="required" v-slot="{ validated, errors }">
               <v-text-field 
-                slot-scope="{
-                  valid,
-                  errors
-                }"
                 v-model="form.name" 
-                label="Tên đầy đủ" 
+                :label="labels.full_name"
                 :readonly="!flag.editProfile"
-                :success="valid"
+                :success="validated"
                 :error-messages="errors"
               >
               </v-text-field>
             </ValidationProvider>
             <v-text-field v-if="form.home" v-model="form.home.name" label="Tên nhà" disabled></v-text-field>
-            <ValidationProvider :name="labels.email" rules="required|email">
+            <ValidationProvider :name="labels.email" rules="required|email" v-slot="{ validated, errors }">
             <v-text-field 
-              slot-scope="{
-                valid,
-                errors
-              }"
-              v-model="form.email" 
-              :label="labels.email" 
+              v-model="form.email"
+              :label="labels.email"
               :readonly="!flag.editProfile"
-              :success="valid"
+              :success="validated"
               :error-messages="errors"
             >
             </v-text-field>

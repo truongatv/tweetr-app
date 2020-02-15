@@ -14,20 +14,22 @@ export const menu = [
 ]
 
 export const label = {
-    fullName: 'Họ tên',
+    full_name: 'Họ tên',
     name_product: 'Tên sản phẩm',
-    date: 'Ngày thanh toán',
+    date_pay: 'Ngày thanh toán',
     price: 'Gía tiền',
     payer: 'Người thanh toán',
     edit: 'Sửa',
     email: 'E-mail',
-    addNew: 'Thêm mới',
+    add_new: 'Thêm mới',
     password: 'Mật khẩu',
     detail: 'Mô tả',
-    addNewMember: 'Thêm thành viên',
-    homeName: 'Tên nhà',
+    add_new_member: 'Thêm thành viên',
+    home_name: 'Tên nhà',
     address: 'Địa chỉ',
-    beneficiary: 'Người sử dụng'
+    beneficiary: 'Người sử dụng',
+    cost_detail: 'Thông tin chi tiết',
+    admin: 'Người quản lý'
 }
 
 export const button = {
@@ -45,13 +47,21 @@ export const button = {
 export const messages = {
     error: {
         email: 'Nhập email',
-        notExistUser: 'Người dùng không tồn tại',
-        userIsReadyInOtherHome: 'Người dùng đã ở một nhà nào đó!',
+        not_exist_user: 'Người dùng không tồn tại',
+        user_is_ready_in_other_home: 'Người dùng đã ở một nhà nào đó!',
         required: 'Bạn cần nhập thông tin',
-        needCreateHome: 'Bạn cần tạo thông tin nhà ở trước'
+        need_create_home: 'Bạn cần tạo thông tin nhà ở trước'
     },
     success: {
-        addDone: 'Thêm thành công'
+        add_done: 'Thêm thành công',
+        remove_done: 'Xóa thành công',
+        remove_fail: 'Xóa thất bại',
+        edit_done: 'Cập nhật thành công',
+        edit_fail: 'Cập nhật thất bại',
+        add_fail: 'Thêm thất bại'
+    },
+    alert: {
+        are_you_sure_delete: 'Bạn có muốn xóa mục này không ?'
     }
 }
 

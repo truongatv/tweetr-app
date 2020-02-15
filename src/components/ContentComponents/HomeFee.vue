@@ -21,7 +21,7 @@
                     <v-text-field v-model="editedItem.name" :label=label.name_product></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.date" :label=label.date></v-text-field>
+                    <v-text-field v-model="editedItem.date" :label=label.date_pay></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.payer" :label=label.price></v-text-field>
@@ -65,7 +65,7 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: label.date, value: "date" },
+      { text: label.date_pay, value: "date" },
       { text: label.payer, value: "payer" },
       { text: label.price, value: "price" },
       { text: label.edit, value: "edit", sortable: false }
@@ -100,7 +100,6 @@ export default {
   },
   methods: {
     initialize() {
-      console.log("tests")
       // this.livingCosts = [
       //   {
       //     name: "Frozen Yogurt",
