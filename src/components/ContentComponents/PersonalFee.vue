@@ -5,7 +5,8 @@
         <v-toolbar-title>Tổng tiền:</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <CostPopup :living_cost="living_cost" :dialog="dialog">
+        <!-- popup create, update living cost -->
+        <CostPopup :living_cost="living_cost" :dialog="flag.dialog" :edit="flag.edit">
         </CostPopup>
       </v-toolbar>
       <!-- show snackbars -->
@@ -18,8 +19,8 @@
       <v-chip>{{ item.payer_name }}</v-chip>
     </template>
     <template v-slot:item.edit="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-      <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+      <v-icon v-if="currentUser.id == item.payer_id" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+      <v-icon v-if="currentUser.id == item.payer_id" small @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -50,7 +51,6 @@ export default {
     },
     label: label,
     button: button,
-    dialog: false,
     flag: {
       dialog: false,
       snackbar: {
@@ -58,6 +58,7 @@ export default {
         message: "",
         color: "success"
       },
+      edit: false
     },
     headers: [
       {
@@ -66,7 +67,7 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: label.date, value: "date_pay" },
+      { text: label.date_pay, value: "date_pay" },
       { text: label.payer, value: "payer_name" },
       { text: label.price, value: "price" },
       { text: label.edit, value: "edit", sortable: false }
@@ -78,18 +79,27 @@ export default {
       val || this.close();
     }
   },
+  computed: {
+    currentUser () {
+      return this.$store.getters.getCurrentUserInfo
+    }
+  },
   created() {
     this.initialize();
     //listen event from children
     this.$bus.on('saveLivingCost', value => {
-        this.living_cost_data.push(value)
+        this.initialize()
         this.setDefaultLivingCost()
         //show snackbar
         this.flag.snackbar = {
           flag: true,
-          message: messages.success.addDone,
+          message: messages.success.add_done,
           color: "success"
         }
+    })
+
+    this.$bus.on('closeDialog', value => {
+      this.flag.dialog = value
     })
   },
   methods: {
@@ -110,12 +120,13 @@ export default {
     },
     editItem(item) {
       this.living_cost = Object.assign({}, item);
-      this.dialog = true;
+      this.flag.dialog = true;
+      this.flag.edit = true
     },
     deleteItem(item) {
       const token = localStorage.getItem('tweetr-token')
       const index = this.living_cost_data.indexOf(item);
-      if(confirm(messages.alert.areYouSureDelete)) {
+      if(confirm(messages.alert.are_you_sure_delete)) {
        axios
           .delete(
             "/cost/remove_cost/" + item.id,
@@ -130,14 +141,14 @@ export default {
               //show snackbar
               this.flag.snackbar = {
                 flag: true,
-                message: messages.success.removeDone,
+                message: messages.success.remove_done,
                 color: "success"
               }
             } else {
               //show snackbar
               this.flag.snackbar = {
                 flag: true,
-                message: messages.success.removeFail,
+                message: messages.success.remove_fail,
                 color: "error"
               }
             }

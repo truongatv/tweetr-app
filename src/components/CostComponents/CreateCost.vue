@@ -1,7 +1,7 @@
 <template>
-    <v-dialog v-model="dialog" max-width="500px">
+    <v-dialog v-model="dialogFlag" max-width="500px">
         <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">{{label.addNew}}</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-on="on">{{label.add_new}}</v-btn>
         </template>
         <v-card>
             <v-card-title>
@@ -29,7 +29,7 @@
                         <template v-slot:activator="{ on }">
                             <v-text-field
                             v-model="living_cost.date_pay"
-                            :label="label.date"
+                            :label="label.date_pay"
                             prepend-inner-icon="mdi-calendar"
                             persistent-hint
                             readonly
@@ -52,41 +52,41 @@
                         ></v-text-field>
                         <!-- payer user -->
                         <v-menu offset-y>
-                        <template v-slot:activator="{ on }">
-                            <v-text-field
-                            dense
-                            clearable
-                            auto-grow
-                            :label="label.payer"
-                            v-on="on"
-                            v-model="living_cost.payer_name"
-                            ></v-text-field>
-                        </template>
-                        <v-list>
-                            <v-list-item
-                            v-for="(item, index) in homeMember"
-                            :key="index"
-                            @click="selectPayer(item)"
-                            >
-                            <v-list-item-title>{{item.name}}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
+                            <template v-slot:activator="{ on }">
+                                <v-text-field
+                                dense
+                                clearable
+                                auto-grow
+                                :label="label.payer"
+                                v-on="on"
+                                v-model="living_cost.payer_name"
+                                ></v-text-field>
+                            </template>
+                            <v-list>
+                                <v-list-item
+                                v-for="(item, index) in homeMember"
+                                :key="index"
+                                @click="selectPayer(item)"
+                                >
+                                <v-list-item-title>{{item.name}}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
                         </v-menu>
                         <!-- receiver -->
                         <v-select
-                        v-model="living_cost.receiver"
-                        :items="listMemberUser"
-                        :chips="true"
-                        :multiple="true"
-                        :label="label.beneficiary"
-                        item-text="name"
-                        return-object
+                            v-model="living_cost.receiver"
+                            :items="listMemberUser"
+                            :chips="true"
+                            :multiple="true"
+                            :label="label.beneficiary"
+                            item-text="name"
+                            return-object
                         >
-                        <template v-slot:selection="{ item }">
-                            <v-chip>
-                            <span>{{ item.name }}</span>
-                            </v-chip>
-                        </template>
+                            <template v-slot:selection="{ item }">
+                                <v-chip>
+                                <span>{{ item.name }}</span>
+                                </v-chip>
+                            </template>
                         </v-select>
 
                         <v-textarea clearable auto-grow :label="label.detail" v-model="living_cost.detail"></v-textarea>
@@ -96,7 +96,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">{{button.cancel}}</v-btn>
-                <v-btn color="blue darken-1" text @click="saveLivingCost()">{{button.save}}</v-btn>
+                <v-btn color="blue darken-1" text @click="saveLivingCost(edit)">{{button.save}}</v-btn>
             </v-card-actions>
             <!-- end add new cost living or edit cost living -->
         </v-card>
@@ -114,6 +114,10 @@ export default {
         dialog: {
             type: Boolean,
             required: true
+        },
+        edit: {
+            type: Boolean,
+            required: true
         }
     },
     data() {
@@ -128,7 +132,6 @@ export default {
             },
             dateSelect: false,
             flag: {
-                dialog: false,
                 snackbar: {
                     flag: false,
                     message: "",
@@ -139,7 +142,7 @@ export default {
     },
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? label.addNew : label.edit;
+            return this.editedIndex === -1 ? label.add_new : label.edit;
         },
         listMemberUser() {
             let listMember = new Array();
@@ -152,6 +155,14 @@ export default {
         computedDateFormatted() {
             this.living_cost.date_pay = this.formatDate(this.dateSelect.date);
             return this.formatDate(this.dateSelect.date);
+        },
+        dialogFlag : {
+            get() {
+                return this.dialog
+            },
+            set: function(newValue) {
+                this.$bus.emit('closeDialog', newValue)
+            }
         }
     },
     mounted() {
@@ -168,35 +179,62 @@ export default {
     },
     methods: {
         close() {
-            this.dialog = false;
-            // setTimeout(() => {
-            //     this.editedItem = Object.assign({}, this.defaultItem);
-            //     this.editedIndex = -1;
-            // }, 300);
+            this.$bus.emit('closeDialog', false)
         },
             //save living cost
-        saveLivingCost() {
+        saveLivingCost(edit) {
             const token = localStorage.getItem("tweetr-token")
             if(this.living_cost.name !== "" && this.living_cost.price > 0 && this.living_cost.payer_name != "") {
-                axios.post('cost/create_cost', this.living_cost, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-                })
-                .then(response => {
-                    // this.setDefaultLivingCost()
-                    //send emit to parent 
-                    this.$bus.emit('saveLivingCost', this.living_cost)
-                    this.close()
-                    this.flag.snackbar = {
-                        flag: true,
-                        message: messages.success.addDone,
-                        color: "success"
+                if(!edit) {
+                    axios.post('cost/create_cost', this.living_cost, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
-                })
-                .catch(error => {
-                    console.log(error.response)
-                })
+                    })
+                    .then(response => {
+                        //send emit to parent 
+                        this.living_cost.id = response.data.data.living_cost_id
+                        this.$bus.emit('saveLivingCost', this.living_cost)
+                        this.close()
+                        this.flag.snackbar = {
+                            flag: true,
+                            message: messages.success.add_done,
+                            color: "success"
+                        }
+                    })
+                    .catch(error => {
+                        this.flag.snackbar = {
+                            flag: true,
+                            message: messages.success.add_fail,
+                            color: "error"
+                        }
+                        console.log(error.response)
+                    })
+                } else {
+                    axios.put('cost/update_cost', this.living_cost, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                    })
+                    .then(response => {
+                        //send emit to parent 
+                        this.$bus.emit('saveLivingCost', this.living_cost)
+                        this.close()
+                        this.flag.snackbar = {
+                            flag: true,
+                            message: messages.success.edit_done,
+                            color: "success"
+                        }
+                    })
+                    .catch(error => {
+                        this.flag.snackbar = {
+                            flag: true,
+                            message: messages.success.edit_fail,
+                            color: "error"
+                        }
+                        console.log(error.response)
+                    })
+                }
             } else {
                 this.flag.snackbar = {
                 flag: true,

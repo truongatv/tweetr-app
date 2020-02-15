@@ -5,9 +5,9 @@
       <v-card v-if="isHomeInfoLoaded" slot-scope="{invalid, validated}">
         <v-subheader>Thông tin nhà ở</v-subheader>
         <v-card-text>
-          <validationProvider :name="label.homeName" rules="required" v-slot="{validated, errors}">
+          <validationProvider :name="label.home_name" rules="required" v-slot="{validated, errors}">
             <v-text-field
-              :label="label.homeName" 
+              :label="label.home_name" 
               v-model="home_infos.homeInfo.name" 
               :readonly="!isAdmin"
               :success="validated"
@@ -15,7 +15,7 @@
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" v-slot="{validated, errors}" >
+          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
             <v-text-field
               :label="label.address" 
               v-model="home_infos.homeInfo.address" 
@@ -25,12 +25,12 @@
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" v-slot="{validated, errors}" >
+          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
             <v-select
               v-model="home_infos.admin.name"
               :items="listMemberUser"
               :chips="true"
-              label="Người quản lý"
+              :label="label.admin"
               item-text="name"
               item-value="admin_id"
               :readonly="!isAdmin"
@@ -123,13 +123,13 @@
         <!-- dialog add member -->
         <v-dialog v-model="flag.dialog_add_member" persistent max-width="290">
           <v-card class="pa-2">
-            <v-card-title class="headline">{{label.addNewMember}}</v-card-title>
+            <v-card-title class="headline">{{label.add_new_member}}</v-card-title>
             <v-form ref="form" v-model="valid" lazy-validation>
               <validationProvider :name="label.address" rules="required|email" v-slot="{ valid, errors }">
                 <v-text-field 
                   v-model="email" 
                   :rules="emailRules" 
-                  label="E-mail" 
+                  :label="label.email" 
                   required
                   :success="valid"
                   :error-messages="errors"
@@ -337,18 +337,18 @@ export default {
               user_id: response.data.data.id
             }
             this.home_infos.push(addMemberData)
-            this.snackbar.message = messages.success.addDone
+            this.snackbar.message = messages.success.add_done
             this.snackbar.color = "green"
             this.snackbar.flag = true
             this.flag.dialog_add_member = false;
           })
           .catch((error)  => {
             if(error.response.data.message == 405) {
-              this.snackbar.message = messages.error.notExistUser
+              this.snackbar.message = messages.error.not_exist_user
             } else if(error.response.data.message == 404) {
-              this.snackbar.message = messages.error.userIsReadyInOtherHome
+              this.snackbar.message = messages.error.user_is_ready_in_other_home
             } else if(error.response.data.message = 407) {
-              this.snackbar.message = messages.error.needCreateHome
+              this.snackbar.message = messages.error.need_create_home
             }
             this.flag.dialog_add_member = false
             this.snackbar.flag = true
