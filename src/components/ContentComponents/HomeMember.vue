@@ -5,48 +5,36 @@
       <v-card v-if="isHomeInfoLoaded" slot-scope="{invalid, validated}">
         <v-subheader>Thông tin nhà ở</v-subheader>
         <v-card-text>
-          <validationProvider :name="label.homeName" rules="required">
-            <v-text-field 
-              slot-scope="{
-                valid,
-                errors
-              }"
-              :label="label.homeName" 
+          <validationProvider :name="label.home_name" rules="required" v-slot="{validated, errors}">
+            <v-text-field
+              :label="label.home_name" 
               v-model="home_infos.homeInfo.name" 
               :readonly="!isAdmin"
-              :success="valid"
+              :success="validated"
               :error-messages="errors"
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" >
-            <v-text-field 
-              slot-scope="{
-                valid,
-                errors
-              }"
+          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
+            <v-text-field
               :label="label.address" 
               v-model="home_infos.homeInfo.address" 
               :readonly="!isAdmin"
-              :success="valid"
+              :success="validated"
               :error-messages="errors"
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" >
+          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
             <v-select
-              slot-scope="{
-                valid,
-                errors
-              }"
               v-model="home_infos.admin.name"
               :items="listMemberUser"
               :chips="true"
-              label="Người quản lý"
+              :label="label.admin"
               item-text="name"
               item-value="admin_id"
               :readonly="!isAdmin"
-              :success="valid"
+              :success="validated"
               :error-messages="errors"
             >
               <template v-slot:selection="{ item }">
@@ -107,13 +95,13 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title v-html="item.full_name"></v-list-item-title>
-                <v-list-item-subtitle v-if="item.user_id == home_infos.homeInfo.admin_id">Quản lý</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="item.user_id == home_infos.admin.id">Quản lý</v-list-item-subtitle>
               </v-list-item-content>
               <v-btn
                 text
                 icon
                 color="red"
-                v-if="item.user_id !== item.admin_id && flag.flag_edit_member"
+                v-if="item.user_id !== home_infos.admin.id && flag.flag_edit_member"
                 @click="showDialog(item)"
               >
                 <v-icon>mdi-account-remove</v-icon>
@@ -135,14 +123,24 @@
         <!-- dialog add member -->
         <v-dialog v-model="flag.dialog_add_member" persistent max-width="290">
           <v-card class="pa-2">
-            <v-card-title class="headline">{{label.addNewMember}}</v-card-title>
+            <v-card-title class="headline">{{label.add_new_member}}</v-card-title>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model="email" :rules="emailRules" v-validate="'required|email'" label="E-mail" required></v-text-field>
+              <validationProvider :name="label.address" rules="required|email" v-slot="{ valid, errors }">
+                <v-text-field 
+                  v-model="email" 
+                  :rules="emailRules" 
+                  :label="label.email" 
+                  required
+                  :success="valid"
+                  :error-messages="errors"
+                >
+                </v-text-field>
+              </validationProvider>
             </v-form>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="red darken-1" text @click="addMember(false)">{{button_label.cancel}}</v-btn>
-              <v-btn color="blue darken-1" text @click="addMember(true)" :disabled="!isFormValid">{{button_label.add}}</v-btn>
+              <v-btn color="blue darken-1" text @click="addMember(true)">{{button_label.add}}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -187,41 +185,6 @@ export default {
     ValidationProvider
   },
   data: () => ({
-    items: [
-      { header: "Thành viên" },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Brunch this weekend?",
-        subtitle:
-          "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-      },
-      { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>'
-      },
-      { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Oui oui",
-        subtitle:
-          "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-      },
-      { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        title: "Birthday gift",
-        subtitle:
-          "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?"
-      },
-      { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-        title: "Recipe to try",
-        subtitle:
-          "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-      }
-    ],
     home_infos: {},
     removeMemberDetail: {},
     email: "",
@@ -280,6 +243,7 @@ export default {
       return Object.keys(this.home_infos).length > 0;
     },
     isFormValid() {
+      console.log(this.fields)
       return Object.keys(this.fields).every(key => this.fields[key].valid);
     },
     isAdmin () {
@@ -294,7 +258,7 @@ export default {
       let listMember = new Array();
       this.home_infos.members.map((item) => {
         listMember.push({
-          id: item.id,
+          id: item.user_id,
           name: item.full_name
         })
       })
@@ -373,18 +337,18 @@ export default {
               user_id: response.data.data.id
             }
             this.home_infos.push(addMemberData)
-            this.snackbar.message = messages.success.addDone
+            this.snackbar.message = messages.success.add_done
             this.snackbar.color = "green"
             this.snackbar.flag = true
             this.flag.dialog_add_member = false;
           })
           .catch((error)  => {
             if(error.response.data.message == 405) {
-              this.snackbar.message = messages.error.notExistUser
+              this.snackbar.message = messages.error.not_exist_user
             } else if(error.response.data.message == 404) {
-              this.snackbar.message = messages.error.userIsReadyInOtherHome
+              this.snackbar.message = messages.error.user_is_ready_in_other_home
             } else if(error.response.data.message = 407) {
-              this.snackbar.message = messages.error.needCreateHome
+              this.snackbar.message = messages.error.need_create_home
             }
             this.flag.dialog_add_member = false
             this.snackbar.flag = true

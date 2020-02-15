@@ -11,14 +11,14 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form @submit.prevent="signup()" id="signup">
-                    <ValidationProvider :name="labels.fullName" rules="required">
+                    <ValidationProvider :name="labels.full_name" rules="required">
                       <v-text-field
                         slot-scope="{
                           errors,
                           valid
                         }"
-                        :label="labels.fullName"
-                        :name="labels.fullName"
+                        :label="labels.full_name"
+                        :name="labels.full_name"
                         prepend-inner-icon="mdi-account-card-details"
                         type="text"
                         :success="valid"
