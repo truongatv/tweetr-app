@@ -12,28 +12,28 @@
                 <v-container>
                     <v-form ref="form">
                         <v-text-field
-                        dense
-                        clearable
-                        :label="label.name_product"
-                        :rules="rules.nameProductRules"
-                        v-model="living_cost.name"
+                            dense
+                            clearable
+                            :label="label.name_product"
+                            :rules="rules.nameProductRules"
+                            v-model="living_cost.name"
                         ></v-text-field>
                         <v-menu
-                        v-model="dateSelect"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
+                            v-model="dateSelect"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            max-width="290px"
+                            min-width="290px"
                         >
                         <template v-slot:activator="{ on }">
                             <v-text-field
-                            v-model="living_cost.date_pay"
-                            :label="label.date_pay"
-                            prepend-inner-icon="mdi-calendar"
-                            persistent-hint
-                            readonly
-                            v-on="on"
+                                v-model="living_cost.date_pay"
+                                :label="label.date_pay"
+                                prepend-inner-icon="mdi-calendar"
+                                persistent-hint
+                                readonly
+                                v-on="on"
                             ></v-text-field>
                         </template>
                         <v-date-picker
@@ -43,30 +43,30 @@
                         ></v-date-picker>
                         </v-menu>
                         <v-text-field
-                        type="number"
-                        prefix="$"
-                        dense
-                        clearable
-                        :label="label.price"
-                        v-model="living_cost.price"
+                            type="number"
+                            prefix="$"
+                            dense
+                            clearable
+                            :label="label.price"
+                            v-model="living_cost.price"
                         ></v-text-field>
                         <!-- payer user -->
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
                                 <v-text-field
-                                dense
-                                clearable
-                                auto-grow
-                                :label="label.payer"
-                                v-on="on"
-                                v-model="living_cost.payer_name"
+                                    dense
+                                    clearable
+                                    auto-grow
+                                    :label="label.payer"
+                                    v-on="on"
+                                    v-model="living_cost.payer_name"
                                 ></v-text-field>
                             </template>
                             <v-list>
                                 <v-list-item
-                                v-for="(item, index) in homeMember"
-                                :key="index"
-                                @click="selectPayer(item)"
+                                    v-for="(item, index) in homeMember"
+                                    :key="index"
+                                    @click="selectPayer(item)"
                                 >
                                 <v-list-item-title>{{item.name}}</v-list-item-title>
                                 </v-list-item>

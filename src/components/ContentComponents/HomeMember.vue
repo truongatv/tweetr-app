@@ -5,36 +5,33 @@
       <v-card v-if="isHomeInfoLoaded" slot-scope="{invalid, validated}">
         <v-subheader>Thông tin nhà ở</v-subheader>
         <v-card-text>
-          <validationProvider :name="label.home_name" rules="required" v-slot="{validated, errors}">
+          <validationProvider :name="label.home_name" rules="required" v-slot="{errors}">
             <v-text-field
               :label="label.home_name" 
               v-model="home_infos.homeInfo.name" 
-              :readonly="!isAdmin"
-              :success="validated"
+              :readonly="!flag.edit_home_info && !flag.create_home"
               :error-messages="errors"
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
+          <validationProvider :name="label.address" rules="required" v-slot="{ errors }" >
             <v-text-field
               :label="label.address" 
               v-model="home_infos.homeInfo.address" 
-              :readonly="!isAdmin"
-              :success="validated"
+              :readonly="!flag.edit_home_info && !flag.create_home"
               :error-messages="errors"
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
+          <validationProvider :name="label.address" rules="required" v-slot="{ errors }" >
             <v-select
-              v-model="home_infos.admin.name"
+              v-model="home_infos.admin"
               :items="listMemberUser"
               :chips="true"
               :label="label.admin"
               item-text="name"
-              item-value="admin_id"
-              :readonly="!isAdmin"
-              :success="validated"
+              return-object
+              :readonly="!flag.edit_home_info && !flag.create_home"
               :error-messages="errors"
             >
               <template v-slot:selection="{ item }">
@@ -46,25 +43,25 @@
           </validationProvider>
         </v-card-text>
         <v-alert
-          v-if="response.responseHomeUpdate.status"
+          v-if="response.response_home_update.status"
           class="ml-2 mr-2"
-          :type="response.responseHomeUpdate.status"
+          :type="response.response_home_update.status"
           border="left"
           outlined
           dense
           text
-        >{{response.responseHomeUpdate.message}}</v-alert>
+        >{{response.response_home_update.message}}</v-alert>
         <v-card-actions v-if="isAdmin">
           <!-- update home info -->
-          <v-btn v-if="!flag.editHomeInfo && !flag.createHome" color="warning" @click.native="flag.editHomeInfo = true">
+          <v-btn v-if="!flag.edit_home_info && !flag.create_home" color="warning" @click.native="flag.edit_home_info = true">
             {{button_label.edit}}
           </v-btn>
-          <v-btn v-if="flag.editHomeInfo" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
+          <v-btn v-if="flag.edit_home_info" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
             <v-icon left dark>mdi-check</v-icon>
             {{button_label.save}}
           </v-btn>
           <!-- create new home info -->
-          <v-btn v-if="flag.createHome" color="primary" @click.native="updateHomeInfo" :disabled="invalid || !validated">
+          <v-btn v-if="flag.create_home" color="primary" @click.native="updateHomeInfo" :disabled="invalid || !validated">
             <v-icon left dark>mdi-check</v-icon>
             {{button_label.save}}
           </v-btn>
@@ -112,7 +109,7 @@
         <!-- dialog remove member -->
         <v-dialog v-model="flag.dialog" persistent max-width="290">
           <v-card>
-            <v-card-title class="headline">Bạn có muốn xóa " {{removeMemberDetail.full_name}} " ?</v-card-title>
+            <v-card-title class="headline">Bạn có muốn xóa " {{remove_member_detail.full_name}} " ?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="red darken-1" text @click="removeMember(0)">{{button_label.no}}</v-btn>
@@ -125,10 +122,9 @@
           <v-card class="pa-2">
             <v-card-title class="headline">{{label.add_new_member}}</v-card-title>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <validationProvider :name="label.address" rules="required|email" v-slot="{ valid, errors }">
+              <validationProvider :name="label.email" rules="required|email" v-slot="{ valid, errors }">
                 <v-text-field 
-                  v-model="email" 
-                  :rules="emailRules" 
+                  v-model="email"
                   :label="label.email" 
                   required
                   :success="valid"
@@ -186,26 +182,21 @@ export default {
   },
   data: () => ({
     home_infos: {},
-    removeMemberDetail: {},
+    remove_member_detail: {},
     email: "",
     response: {
-      responseHomeUpdate: {}
+      response_home_update: {}
     },
     button_label: button,
     label: label,
     flag: {
       flag_edit_member: false,
       dialog: false,
-      removeIndex: -1,
       dialog_add_member: false,
-      createHome: false,
-      editHomeInfo: false
+      create_home: false,
+      edit_home_info: false
     },
     valid: true,
-    emailRules: [
-      v => !!v || messages.error.required,
-      v => /.+@.+\..+/.test(v) || messages.error.email
-    ],
     snackbar: {
       flag: false,
       message: "",
@@ -225,7 +216,7 @@ export default {
         this.home_infos = response.data.data;
       })
       .catch(error => {
-        this.flag.createHome = true
+        this.flag.create_home = true
         let userInfo = this.$store.getters.getCurrentUserInfo
         this.home_infos = {
           admin: {},
@@ -248,7 +239,7 @@ export default {
     },
     isAdmin () {
       let userInfo = this.$store.getters.getCurrentUserInfo
-      if((typeof this.home_infos.homeInfo !== undefined && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.createHome) {
+      if((typeof this.home_infos.homeInfo !== undefined && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
         return true
       } else {
         return false
@@ -278,7 +269,7 @@ export default {
       this.flag.flag_edit_member = false;
     },
     showDialog(item) {
-      this.removeMemberDetail = item;
+      this.remove_member_detail = item;
       this.flag.dialog = true;
     },
     //remove member from home
@@ -289,7 +280,7 @@ export default {
           .put(
             "/home/remove_member",
             {
-              remove_user_id: this.removeMemberDetail.user_id
+              remove_user_id: this.remove_member_detail.user_id
             },
             {
               headers: {
@@ -300,7 +291,7 @@ export default {
           .then(response => {
             if (response.status == 200) {
               this.home_infos.splice(
-                this.home_infos.indexOf(this.removeMemberDetail),
+                this.home_infos.indexOf(this.remove_member_detail),
                 1
               );
             }
@@ -363,13 +354,14 @@ export default {
     update home info
     */
     updateHomeInfo() {
-      const token = localStorage.getItem("tweetr-token");
+      const token = localStorage.getItem("tweetr-token")
       axios
         .put(
           "/home/update_home",
           {
-            name: this.homeInfo.home_name,
-            address: this.homeInfo.address
+            name: this.home_infos.homeInfo.name,
+            address: this.home_infos.homeInfo.address,
+            admin_id: this.home_infos.admin.id
           },
           {
             headers: {
@@ -379,9 +371,13 @@ export default {
         )
         .then(response => {
           if (response.status == 200) {
-            this.response.responseHomeUpdate = response.data;
+            this.response.response_home_update = response.data;
+            this.flag.edit_home_info = false
           }
-        });
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     }
   }
 };
