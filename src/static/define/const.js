@@ -29,7 +29,10 @@ export const label = {
     address: 'Địa chỉ',
     beneficiary: 'Người sử dụng',
     cost_detail: 'Thông tin chi tiết',
-    admin: 'Người quản lý'
+    admin: 'Người quản lý',
+    sum_money: 'Tổng tiền',
+    created: 'Ngày tạo',
+    updated: 'Ngày cập nhật'
 }
 
 export const button = {

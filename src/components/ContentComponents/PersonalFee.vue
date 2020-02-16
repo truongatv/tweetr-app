@@ -2,7 +2,7 @@
   <v-data-table :headers="headers"  show-expand :items="living_cost_data" sort-by="date" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Tổng tiền:</v-toolbar-title>
+        <v-toolbar-title>{{label.sum_money}}: <strong>{{sumMoney}}</strong></v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <!-- popup create, update living cost -->
@@ -15,12 +15,12 @@
         <v-btn color="white" text @click="flag.snackbar.flag = false">{{button.cancel}}</v-btn>
       </v-snackbar>
     </template>
-    <template v-slot:item.payer_name="{ item }">
-      <v-chip>{{ item.payer_name }}</v-chip>
+    <template v-slot:item.payer.name="{ item }">
+      <v-chip>{{ item.payer.name }}</v-chip>
     </template>
     <template v-slot:item.edit="{ item }">
-      <v-icon v-if="currentUser.id == item.payer_id" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-      <v-icon v-if="currentUser.id == item.payer_id" small @click="deleteItem(item)">mdi-delete</v-icon>
+      <v-icon v-if="currentUser.id == item.payer.id" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+      <v-icon v-if="currentUser.id == item.payer.id" small @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -43,8 +43,8 @@ export default {
   data: () => ({
     living_cost: {
       name: "",
-      payer_name: "",
-      price: 0,
+      payer: {},
+      price: "",
       date_pay: new Date().toISOString().substr(0, 10),
       detail: "",
       receiver: []
@@ -68,7 +68,7 @@ export default {
         value: "name"
       },
       { text: label.date_pay, value: "date_pay" },
-      { text: label.payer, value: "payer_name" },
+      { text: label.payer, value: "payer.name" },
       { text: label.price, value: "price" },
       { text: label.edit, value: "edit", sortable: false }
     ],
@@ -82,6 +82,14 @@ export default {
   computed: {
     currentUser () {
       return this.$store.getters.getCurrentUserInfo
+    },
+    sumMoney () {
+      let sum_money = 0;
+      this.living_cost_data.map(item => {
+        sum_money += item.price
+      })
+
+      return sum_money
     }
   },
   created() {
@@ -100,6 +108,7 @@ export default {
 
     this.$bus.on('closeDialog', value => {
       this.flag.dialog = value
+      this.setDefaultLivingCost()
     })
   },
   methods: {
@@ -160,8 +169,8 @@ export default {
     setDefaultLivingCost() {
       this.living_cost= {
           name: "",
-          payer_name: "",
-          price: 0,
+          payer: {},
+          price: "",
           date_pay: new Date().toISOString().substr(0, 10),
           detail: "",
           receiver: []

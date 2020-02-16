@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
     <v-content>
-      <ValidationObserver ref="obs">
-        <v-container class="fill-height" fluid slot-scope="{ invalid, validated }">
+      <ValidationObserver ref="obs" v-slot="{ invalid, validated }">
+        <v-container class="fill-height" fluid>
           <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="4">
               <v-card class="elevation-12">
@@ -11,12 +11,8 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form @submit.prevent="signup()" id="signup">
-                    <ValidationProvider :name="labels.full_name" rules="required">
+                    <ValidationProvider :name="labels.full_name" rules="required" v-slot="{valid, errors}">
                       <v-text-field
-                        slot-scope="{
-                          errors,
-                          valid
-                        }"
                         :label="labels.full_name"
                         :name="labels.full_name"
                         prepend-inner-icon="mdi-account-card-details"
@@ -26,12 +22,8 @@
                         v-model="name"
                       />
                     </ValidationProvider>
-                    <ValidationProvider :name="labels.email" rules="required|email|notExistEmail">
+                    <ValidationProvider :name="labels.email" rules="required|email|notExistEmail" v-slot="{valid, errors}">
                       <v-text-field
-                        slot-scope="{
-                          errors,
-                          valid
-                        }"
                         :label="labels.email"
                         :name="labels.email"
                         prepend-inner-icon="mdi-email"
@@ -41,12 +33,8 @@
                         :error-messages="errors"
                       />
                     </ValidationProvider>
-                    <ValidationProvider :name="labels.password" rules="required|min:6">
+                    <ValidationProvider :name="labels.password" rules="required|min:6" v-slot="{valid, errors}">
                       <v-text-field
-                        slot-scope="{
-                          valid,
-                          errors
-                        }"
                         id="password"
                         :label="labels.password"
                         :name="labels.password"

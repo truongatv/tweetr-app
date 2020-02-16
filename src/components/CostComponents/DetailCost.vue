@@ -64,21 +64,23 @@
                         readonly
                     ></v-textarea>
                 </v-col>
+                <!-- created date   -->
                 <v-col cols="4" >
-                    <v-subheader>{{labels.date_pay}}</v-subheader>
+                    <v-subheader>{{labels.created}}</v-subheader>
                 </v-col>
                 <v-col cols="8">
                     <v-text-field
-                        :value="item.date_pay"
+                        :value="item.created_at"
                         readonly
                     ></v-text-field>
                 </v-col>
+                <!-- updated date  -->
                 <v-col cols="4" >
-                    <v-subheader>{{labels.date_pay}}</v-subheader>
+                    <v-subheader>{{labels.updated}}</v-subheader>
                 </v-col>
                 <v-col cols="8">
                     <v-text-field
-                        :value="item.date_pay"
+                        :value="item.updated_at"
                         readonly
                     ></v-text-field>
                 </v-col>
