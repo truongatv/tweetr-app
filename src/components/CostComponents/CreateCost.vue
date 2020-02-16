@@ -26,21 +26,21 @@
                             max-width="290px"
                             min-width="290px"
                         >
-                            <template v-slot:activator="{ on }">
-                                <v-text-field
-                                    v-model="living_cost.date_pay"
-                                    :label="label.date_pay"
-                                    prepend-inner-icon="mdi-calendar"
-                                    persistent-hint
-                                    readonly
-                                    v-on="on"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
                                 v-model="living_cost.date_pay"
-                                no-title
-                                @input="dateSelect = false"
-                            ></v-date-picker>
+                                :label="label.date_pay"
+                                prepend-inner-icon="mdi-calendar"
+                                persistent-hint
+                                readonly
+                                v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker
+                            v-model="living_cost.date_pay"
+                            no-title
+                            @input="dateSelect = false"
+                        ></v-date-picker>
                         </v-menu>
                         <v-text-field
                             type="number"
@@ -69,19 +69,19 @@
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
                                 <v-text-field
-                                dense
-                                clearable
-                                auto-grow
-                                :label="label.payer"
-                                v-on="on"
-                                v-model="living_cost.payer_name"
+                                    dense
+                                    clearable
+                                    auto-grow
+                                    :label="label.payer"
+                                    v-on="on"
+                                    v-model="living_cost.payer_name"
                                 ></v-text-field>
                             </template>
                             <v-list>
                                 <v-list-item
-                                v-for="(item, index) in homeMember"
-                                :key="index"
-                                @click="selectPayer(item)"
+                                    v-for="(item, index) in homeMember"
+                                    :key="index"
+                                    @click="selectPayer(item)"
                                 >
                                 <v-list-item-title>{{item.name}}</v-list-item-title>
                                 </v-list-item>
