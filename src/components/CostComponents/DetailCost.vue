@@ -3,49 +3,9 @@
         <v-container>
             <h4>{{labels.cost_detail}}</h4>
             <v-row align="center">
-                <!-- name product -->
-                <v-col cols="4">
-                    <v-subheader>{{labels.name_product}}</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                    <v-text-field
-                        :value="item.name"
-                        readonly
-                    ></v-text-field>
-                </v-col>
-                <!-- date pay -->
-                <v-col cols="4" >
-                    <v-subheader>{{labels.date_pay}}</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                    <v-text-field
-                        :value="item.date_pay"
-                        readonly
-                    ></v-text-field>
-                </v-col>
-                <!-- price -->
-                <v-col cols="4" >
-                    <v-subheader>{{labels.price}}</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                    <v-text-field
-                        :value="item.price"
-                        readonly
-                    ></v-text-field>
-                </v-col>
-                <!-- payer -->
-                <v-col cols="4" >
-                    <v-subheader>{{labels.payer}}</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                    <v-text-field
-                        :value="item.payer_name"
-                        readonly
-                    ></v-text-field>
-                </v-col>
                 <!-- receiver -->
                 <v-col cols="4" >
-                    <v-subheader>{{labels.date_pay}}</v-subheader>
+                    <v-subheader>{{labels.beneficiary}}</v-subheader>
                 </v-col>
                 <v-col cols="8">
                     <v-card-text>
