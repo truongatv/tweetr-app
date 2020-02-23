@@ -1,9 +1,9 @@
 <template>
-  <ListCost v-if="isLoaded" :headers="headers" :living_cost_data="living_cost_data"></ListCost>
+  <ListCost :headers="headers" :living_cost_data="living_cost_data"></ListCost>
 </template>
 
 <script>
-import { label, button } from "@/static/define/const";
+import { label } from "@/static/define/const";
 import ListCost from "../LivingCostComponents/ListCost";
 export default {
   data: () => ({
@@ -24,13 +24,11 @@ export default {
   components: {
     ListCost
   },
-  computed: {
-    isLoaded() {
-      return Object.keys(this.living_cost_data).length > 0;
-    }
-  },
   created() {
-    this.initialize();
+    this.initialize()
+    this.$bus.on('saveLivingCost', value => {
+        this.initialize()
+    })
   },
   methods: {
     initialize() {
@@ -43,7 +41,6 @@ export default {
         })
         .then(response => {
           this.living_cost_data = response.data.data;
-          console.log(this.living_cost_data);
         })
         .catch(error => {
           console.log(error.response);

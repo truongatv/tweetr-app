@@ -32,7 +32,8 @@ export const label = {
     admin: 'Người quản lý',
     sum_money: 'Tổng tiền',
     created: 'Ngày tạo',
-    updated: 'Ngày cập nhật'
+    updated: 'Ngày cập nhật',
+    home_info: 'Thông tin nhà ở',
 }
 
 export const button = {
@@ -64,7 +65,9 @@ export const messages = {
         add_fail: 'Thêm thất bại'
     },
     alert: {
-        are_you_sure_delete: 'Bạn có muốn xóa mục này không ?'
+        are_you_sure_delete: 'Bạn có muốn xóa mục này không ?',
+        no_data: 'Không có dữ liệu!',
+        create_home: 'Bạn chưa có thông tin nhà ở !'
     }
 }
 

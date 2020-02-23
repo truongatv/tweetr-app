@@ -1,5 +1,5 @@
 <template>
-    <v-data-table :headers="headers"  show-expand :items="living_cost_data" sort-by="date" class="elevation-1">
+    <v-data-table :headers="headers" :sort-by="['date_pay']" :sort-desc="[true]" show-expand :items="living_cost_data" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>{{label.sum_money}}: <strong>{{sumMoney}}</strong></v-toolbar-title>
@@ -23,7 +23,7 @@
         <v-icon v-if="currentUser.id == item.payer.id" small @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        {{messages.alert.no_data}}
       </template>
       <template v-slot:expanded-item="{ item }">
         <DetailCost :item="item" />
@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import { label, button } from '@/static/define/const'
-import CostPopup from './../CostComponents/CreateCost'
-import DetailCost from './../CostComponents/DetailCost'
+import { label, button, messages } from '@/static/define/const'
+import CostPopup from './CostComponents/CreateCost'
+import DetailCost from './CostComponents/DetailCost'
 export default {
   props: {
     headers: {
@@ -61,6 +61,7 @@ export default {
     },
     label: label,
     button: button,
+    messages: messages,
     flag: {
       dialog: false,
       snackbar: {
@@ -70,6 +71,7 @@ export default {
       },
       edit: false
     },
+    sort_by: 'date_pay'
   }),
   computed: {
     currentUser () {
@@ -89,7 +91,22 @@ export default {
     }
   },
   created() {
-    // this.initialize();
+    //listen event from children
+    this.$bus.on('saveLivingCost', value => {
+        // this.initialize()
+        this.setDefaultLivingCost()
+        //show snackbar
+        this.flag.snackbar = {
+          flag: true,
+          message: messages.success.add_done,
+          color: "success"
+        }
+    })
+
+    this.$bus.on('closeDialog', value => {
+      this.flag.dialog = value
+      this.setDefaultLivingCost()
+    })
   },
   methods: {
     editItem(item) {
@@ -129,7 +146,19 @@ export default {
           });
         this.living_cost_data.splice(index, 1);
       }
-    }
+    },
+
+    //set default value living cost
+    setDefaultLivingCost() {
+      this.living_cost= {
+          name: "",
+          payer: {},
+          price: "",
+          date_pay: new Date().toISOString().substr(0, 10),
+          detail: "",
+          receiver: []
+      }
+    },
   }
 };
 </script>
