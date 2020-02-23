@@ -1,20 +1,60 @@
 <template>
-    <v-data-table :headers="headers" :sort-by="['date_pay']" :sort-desc="[true]" show-expand :items="living_cost_data" class="elevation-1">
-      <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title>{{label.sum_money}}: <strong>{{sumMoney}}</strong></v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+  <v-card>
+    <v-card-title>
+      {{label.sum_money}}: <strong> {{sumMoney}}</strong>
+      <v-spacer></v-spacer>
+      <!-- popup create, update living cost -->
+      <CostPopup :living_cost="living_cost" :dialog="flag.dialog" :edit="flag.edit">
+      </CostPopup>
+    </v-card-title>
+    <v-card-title>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-menu
+        ref="date_select"
+        v-model="date_select"
+        :close-on-content-click="false"
+        :return-value.sync="dates"
+        transition="scale-transition"
+        offset-y
+        max-width="290px"
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="dateRangeText"
+            label="Picker in menu"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          v-model="dates"
+          type="month"
+          no-title
+          scrollable
+          range
+        >
           <v-spacer></v-spacer>
-          <!-- popup create, update living cost -->
-          <CostPopup :living_cost="living_cost" :dialog="flag.dialog" :edit="flag.edit">
-          </CostPopup>
-        </v-toolbar>
-        <!-- show snackbars -->
-        <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color" right bottom>
-          {{flag.snackbar.message}}
-          <v-btn color="white" text @click="flag.snackbar.flag = false">{{button.cancel}}</v-btn>
-        </v-snackbar>
-      </template>
+          <v-btn text color="primary" @click="date_select = false">Cancel</v-btn>
+          <v-btn text color="primary" @click="searchByDate()">OK</v-btn>
+        </v-date-picker>
+      </v-menu>
+    </v-card-title>
+    <v-data-table 
+      :headers="headers" 
+      :sort-by="['date_pay']" 
+      :sort-desc="[true]" 
+      show-expand 
+      :items="living_cost_data" 
+      class="elevation-1"
+      :search="search"
+    >
       <template v-slot:item.payer.name="{ item }">
         <v-chip>{{ item.payer.name }}</v-chip>
       </template>
@@ -28,7 +68,8 @@
       <template v-slot:expanded-item="{ item }">
         <DetailCost :item="item" />
       </template>
-  </v-data-table>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
@@ -59,8 +100,11 @@ export default {
       detail: "",
       receiver: []
     },
+    search: '',
     label: label,
     button: button,
+    date_select: false,
+    dates: [new Date().toISOString().substr(0, 7)],
     messages: messages,
     flag: {
       dialog: false,
@@ -83,7 +127,12 @@ export default {
         sum_money += item.price
       })
       return sum_money
-    }
+    },
+    //change array date to format date_month_start ~ date_month_end
+    dateRangeText () {
+      this.dates.sort()
+      return this.dates.join(' ~ ')
+    },
   },
   watch: {
     dialog(val) {
@@ -109,6 +158,12 @@ export default {
     })
   },
   methods: {
+    //search data when select date month
+    searchByDate() {
+      // this.$bus.emit('searchByDate', false)
+      this.$refs.date_select.save(this.dates)
+      this.$bus.emit('searchByDate', this.dates)
+    },
     editItem(item) {
       this.living_cost = Object.assign({}, item);
       this.flag.dialog = true;
