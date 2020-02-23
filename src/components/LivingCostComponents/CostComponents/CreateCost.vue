@@ -23,7 +23,7 @@
                                 ></v-text-field>
                             </ValidationProvider>
                             <v-menu
-                                v-model="dateSelect"
+                                v-model="date_select"
                                 :close-on-content-click="false"
                                 transition="scale-transition"
                                 offset-y
@@ -47,7 +47,7 @@
                                 <v-date-picker
                                     v-model="living_cost.date_pay"
                                     no-title
-                                    @input="dateSelect = false"
+                                    @input="date_select = false"
                                 ></v-date-picker>
                             </v-menu>
                             <ValidationProvider :name="label.price" rules="required|min_value:1" v-slot="{validated, errors}">
@@ -143,7 +143,7 @@ export default {
             home_member: [],
             label: label,
             button: button,
-            dateSelect: false,
+            date_select: false,
             flag: {
                 snackbar: {
                     flag: false,
@@ -166,8 +166,8 @@ export default {
             return listMember
         },
         computedDateFormatted() {
-            this.living_cost.date_pay = this.formatDate(this.dateSelect.date);
-            return this.formatDate(this.dateSelect.date);
+            this.living_cost.date_pay = this.formatDate(this.date_select.date);
+            return this.formatDate(this.date_select.date);
         },
         dialogFlag : {
             get() {

@@ -29,6 +29,10 @@ export default {
     this.$bus.on('saveLivingCost', value => {
         this.initialize()
     })
+    //search by date
+    this.$bus.on('searchByDate', value => {
+        this.searchByDate(value)
+    })
   },
   methods: {
     initialize() {
@@ -45,6 +49,31 @@ export default {
         .catch(error => {
           console.log(error.response);
         });
+    },
+    searchByDate(value) {
+      //get date start and date end
+      let date_pay_start =  value[0]
+      let date_pay_end = value[0]
+      if(typeof value[1] != 'undefined') {
+        date_pay_end = value[1]
+      }
+      const token = localStorage.getItem('tweetr-token')
+      axios
+        .get('/cost/get_user_cost',{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          params: {
+            date_pay_start: date_pay_start,
+            date_pay_end: date_pay_end
+          }
+        })
+        .then(response => {
+          this.living_cost_data = response.data.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     }
   }
 };

@@ -245,7 +245,7 @@ export default {
     },
     isAdmin () {
       let userInfo = this.$store.getters.getCurrentUserInfo
-      if((typeof this.home_infos.homeInfo !== undefined && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
+      if((typeof this.home_infos.homeInfo !== 'undefined' && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
         return true
       } else {
         return false
