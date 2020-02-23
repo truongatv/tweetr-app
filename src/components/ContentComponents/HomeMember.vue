@@ -3,7 +3,12 @@
     <!-- home detail -->
     <ValidationObserver ref="obs">
       <v-card v-if="isHomeInfoLoaded" slot-scope="{invalid, validated}">
-        <v-subheader>Thông tin nhà ở</v-subheader>
+        <v-card-title>{{label.home_info}}</v-card-title>
+        <v-card-subtitle v-if="flag.create_home">
+          <div class="red lighten-1 text-center">
+            <span class="white--text">{{messages.alert.create_home}}</span>
+          </div>
+        </v-card-subtitle>
         <v-card-text>
           <validationProvider :name="label.home_name" rules="required" v-slot="{errors}">
             <v-text-field
@@ -189,6 +194,7 @@ export default {
     },
     button_label: button,
     label: label,
+    messages: messages,
     flag: {
       flag_edit_member: false,
       dialog: false,
