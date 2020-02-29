@@ -7,7 +7,7 @@
             <v-col cols="12" sm="8" md="4">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
-                  <v-toolbar-title>Login form</v-toolbar-title>
+                  <v-toolbar-title>{{ $t('labels.login_form')}}</v-toolbar-title>
                   <v-spacer />
                 </v-toolbar>
                 <v-card-text>
@@ -18,7 +18,7 @@
                           errors,
                           valid
                         }"
-                        label="email"
+                        :label="$t('labels.email')"
                         name="Email"
                         prepend-inner-icon="mdi-account"
                         :error-messages="errors"
@@ -35,7 +35,7 @@
                           valid
                         }"
                         id="password"
-                        label="Password"
+                        :label="$t('labels.password')"
                         name="Password"
                         :error-messages="errors"
                         prepend-inner-icon="mdi-lock"
@@ -54,7 +54,7 @@
                 <v-spacer />
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn type="submit" form="login" color="primary" :disabled="invalid || !validated">Login</v-btn>
+                  <v-btn type="submit" form="login" color="primary" :disabled="invalid || !validated">{{$t('buttons.login')}}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>

@@ -11,9 +11,9 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form @submit.prevent="signup()" id="signup">
-                    <ValidationProvider :name="labels.full_name" rules="required" v-slot="{valid, errors}">
+                    <ValidationProvider :name="$t('labels.full_name')" rules="required" v-slot="{valid, errors}">
                       <v-text-field
-                        :label="labels.full_name"
+                        :label="$t('labels.full_name')"
                         :name="labels.full_name"
                         prepend-inner-icon="mdi-account-card-details"
                         type="text"
@@ -22,9 +22,9 @@
                         v-model="name"
                       />
                     </ValidationProvider>
-                    <ValidationProvider :name="labels.email" rules="required|email|notExistEmail" v-slot="{valid, errors}">
+                    <ValidationProvider :name="$t('labels.email')" rules="required|email|notExistEmail" v-slot="{valid, errors}">
                       <v-text-field
-                        :label="labels.email"
+                        :label="$t('labels.email')"
                         :name="labels.email"
                         prepend-inner-icon="mdi-email"
                         type="text"
@@ -33,10 +33,10 @@
                         :error-messages="errors"
                       />
                     </ValidationProvider>
-                    <ValidationProvider :name="labels.password" rules="required|min:6" v-slot="{valid, errors}">
+                    <ValidationProvider :name="$t('labels.password')" rules="required|min:6" v-slot="{valid, errors}">
                       <v-text-field
                         id="password"
-                        :label="labels.password"
+                        :label="$t('labels.password')"
                         :name="labels.password"
                         prepend-inner-icon="mdi-lock"
                         type="password"
@@ -54,7 +54,7 @@
                   />
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn type="submit" form="signup"  color="primary" :disabled="invalid || !validated">SIGN UP</v-btn>
+                  <v-btn type="submit" form="signup"  color="primary" :disabled="invalid || !validated">{{$t('buttons.sign_up')}}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>

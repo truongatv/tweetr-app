@@ -39,5 +39,8 @@ export default {
   data: () => ({
     //
   }),
+  created() {
+    console.log(this.$i18n.locale)
+  },
 };
 </script>

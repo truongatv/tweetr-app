@@ -15,9 +15,9 @@
 
     <v-divider />
     <v-list rounded>
-      <v-subheader>MENU</v-subheader>
-      <v-list-item-group v-model="item" color="primary">
-        <v-list-item v-for="(item, i) in items" :key="i" @click="changeMenu(item.component_name)">
+      <v-subheader>{{$t('labels.menu')}}</v-subheader>
+      <v-list-item-group color="primary">
+        <v-list-item v-for="(item, i) in $t('menu')" :key="i" @click="changeMenu(item.component_name)">
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
@@ -31,11 +31,8 @@
 </template>
 
 <script>
-import { menu } from '@/static/define/const'
 export default {
   data: () => ({
-    item: 1,
-    items: menu,
     current_menu: "",
     user:{}
   }),

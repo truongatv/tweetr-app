@@ -2,16 +2,16 @@
   <div>
     <!-- <router-link to="/login" tag="v-btn"> -->
       <v-btn v-if="!loginStatus" text to="/login">
-        <span class="mr-2">Login</span>
+        <span class="mr-2">{{$t('buttons.login')}}</span>
       </v-btn>
     <!-- </router-link> -->
     <v-btn v-if="loginStatus" @click="logout" text>
-      <span class="mr-2">Logout</span>
+      <span class="mr-2">{{$t('buttons.logout')}}</span>
       <v-icon>mdi-logout</v-icon>
     </v-btn>
     <!-- <router-link to="/signup" tag="v-btn"> -->
       <v-btn v-if="!loginStatus" text to="/signup">
-        <span class="mr-2">Signup</span>
+        <span class="mr-2">{{$t('buttons.sign_up')}}</span>
         <v-icon>mdi-account</v-icon>
       </v-btn>
     <!-- </router-link> -->
