@@ -8,24 +8,24 @@
               <v-avatar size="96" class="mr-4">
                 <img id="img" src="https://randomuser.me/api/portraits/women/81.jpg" alt="Avatar" />
               </v-avatar>
-              <v-btn @click="openAvatarPicker">Change Avatar</v-btn>
+              <v-btn @click="openAvatarPicker">{{$t('buttons.change_avatar')}}</v-btn>
               <input type="file" id="file-upload" style="display:none" @change="onFileChange" />
             </v-flex>
-            <ValidationProvider :name="labels.full_name" rules="required" v-slot="{ validated, errors }">
+            <ValidationProvider :name="$t('labels.full_name')" rules="required" v-slot="{ validated, errors }">
               <v-text-field 
                 v-model="form.name" 
-                :label="labels.full_name"
+                :label="$t('labels.full_name')"
                 :readonly="!flag.editProfile"
                 :success="validated"
                 :error-messages="errors"
               >
               </v-text-field>
             </ValidationProvider>
-            <v-text-field v-if="form.home" v-model="form.home.name" label="Tên nhà" disabled></v-text-field>
-            <ValidationProvider :name="labels.email" rules="required|email" v-slot="{ validated, errors }">
+            <v-text-field v-if="form.home" v-model="form.home.name" :label="$t('labels.home_name')" disabled></v-text-field>
+            <ValidationProvider :name="$t('labels.email')" rules="required|email" v-slot="{ validated, errors }">
             <v-text-field 
               v-model="form.email"
-              :label="labels.email"
+              :label="$t('labels.email')"
               :readonly="!flag.editProfile"
               :success="validated"
               :error-messages="errors"
@@ -38,10 +38,10 @@
           </v-alert>
           <v-card-actions>
             <v-btn v-if="flag.editProfile" color="primary" :loading="loading" @click.native="updateProfile" :disabled="invalid ">
-              <v-icon left dark>mdi-check</v-icon>{{button_label.save}}
+              <v-icon left dark>mdi-check</v-icon>{{$t('buttons.save')}}
             </v-btn>
             <v-btn v-if="!flag.editProfile" color="warning" @click.native="flag.editProfile = true">
-              <v-icon left dark>mdi-check</v-icon>{{button_label.edit}}
+              <v-icon left dark>mdi-check</v-icon>{{$t('buttons.edit')}}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { button, error, label } from '@/static/define/const'
+// import { button, error, label } from '@/static/define/const'
 import {
   ValidationProvider,
   ValidationObserver
@@ -68,8 +68,6 @@ export default {
       form: {},
       showAvatarPicker: false,
       response: {},
-      button_label: button,
-      labels: label,
       flag: {
         editProfile: false
       }

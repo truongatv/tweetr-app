@@ -6,7 +6,8 @@ import vuetify from './plugins/vuetify'
 import { localize, extend  } from 'vee-validate'
 import * as rules from 'vee-validate/dist/rules';
 import axios from 'axios'
-import vi_extend from '@/i18n/validator/vi'
+import vi_extend from '@/plugins/i18n/validator/vi'
+import i18n from '@/plugins/i18n/i18n';
 
 //register event bus global
 import Bus from './components/bus'
@@ -25,6 +26,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:3333'
 localize('vi', vi_extend);
 
 new Vue({
+  i18n,
   router,
   store,
   vuetify,
