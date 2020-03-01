@@ -3,24 +3,26 @@
 </template>
 
 <script>
-import { label } from "@/static/define/const";
 import ListCost from "../LivingCostComponents/ListCost";
 export default {
-  data: () => ({
-    headers: [
-      {
-        text: label.name_product,
-        align: "left",
-        sortable: false,
-        value: "name"
-      },
-      { text: label.date_pay, value: "date_pay" },
-      { text: label.payer, value: "payer.name" },
-      { text: label.price, value: "price" },
-      { text: label.edit, value: "edit", sortable: false }
-    ],
-    living_cost_data: []
-  }),
+  data(){
+    const $t = this.$t.bind(this)
+    return {
+      headers: [
+        {
+          text: $t('labels.name_product'),
+          align: "left",
+          sortable: false,
+          value: "name"
+        },
+        { text: $t('labels.date_pay'), value: "date_pay" },
+        { text: $t('labels.payer'), value: "payer.name" },
+        { text: $t('labels.price'), value: "price" },
+        { text: $t('labels.edit'), value: "edit", sortable: false }
+      ],
+      living_cost_data: []
+    }
+  },
   components: {
     ListCost
   },

@@ -14,7 +14,7 @@
                     <ValidationProvider :name="$t('labels.full_name')" rules="required" v-slot="{valid, errors}">
                       <v-text-field
                         :label="$t('labels.full_name')"
-                        :name="labels.full_name"
+                        :name="$t('labels.full_name')"
                         prepend-inner-icon="mdi-account-card-details"
                         type="text"
                         :success="valid"
@@ -25,7 +25,7 @@
                     <ValidationProvider :name="$t('labels.email')" rules="required|email|notExistEmail" v-slot="{valid, errors}">
                       <v-text-field
                         :label="$t('labels.email')"
-                        :name="labels.email"
+                        :name="$t('labels.email')"
                         prepend-inner-icon="mdi-email"
                         type="text"
                         v-model="email"
@@ -37,7 +37,7 @@
                       <v-text-field
                         id="password"
                         :label="$t('labels.password')"
-                        :name="labels.password"
+                        :name="$t('labels.password')"
                         prepend-inner-icon="mdi-lock"
                         type="password"
                         v-model="password"
@@ -72,7 +72,6 @@ import {
   ValidationObserver
 } from 'vee-validate'
 import { extend } from 'vee-validate';
-import { label } from '@/static/define/const'
 
 //create rule check email is exist
 extend('notExistEmail', value => {
@@ -112,7 +111,6 @@ export default {
         type: ""
       },
       color: 'red',
-      labels: label
     };
   },
   beforeRouteEnter(to, from, next) {
