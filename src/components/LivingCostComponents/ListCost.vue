@@ -139,6 +139,8 @@ export default {
   created() {
     //listen event from children
     this.$bus.on("saveLivingCost", value => {
+      //re get living cost data by date range
+      this.$bus.emit("searchByDate", this.dates);
       // this.initialize()
       this.setDefaultLivingCost();
       //show snackbar
