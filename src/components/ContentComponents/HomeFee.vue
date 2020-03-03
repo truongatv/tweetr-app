@@ -1,5 +1,12 @@
 <template>
-  <ListCost :headers="headers" :living_cost_data="living_cost_data"></ListCost>
+  <div>
+    <ListCost :headers="headers" :living_cost_data="living_cost_data"></ListCost>
+    <!-- show snackbars -->
+    <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color">
+      {{flag.snackbar.message}}
+      <v-btn color="white" text @click="flag.snackbar.flag = false">{{$t('buttons.cancel')}}</v-btn>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
@@ -20,7 +27,14 @@ export default {
         { text: $t('labels.price'), value: "price" },
         { text: $t('labels.edit'), value: "edit", sortable: false }
       ],
-      living_cost_data: []
+      living_cost_data: [],
+      flag: {
+          snackbar: {
+            flag: false,
+            message: "",
+            color: "#004D40"
+        }
+      }
     }
   },
   components: {
@@ -31,6 +45,10 @@ export default {
     // this.$bus.on('saveLivingCost', value => {
     //     this.initialize()
     // })
+    //show snackbar when create, update cost
+    this.$bus.on("setSnackbar", value => {
+      this.flag = value
+    });
     //search by date
     this.$bus.on('searchByDate', value => {
         this.searchByDate(value)
