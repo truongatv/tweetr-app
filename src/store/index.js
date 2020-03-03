@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     current_component: 'HomeMember',
     user_infos: {},
-    languages: 'vi',
+    languages: 'vn',
   },
   getters: {
     currentComponent: state => {
@@ -16,6 +16,9 @@ export default new Vuex.Store({
     },
     getCurrentUserInfo: state => {
       return state.user_infos
+    },
+    getCurrentLanguages: state => {
+      return state.languages
     }
   },
   actions: {
