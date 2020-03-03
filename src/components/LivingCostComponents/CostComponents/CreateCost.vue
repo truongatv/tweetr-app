@@ -216,7 +216,6 @@ export default {
                             message: this.$t('messages.success.add_done'),
                             color: "success"
                         }
-                        this.$refs.obs.reset()
                     })
                     .catch(error => {
                         this.flag.snackbar = {
@@ -224,7 +223,12 @@ export default {
                             message: this.$t('messages.success.add_fail'),
                             color: "error"
                         }
-                        console.log(error.response)
+                        this.$bus.emit('setSnackbar', this.flag)
+                    })
+                    .then(() => {
+                        //    reset validate
+                        this.$refs.obs.reset()
+                        this.$bus.emit('setSnackbar', this.flag)
                     })
                 } else {
                     axios.put('cost/update_cost', this.living_cost, {
@@ -248,7 +252,11 @@ export default {
                             message: this.$t('messages.success.edit_fail'),
                             color: "error"
                         }
-                        console.log(error.response)
+                    })
+                    .then(() => {
+                        //    reset validate
+                        this.$refs.obs.reset()
+                        this.$bus.emit('setSnackbar', this.flag)
                     })
                 }
             } else {

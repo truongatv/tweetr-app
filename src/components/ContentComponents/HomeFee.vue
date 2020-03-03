@@ -28,9 +28,9 @@ export default {
   },
   created() {
     this.initialize()
-    this.$bus.on('saveLivingCost', value => {
-        this.initialize()
-    })
+    // this.$bus.on('saveLivingCost', value => {
+    //     this.initialize()
+    // })
     //search by date
     this.$bus.on('searchByDate', value => {
         this.searchByDate(value)
