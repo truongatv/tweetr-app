@@ -109,7 +109,6 @@ export default {
         .then(response => {
           // save token in localstorage
           localStorage.setItem("tweetr-token", response.data.data.token);
-
           // redirect to user home
           this.$router.push('/')
         })
@@ -123,6 +122,22 @@ export default {
             type: error.response.data.status
           });
         });
+    },
+    getLanguage() {
+      const token = localStorage.getItem("tweetr-token")
+      axios
+        .get('/account/get_language', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          if(response.data.data) {
+            this.$cookie.set('language', response.data.data);
+          } else {
+            this.$cookie.set('language', 'us');
+          }
+        })
     }
   }
 };
