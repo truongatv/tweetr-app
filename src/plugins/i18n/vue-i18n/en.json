@@ -1,8 +1,90 @@
 {
-  "welcome_message": "Welcome to Your Vue.js App",
-  "popular_links": "Popular Links",
-  "ecosystem": "Ecosystem",
-  "pages": {
-    "about": "About Page"
+  "menu": [
+    {
+      "text": "Profile",
+      "icon": "mdi-account",
+      "component_name": "Profile"
+    },
+    {
+      "text": "Home control",
+      "icon": "mdi-clock",
+      "component_name": "HomeMember"
+    },
+    {
+      "text": "Personal Fee",
+      "icon": "mdi-account",
+      "component_name": "PersonalFee"
+    },
+    {
+      "text": "Home Fee",
+      "icon": "mdi-home",
+      "component_name": "HomeFee"
+    }
+  ],
+  "labels": {
+    "full_name": "Fullname",
+    "name_product": "Product name",
+    "date_pay": "Paid day",
+    "price": "Price",
+    "payer": "Payer",
+    "edit": "Edit",
+    "email": "E-mail",
+    "add_new": "New",
+    "password": "Password",
+    "detail": "Detail",
+    "add_new_member": "Add new member",
+    "home_name": "Home's name",
+    "address": "Address",
+    "beneficiary": "Beneficiary",
+    "cost_detail": "Detail",
+    "admin": "Admin",
+    "sum_money": "Sum money",
+    "created": "created",
+    "updated": "updated",
+    "home_info": "Home detail",
+    "login_form": "Login",
+    "menu": "Menu",
+    "member": "Members",
+    "manager": "Admin",
+    "search": "Search",
+    "date_pay_range": "Month range"
+  },
+  "buttons": {
+    "edit_member": "Edit member",
+    "done": "Done",
+    "yes": "Yes",
+    "no": "No",
+    "add": "Add",
+    "cancel": "Cancel",
+    "save_edit": "Save",
+    "save": "Save",
+    "edit": "Edit Info",
+    "login": "Login",
+    "sign_up": "Sign Up",
+    "logout": "Logout",
+    "change_avatar": "Change avatar"
+  },
+  "messages": {
+    "error": {
+      "email": "Email required",
+      "not_exist_user": "User not exist",
+      "user_is_ready_in_other_home": "The user is already in a home!",
+      "required": "You need to enter information",
+      "need_create_home": "You need to create housing information first"
+    },
+    "success": {
+      "add_done": "Add done",
+      "remove_done": "Removed",
+      "remove_fail": "Remove fail",
+      "edit_done": "Update done",
+      "edit_fail": "Update fail",
+      "add_fail": "Add fail"
+    },
+    "alert": {
+      "are_you_sure_delete": "Do you sure remove <strong>{name}</strong> ?",
+      "no_data": "No data!",
+      "create_home": "You do not have housing information!",
+      "are_you_sure_delete_confirm": "Do you sure remove  {name} ?"
+    }
   }
 }
