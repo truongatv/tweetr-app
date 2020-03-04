@@ -109,7 +109,6 @@ export default {
         .then(response => {
           // save token in localstorage
           localStorage.setItem("tweetr-token", response.data.data.token);
-          const language = this.getLanguage();
           // redirect to user home
           this.$router.push('/')
         })
