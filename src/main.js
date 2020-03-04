@@ -8,10 +8,13 @@ import * as rules from 'vee-validate/dist/rules';
 import axios from 'axios'
 import vi_extend from '@/plugins/i18n/validator/vi'
 import i18n from '@/plugins/i18n/i18n';
+import VueCookie from 'vue-cookie'
 
 //register event bus global
 import Bus from './components/bus'
 Vue.use(Bus)
+//register cookie
+Vue.use(VueCookie);
 
 // install rules and localization
 Object.keys(rules).forEach(rule => {
