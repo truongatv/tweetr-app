@@ -130,11 +130,9 @@ export default {
           password: this.password
         })
         .then(response => {
-          // save token in localstorage
-          localStorage.setItem("tweetr-token", response.data.data.token);
 
           // redirect to user home
-          this.$router.push({ path: '/' });
+          this.$router.push({ path: '/sign_up_done' });
         })
         .catch(error => {
           // display error notification

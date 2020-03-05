@@ -51,8 +51,8 @@ export default {
   computed: {
     getCountry() {
       //setup language
-      const language = this.$cookie.get('language')
-      if(language) {
+      const language = this.$cookie.get("language")
+      if (language) {
         this.$store.commit("setLanguage", language)
       }
       const country = this.$store.getters.getCurrentLanguages
@@ -68,9 +68,11 @@ export default {
       }
     },
     changeLanguage(item) {
-      if(this.loginStatus) {
+      if (this.loginStatus) {
         const token = localStorage.getItem("tweetr-token");
-        axios.put("/account/update_language", 
+        axios
+          .put(
+            "/account/update_language",
             {
               language: item
             },
@@ -80,13 +82,11 @@ export default {
               }
             }
           )
-          .then(response => {
-            
-          })
+          .then(response => {});
       }
-      this.$store.commit("setLanguage", item)
-      this.$i18n.locale = item
-      this.$cookie.set('language', item)
+      this.$store.commit("setLanguage", item);
+      this.$i18n.locale = item;
+      this.$cookie.set("language", item);
     }
   },
   watch: {

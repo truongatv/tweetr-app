@@ -70,7 +70,8 @@
       "not_exist_user": "Người dùng không tồn tại",
       "user_is_ready_in_other_home": "Người dùng đã ở một nhà nào đó!",
       "required": "Bạn cần nhập thông tin",
-      "need_create_home": "Bạn cần tạo thông tin nhà ở trước"
+      "need_create_home": "Bạn cần tạo thông tin nhà ở trước",
+      "confirm_account_fail": "Xác nhận tài khoản thất bại !"
     },
     "success": {
       "add_done": "Thêm thành công",
@@ -78,13 +79,19 @@
       "remove_fail": "Xóa thất bại",
       "edit_done": "Cập nhật thành công",
       "edit_fail": "Cập nhật thất bại",
-      "add_fail": "Thêm thất bại"
+      "add_fail": "Thêm thất bại",
+      "confirm_account_done": "Xác nhận tài khoản thành công !",
+      "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !"
     },
     "alert": {
       "are_you_sure_delete": "Bạn có muốn xóa <strong>{name}</strong> ?",
       "no_data": "Không có dữ liệu!",
       "create_home": "Bạn chưa có thông tin nhà ở !",
-      "are_you_sure_delete_confirm": "Bạn có muốn xóa {name} không ?"
+      "are_you_sure_delete_confirm": "Bạn có muốn xóa {name} không ?",
+      "account_not_confirm": "Tài khoản chưa được xác nhận! Bạn hãy xác nhận tài khoản trước !"
+    },
+    "titles": {
+      "confirm_account": "Xác nhận tài khoản"
     }
   }
 }

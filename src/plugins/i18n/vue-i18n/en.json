@@ -70,7 +70,8 @@
       "not_exist_user": "User not exist",
       "user_is_ready_in_other_home": "The user is already in a home!",
       "required": "You need to enter information",
-      "need_create_home": "You need to create housing information first"
+      "need_create_home": "You need to create housing information first",
+      "confirm_account_fail": "Confirm account failed !"
     },
     "success": {
       "add_done": "Add done",
@@ -78,13 +79,18 @@
       "remove_fail": "Remove fail",
       "edit_done": "Update done",
       "edit_fail": "Update fail",
-      "add_fail": "Add fail"
+      "add_fail": "Add fail",
+      "confirm_account_done": "Confirm account success !"
     },
     "alert": {
       "are_you_sure_delete": "Do you sure remove <strong>{name}</strong> ?",
       "no_data": "No data!",
       "create_home": "You do not have housing information!",
-      "are_you_sure_delete_confirm": "Do you sure remove  {name} ?"
+      "are_you_sure_delete_confirm": "Do you sure remove  {name} ?",
+      "account_not_confirm": "The account has not been confirmed! Please confirm your account first!"
+    },
+    "titles": {
+      "confirm_account": "Confirm account"
     }
   }
 }

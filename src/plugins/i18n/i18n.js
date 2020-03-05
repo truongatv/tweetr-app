@@ -7,7 +7,7 @@ import jp from './vue-i18n/jp.json'
 Vue.use(VueI18n);
 export default new VueI18n({
     locale: 'vn', // set locale
-    fallbackLocale: 'us',
+    fallbackLocale: 'vn',
     messages: {
         vn: vn ,
         us: us ,
