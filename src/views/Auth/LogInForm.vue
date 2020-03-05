@@ -54,24 +54,34 @@
                 <v-spacer />
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn type="submit" form="login" color="primary" :disabled="invalid || !validated">{{$t('buttons.login')}}</v-btn>
+                  <v-btn
+                    type="submit"
+                    form="login"
+                    color="primary"
+                    :disabled="invalid || !validated"
+                  >{{$t('buttons.login')}}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
         </v-container>
       </ValidationObserver>
+      <!-- show dialog for warning  -->
+      <v-dialog v-model="dialog_flag" max-width="400">
+        <v-card>
+          <v-card-title class="headline">{{$t('messages.titles.confirm_account')}}</v-card-title>
+
+          <v-card-text>{{$t('messages.alert.account_not_confirm')}}</v-card-text>
+        </v-card>
+      </v-dialog>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Notification from "@/components/Notification"
-import {
-  ValidationProvider,
-  ValidationObserver
-} from 'vee-validate'
-import {messages} from '@/static/define/const'
+import Notification from "@/components/Notification";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { messages, resultApi } from "@/static/define/const";
 export default {
   name: "LogInForm",
   components: {
@@ -86,7 +96,8 @@ export default {
       notification: {
         message: "",
         type: ""
-      }
+      },
+      dialog_flag: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -110,34 +121,37 @@ export default {
           // save token in localstorage
           localStorage.setItem("tweetr-token", response.data.data.token);
           // redirect to user home
-          this.$router.push('/')
+          this.$router.push("/")
         })
         .catch(error => {
-          // clear form inputs
-          this.email = this.password = "";
-
-          // display error notification
-          this.notification = Object.assign({}, this.notification, {
-            message: error.response.data.message,
-            type: error.response.data.status
-          });
+          if (error.response.data.status == resultApi.needConfirmAccount) {
+            this.dialog_flag = true;
+          } else {
+            // clear form inputs
+            this.email = this.password = "";
+            // display error notification
+            this.notification = Object.assign({}, this.notification, {
+              message: error.response.data.message,
+              type: error.response.data.status
+            });
+          }
         });
     },
     getLanguage() {
       const token = localStorage.getItem("tweetr-token")
       axios
-        .get('/account/get_language', {
+        .get("/account/get_language", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
         .then(response => {
-          if(response.data.data) {
-            this.$cookie.set('language', response.data.data);
+          if (response.data.data) {
+            this.$cookie.set("language", response.data.data)
           } else {
-            this.$cookie.set('language', 'us');
+            this.$cookie.set("language", "us")
           }
-        })
+        });
     }
   }
 };
