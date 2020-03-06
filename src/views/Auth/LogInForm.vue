@@ -46,11 +46,6 @@
                     </ValidationProvider>
                   </v-form>
                 </v-card-text>
-                <Notification
-                  :message="notification.message"
-                  :type="notification.type"
-                  v-if="notification.message"
-                />
                 <v-spacer />
                 <v-card-actions>
                   <v-spacer />
@@ -74,18 +69,21 @@
           <v-card-text>{{$t('messages.alert.account_not_confirm')}}</v-card-text>
         </v-card>
       </v-dialog>
+      <!-- show snackbars -->
+      <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color">
+        {{flag.snackbar.message}}
+        <v-btn color="white" text @click="flag.snackbar.flag = false">{{$t('buttons.cancel')}}</v-btn>
+      </v-snackbar>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Notification from "@/components/Notification";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { messages, resultApi } from "@/static/define/const";
 export default {
   name: "LogInForm",
   components: {
-    Notification,
     ValidationProvider,
     ValidationObserver
   },
@@ -93,11 +91,14 @@ export default {
     return {
       email: "",
       password: "",
-      notification: {
-        message: "",
-        type: ""
-      },
-      dialog_flag: false
+      dialog_flag: false,
+      flag: {
+          snackbar: {
+            flag: false,
+            message: "",
+            color: "red lighten-1"
+        }
+      }
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -121,7 +122,7 @@ export default {
           // save token in localstorage
           localStorage.setItem("tweetr-token", response.data.data.token);
           // redirect to user home
-          this.$router.push("/")
+          this.$router.push("/");
         })
         .catch(error => {
           if (error.response.data.status == resultApi.needConfirmAccount) {
@@ -129,16 +130,13 @@ export default {
           } else {
             // clear form inputs
             this.email = this.password = "";
-            // display error notification
-            this.notification = Object.assign({}, this.notification, {
-              message: error.response.data.message,
-              type: error.response.data.status
-            });
+            this.flag.snackbar.flag = true
+            this.flag.snackbar.message = this.$t('messages.error.user_info_error')
           }
         });
     },
     getLanguage() {
-      const token = localStorage.getItem("tweetr-token")
+      const token = localStorage.getItem("tweetr-token");
       axios
         .get("/account/get_language", {
           headers: {
@@ -147,9 +145,9 @@ export default {
         })
         .then(response => {
           if (response.data.data) {
-            this.$cookie.set("language", response.data.data)
+            this.$cookie.set("language", response.data.data);
           } else {
-            this.$cookie.set("language", "us")
+            this.$cookie.set("language", "us");
           }
         });
     }
