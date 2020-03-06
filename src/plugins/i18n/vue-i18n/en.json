@@ -71,7 +71,8 @@
       "user_is_ready_in_other_home": "The user is already in a home!",
       "required": "You need to enter information",
       "need_create_home": "You need to create housing information first",
-      "confirm_account_fail": "Confirm account failed !"
+      "confirm_account_fail": "Confirm account failed !",
+      "user_info_error": "The information you entered is incorrect !"
     },
     "success": {
       "add_done": "Add done",

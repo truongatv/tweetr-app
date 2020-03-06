@@ -71,7 +71,8 @@
       "user_is_ready_in_other_home": "Người dùng đã ở một nhà nào đó!",
       "required": "Bạn cần nhập thông tin",
       "need_create_home": "Bạn cần tạo thông tin nhà ở trước",
-      "confirm_account_fail": "Xác nhận tài khoản thất bại !"
+      "confirm_account_fail": "Xác nhận tài khoản thất bại !",
+      "user_info_error": "Thông tin bạn nhập không đúng !"
     },
     "success": {
       "add_done": "Thêm thành công",
