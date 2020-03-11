@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-card-title>
-      {{$t('labels.sum_money')}}:
-      <strong>{{sumMoney}}</strong>
+      {{ $t("labels.sum_money") }}:
+      <strong>{{ sumMoney }}</strong>
       <v-spacer></v-spacer>
       <!-- popup create, update living cost -->
       <CostPopup :living_cost="living_cost" :dialog="flag.dialog" :edit="flag.edit"></CostPopup>
@@ -35,8 +35,8 @@
         </template>
         <v-date-picker v-model="dates" type="month" no-title scrollable range>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="date_select = false">{{$t('buttons.cancel')}}</v-btn>
-          <v-btn text color="primary" @click="searchByDate()">{{$t('buttons.done')}}</v-btn>
+          <v-btn text color="primary" @click="date_select = false">{{ $t("buttons.cancel") }}</v-btn>
+          <v-btn text color="primary" @click="searchByDate()">{{ $t("buttons.done") }}</v-btn>
         </v-date-picker>
       </v-menu>
     </v-card-title>
@@ -61,7 +61,7 @@
         >mdi-pencil</v-icon>
         <v-icon v-if="currentUser.id == item.payer.id" small @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
-      <template v-slot:no-data>{{$t('messages.alert.no_data')}}</template>
+      <template v-slot:no-data>{{ $t("messages.alert.no_data") }}</template>
       <template v-slot:expanded-item="{ item }">
         <DetailCost :item="item" />
       </template>
@@ -88,12 +88,13 @@ export default {
     DetailCost
   },
   data() {
-    const $t = this.$t.bind(this)
+    const $t = this.$t.bind(this);
     return {
       living_cost: {
         name: "",
         payer: {},
         price: "",
+        image: "",
         date_pay: new Date().toISOString().substr(0, 10),
         detail: "",
         receiver: []
@@ -101,7 +102,7 @@ export default {
       search: "",
       date_select: false,
       dates: [new Date().toISOString().substr(0, 7)],
-      messages: $t('messages'),
+      messages: $t("messages"),
       flag: {
         dialog: false,
         snackbar: {
@@ -171,7 +172,13 @@ export default {
     deleteItem(item) {
       const token = localStorage.getItem("tweetr-token");
       const index = this.living_cost_data.indexOf(item);
-      if (confirm(this.$t('messages.alert.are_you_sure_delete_confirm', {'name': item.name}))) {
+      if (
+        confirm(
+          this.$t("messages.alert.are_you_sure_delete_confirm", {
+            name: item.name
+          })
+        )
+      ) {
         axios
           .delete("/cost/remove_cost/" + item.id, {
             headers: {
@@ -205,6 +212,7 @@ export default {
         name: "",
         payer: {},
         price: "",
+        image: "",
         date_pay: new Date().toISOString().substr(0, 10),
         detail: "",
         receiver: []

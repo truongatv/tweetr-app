@@ -47,7 +47,9 @@
     "member": "Thành viên",
     "manager": "Quản lý",
     "search": "Tìm kiếm",
-    "date_pay_range": "Tháng thanh toán"
+    "date_pay_range": "Tháng thanh toán",
+    "select_image": "Chọn một ảnh",
+    "bill": "Hoá đơn"
   },
   "buttons": {
     "edit_member": "Thay đổi thành viên",
