@@ -2,11 +2,11 @@
   <ValidationObserver ref="obs" v-slot="{ invalid }" tag="form" slim>
     <v-dialog v-model="dialogFlag" max-width="500px">
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" dark class="mb-2" v-on="on">{{$t('labels.add_new')}}</v-btn>
+        <v-btn color="primary" dark class="mb-2" v-on="on">{{ $t("labels.add_new") }}</v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">{{formTitle}}</span>
+          <span class="headline">{{ formTitle }}</span>
         </v-card-title>
         <!-- start add new cost living or edit cost living -->
         <v-card-text>
@@ -15,7 +15,7 @@
               <ValidationProvider
                 :name="$t('labels.name_product')"
                 rules="required"
-                v-slot="{validated, errors}"
+                v-slot="{ validated, errors }"
               >
                 <v-text-field
                   dense
@@ -38,7 +38,7 @@
                   <ValidationProvider
                     :name="$t('labels.date_pay')"
                     rules="required"
-                    v-slot="{validated, errors}"
+                    v-slot="{ validated, errors }"
                   >
                     <v-text-field
                       v-model="living_cost.date_pay"
@@ -57,7 +57,7 @@
               <ValidationProvider
                 :name="$t('labels.price')"
                 rules="required|min_value:1"
-                v-slot="{validated, errors}"
+                v-slot="{ validated, errors }"
               >
                 <v-text-field
                   type="number"
@@ -74,7 +74,7 @@
               <ValidationProvider
                 :name="$t('labels.payer')"
                 rules="required"
-                v-slot="{validated, errors}"
+                v-slot="{ validated, errors }"
               >
                 <v-autocomplete
                   v-model="living_cost.payer"
@@ -94,7 +94,7 @@
               <ValidationProvider
                 :name="$t('labels.beneficiary')"
                 rules="required"
-                v-slot="{validated, errors}"
+                v-slot="{ validated, errors }"
               >
                 <v-select
                   v-model="living_cost.receiver"
@@ -114,19 +114,33 @@
                   </template>
                 </v-select>
               </ValidationProvider>
-              <v-file-input multiple label="Add your files" chips @change="onAddFiles" />
+              <ValidationProvider
+                :name="$t('labels.beneficiary')"
+                rules="image"
+                v-slot="{ validated, errors }"
+              >
+                <v-file-input
+                  multiple
+                  prepend-icon="mdi-camera"
+                  :label="$t('labels.bill')"
+                  accept="image/png, image/jpeg, image/bmp"
+                  :placeholder="$t('labels.select_image')"
+                  chips
+                  v-model="files"
+                  @change="onFileChange"
+                  @click:clear="removeImage"
+                  :error-messages="errors"
+                  :success="validated"
+                />
+              </ValidationProvider>
+              <v-img v-if="living_cost.image" :src="living_cost.image" aspect-ratio="2">
+                <v-row class="fill-height">
+                  <v-btn dark icon absolute right top ripple @click="removeImage()">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </v-row>
+              </v-img>
 
-              <v-card v-if="files.length > 0">
-                <v-card-text>
-                  <v-alert
-                    type="success"
-                    v-for="file in files"
-                    :key="file.public_id"
-                  >File uploaded: {{file.original_filename}} at {{file.url}}</v-alert>
-                </v-card-text>
-              </v-card>
-
-              <v-alert v-if="isError">{{errorText}}</v-alert>
               <v-textarea
                 clearable
                 auto-grow
@@ -138,13 +152,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close">{{$t('buttons.cancel')}}</v-btn>
+          <v-btn color="blue darken-1" text @click="close">{{ $t("buttons.cancel") }}</v-btn>
           <v-btn
             color="blue darken-1"
             text
             @click="saveLivingCost(edit)"
             :disabled="invalid"
-          >{{$t('buttons.save')}}</v-btn>
+          >{{ $t("buttons.save") }}</v-btn>
         </v-card-actions>
         <!-- end add new cost living or edit cost living -->
       </v-card>
@@ -184,9 +198,7 @@ export default {
           color: "#004D40"
         }
       },
-      files: [],
-      isError: false,
-      errorText: null
+      files: null
     };
   },
   computed: {
@@ -233,6 +245,7 @@ export default {
   },
   methods: {
     async close() {
+      this.files = null;
       this.$bus.emit("closeDialog", false);
       this.$refs.obs.errors = {};
     },
@@ -244,11 +257,19 @@ export default {
         this.living_cost.price > 0 &&
         this.living_cost.payer_name != ""
       ) {
+        let formData = new FormData();
+        if (this.files) {
+          formData.append("file", this.files[0]);
+        } else {
+          formData.append("file", this.files);
+        }
+        formData.append("living_cost", JSON.stringify(this.living_cost));
         if (!edit) {
           axios
-            .post("cost/create_cost", this.living_cost, {
+            .post("cost/create_cost", formData, {
               headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                "content-type": "multipart/form-data"
               }
             })
             .then(response => {
@@ -277,9 +298,10 @@ export default {
             });
         } else {
           axios
-            .put("cost/update_cost", this.living_cost, {
+            .put("cost/update_cost", formData, {
               headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                "content-type": "multipart/form-data"
               }
             })
             .then(response => {
@@ -325,55 +347,32 @@ export default {
       const [year, month, day] = date.split("-");
       return `${month}/${day}/${year}`;
     },
-
-    onAddFiles(files) {
-      if (files.length > 0) {
-        files.forEach(file => {
-          window.console.log(file);
-          this.uploadFileToCloudinary(file).then(fileResponse => {
-            this.files.push(fileResponse);
-          });
-        });
+    //handle chose image
+    onFileChange(files) {
+      if (files && files.length > 0) {
+        const extend_file = files[0].type;
+        const image_extend = "image/png, image/jpeg, image/bmp";
+        if (image_extend.search(extend_file) > -1) {
+          this.files = files;
+          this.createImage(files[0]);
+        }
+      } else {
+        this.removeImage();
       }
     },
-    uploadFileToCloudinary(file) {
-      return new Promise(function(resolve, reject) {
-        //Ideally these to lines would be in a .env file
-        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/truongatv/upload";
-        const CLOUDINARY_UPLOAD_PRESET = "pidcfpwc";
+    createImage(file) {
+      var image = new Image();
+      var reader = new FileReader();
+      var vm = this;
 
-        let formData = new FormData();
-        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-        formData.append("folder", "truongatv");
-        formData.append("file", file);
-
-        let request = new XMLHttpRequest();
-        request.open("POST", CLOUDINARY_URL, true);
-        request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-        request.onreadystatechange = () => {
-          // File uploaded successfully
-          if (request.readyState === 4 && request.status === 200) {
-            let response = JSON.parse(request.responseText);
-            resolve(response);
-          }
-
-          // Not succesfull, let find our what happened
-          if (request.status !== 200) {
-            let response = JSON.parse(request.responseText);
-            let error = response.error.message;
-            alert("error, status code not 200 " + error);
-            reject(error);
-          }
-        };
-
-        request.onerror = err => {
-          this.errorText = "error uploading files " + error;
-          this.isError = true;
-        };
-
-        request.send(formData);
-      });
+      reader.onload = e => {
+        vm.living_cost.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    removeImage() {
+      this.files = null;
+      this.living_cost.image = "";
     }
   }
 };

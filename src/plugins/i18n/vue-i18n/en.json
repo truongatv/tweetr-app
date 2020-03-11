@@ -47,7 +47,9 @@
     "member": "Members",
     "manager": "Admin",
     "search": "Search",
-    "date_pay_range": "Month range"
+    "date_pay_range": "Month range",
+    "select_image": "Select photo",
+    "bill": "Bill photo"
   },
   "buttons": {
     "edit_member": "Edit member",
