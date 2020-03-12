@@ -50,7 +50,13 @@
       :search="search"
     >
       <template v-slot:item.payer.name="{ item }">
-        <v-chip>{{ item.payer.name }}</v-chip>
+        <v-chip>
+          <v-avatar left>
+            <v-img v-if="item.payer.avatar" :src="item.payer.avatar"></v-img>
+            <v-img v-else src="@/static/avatar/default_avatar.png"></v-img>
+          </v-avatar>
+          {{ item.payer.name }}
+        </v-chip>
       </template>
       <template v-slot:item.edit="{ item }">
         <v-icon

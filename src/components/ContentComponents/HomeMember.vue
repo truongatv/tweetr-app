@@ -93,7 +93,8 @@
           <template v-for="item in home_infos.members">
             <v-list-item :key="item.user_id">
               <v-list-item-avatar>
-                <v-img src="@/static/avatar/default_avatar.png"></v-img>
+                <v-img v-if="item.avatar" :src="item.avatar"></v-img>
+                <v-img v-else src="@/static/avatar/default_avatar.png"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title v-html="item.full_name"></v-list-item-title>
@@ -219,14 +220,15 @@ export default {
       })
       .catch(error => {
         this.flag.create_home = true
-        let userInfo = this.$store.getters.getCurrentUserInfo
+        let user_info = this.$store.getters.getCurrentUserInfo
         this.home_infos = {
           admin: {},
           homeInfo: {},
           members: [{
-            'full_name': userInfo.name,
-            'user_email': userInfo.email,
-            'user_id': userInfo.id
+            'full_name': user_info.name,
+            'user_email': user_info.email,
+            'user_id': user_info.id,
+            'avatar': user_info.avatar
           }]
         }
       })
@@ -240,8 +242,8 @@ export default {
       return Object.keys(this.fields).every(key => this.fields[key].valid);
     },
     isAdmin () {
-      let userInfo = this.$store.getters.getCurrentUserInfo
-      if((typeof this.home_infos.homeInfo !== 'undefined' && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
+      let user_info = this.$store.getters.getCurrentUserInfo
+      if((typeof this.home_infos.homeInfo !== 'undefined' && user_info.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
         return true
       } else {
         return false
