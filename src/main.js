@@ -9,6 +9,7 @@ import axios from 'axios'
 import vi_extend from '@/plugins/i18n/validator/vi'
 import i18n from '@/plugins/i18n/i18n';
 import VueCookie from 'vue-cookie'
+import "./scripts/filters.js"
 
 //register event bus global
 import Bus from './components/bus'

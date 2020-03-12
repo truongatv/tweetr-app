@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       {{ $t("labels.sum_money") }}:
-      <strong>{{ sumMoney }}</strong>
+      <strong>{{ sumMoney | currency }}</strong>
       <v-spacer></v-spacer>
       <!-- popup create, update living cost -->
       <CostPopup :living_cost="living_cost" :dialog="flag.dialog" :edit="flag.edit"></CostPopup>
@@ -49,6 +49,9 @@
       class="elevation-1"
       :search="search"
     >
+     <template v-slot:item.price="{ item }">
+        <span>{{item.price | currency}}</span>
+      </template>
       <template v-slot:item.payer.name="{ item }">
         <v-chip>
           <v-avatar left>
