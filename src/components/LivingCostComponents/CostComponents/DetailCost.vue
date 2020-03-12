@@ -10,6 +10,10 @@
                 <v-col cols="8">
                     <v-card-text>
                         <v-chip v-for="i in item.receiver" :key="i.id" ma-1>
+                            <v-avatar left>
+                                <v-img v-if="i.avatar" :src="i.avatar"></v-img>
+                                <v-img v-else src="@/static/avatar/default_avatar.png"></v-img>
+                            </v-avatar>
                             {{i.name}}
                         </v-chip>
                     </v-card-text>
@@ -22,7 +26,15 @@
                     <v-textarea
                         :value="item.detail"
                         readonly
+                        solo
                     ></v-textarea>
+                </v-col>
+                <!-- bill  -->
+                <v-col cols="4" v-if="item.image">
+                    <v-subheader>{{$t('labels.bill')}}</v-subheader>
+                </v-col>
+                <v-col cols="8" v-if="item.image">
+                    <v-img :src="item.image" aspect-ratio="2"></v-img>
                 </v-col>
                 <!-- created date   -->
                 <v-col cols="4" >

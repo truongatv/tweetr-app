@@ -54,9 +54,10 @@
                 </template>
                 <v-date-picker v-model="living_cost.date_pay" no-title @input="date_select = false"></v-date-picker>
               </v-menu>
+              <!-- price  -->
               <ValidationProvider
                 :name="$t('labels.price')"
-                rules="required|min_value:1"
+                rules="required|min_value:1|max_value:99999999"
                 v-slot="{ validated, errors }"
               >
                 <v-text-field
