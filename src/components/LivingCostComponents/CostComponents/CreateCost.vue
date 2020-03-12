@@ -26,6 +26,7 @@
                   :success="validated"
                 ></v-text-field>
               </ValidationProvider>
+              <!-- date pay  -->
               <v-menu
                 v-model="date_select"
                 :close-on-content-click="false"
@@ -116,7 +117,7 @@
                 </v-select>
               </ValidationProvider>
               <ValidationProvider
-                :name="$t('labels.beneficiary')"
+                :name="$t('labels.bill')"
                 rules="image"
                 v-slot="{ validated, errors }"
               >
