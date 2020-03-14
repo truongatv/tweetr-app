@@ -7,7 +7,7 @@
             <v-col cols="12" sm="8" md="4">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
-                  <v-toolbar-title>Login form</v-toolbar-title>
+                  <v-toolbar-title>{{ $t('labels.login_form')}}</v-toolbar-title>
                   <v-spacer />
                 </v-toolbar>
                 <v-card-text>
@@ -18,7 +18,7 @@
                           errors,
                           valid
                         }"
-                        label="email"
+                        :label="$t('labels.email')"
                         name="Email"
                         prepend-inner-icon="mdi-account"
                         :error-messages="errors"
@@ -35,7 +35,7 @@
                           valid
                         }"
                         id="password"
-                        label="Password"
+                        :label="$t('labels.password')"
                         name="Password"
                         :error-messages="errors"
                         prepend-inner-icon="mdi-lock"
@@ -46,36 +46,44 @@
                     </ValidationProvider>
                   </v-form>
                 </v-card-text>
-                <Notification
-                  :message="notification.message"
-                  :type="notification.type"
-                  v-if="notification.message"
-                />
                 <v-spacer />
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn type="submit" form="login" color="primary" :disabled="invalid || !validated">Login</v-btn>
+                  <v-btn
+                    type="submit"
+                    form="login"
+                    color="primary"
+                    :disabled="invalid || !validated"
+                  >{{$t('buttons.login')}}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
         </v-container>
       </ValidationObserver>
+      <!-- show dialog for warning  -->
+      <v-dialog v-model="dialog_flag" max-width="400">
+        <v-card>
+          <v-card-title class="headline">{{$t('messages.titles.confirm_account')}}</v-card-title>
+
+          <v-card-text>{{$t('messages.alert.account_not_confirm')}}</v-card-text>
+        </v-card>
+      </v-dialog>
+      <!-- show snackbars -->
+      <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color">
+        {{flag.snackbar.message}}
+        <v-btn color="white" text @click="flag.snackbar.flag = false">{{$t('buttons.cancel')}}</v-btn>
+      </v-snackbar>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Notification from "@/components/Notification"
-import {
-  ValidationProvider,
-  ValidationObserver
-} from 'vee-validate'
-import {messages} from '@/static/define/const'
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { messages, resultApi } from "@/static/define/const";
 export default {
   name: "LogInForm",
   components: {
-    Notification,
     ValidationProvider,
     ValidationObserver
   },
@@ -83,9 +91,13 @@ export default {
     return {
       email: "",
       password: "",
-      notification: {
-        message: "",
-        type: ""
+      dialog_flag: false,
+      flag: {
+          snackbar: {
+            flag: false,
+            message: "",
+            color: "red lighten-1"
+        }
       }
     };
   },
@@ -109,19 +121,34 @@ export default {
         .then(response => {
           // save token in localstorage
           localStorage.setItem("tweetr-token", response.data.data.token);
-
           // redirect to user home
-          this.$router.push('/')
+          this.$router.push("/");
         })
         .catch(error => {
-          // clear form inputs
-          this.email = this.password = "";
-
-          // display error notification
-          this.notification = Object.assign({}, this.notification, {
-            message: error.response.data.message,
-            type: error.response.data.status
-          });
+          if (error.response.data.status == resultApi.needConfirmAccount) {
+            this.dialog_flag = true;
+          } else {
+            // clear form inputs
+            this.email = this.password = "";
+            this.flag.snackbar.flag = true
+            this.flag.snackbar.message = this.$t('messages.error.user_info_error')
+          }
+        });
+    },
+    getLanguage() {
+      const token = localStorage.getItem("tweetr-token");
+      axios
+        .get("/account/get_language", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          if (response.data.data) {
+            this.$cookie.set("language", response.data.data);
+          } else {
+            this.$cookie.set("language", "us");
+          }
         });
     }
   }

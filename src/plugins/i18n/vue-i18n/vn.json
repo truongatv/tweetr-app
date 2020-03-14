@@ -1,0 +1,100 @@
+{
+  "menu": [
+    {
+      "text": "Thông tin cá nhân",
+      "icon": "mdi-account",
+      "component_name": "Profile"
+    },
+    {
+      "text": "Quản lý",
+      "icon": "mdi-clock",
+      "component_name": "HomeMember"
+    },
+    {
+      "text": "Phí cá nhân",
+      "icon": "mdi-account",
+      "component_name": "PersonalFee"
+    },
+    {
+      "text": "Phí gia đình",
+      "icon": "mdi-home",
+      "component_name": "HomeFee"
+    }
+  ],
+  "labels": {
+    "full_name": "Họ tên",
+    "name_product": "Tên sản phẩm",
+    "date_pay": "Ngày thanh toán",
+    "price": "Gía tiền",
+    "payer": "Người thanh toán",
+    "edit": "Sửa",
+    "email": "E-mail",
+    "add_new": "Thêm mới",
+    "password": "Mật khẩu",
+    "detail": "Mô tả",
+    "add_new_member": "Thêm thành viên",
+    "home_name": "Tên nhà",
+    "address": "Địa chỉ",
+    "beneficiary": "Người sử dụng",
+    "cost_detail": "Thông tin chi tiết",
+    "admin": "Người quản lý",
+    "sum_money": "Tổng tiền",
+    "created": "Ngày tạo",
+    "updated": "Ngày cập nhật",
+    "home_info": "Thông tin nhà ở",
+    "login_form": "Đăng nhập",
+    "menu": "Menu",
+    "member": "Thành viên",
+    "manager": "Quản lý",
+    "search": "Tìm kiếm",
+    "date_pay_range": "Tháng thanh toán",
+    "select_image": "Chọn một ảnh",
+    "bill": "Hoá đơn"
+  },
+  "buttons": {
+    "edit_member": "Thay đổi thành viên",
+    "done": "Xong",
+    "yes": "Có",
+    "no": "Không",
+    "add": "Thêm",
+    "cancel": "Đóng",
+    "save_edit": "Lưu thay đổi",
+    "save": "Lưu",
+    "edit": "Sửa đổi thông tin",
+    "login": "Đăng nhập",
+    "sign_up": "Đăng ký",
+    "logout": "Đăng xuất",
+    "change_avatar": "Đổi avatar"
+  },
+  "messages": {
+    "error": {
+      "email": "Nhập email",
+      "not_exist_user": "Người dùng không tồn tại",
+      "user_is_ready_in_other_home": "Người dùng đã ở một nhà nào đó!",
+      "required": "Bạn cần nhập thông tin",
+      "need_create_home": "Bạn cần tạo thông tin nhà ở trước",
+      "confirm_account_fail": "Xác nhận tài khoản thất bại !",
+      "user_info_error": "Thông tin bạn nhập không đúng !"
+    },
+    "success": {
+      "add_done": "Thêm thành công",
+      "remove_done": "Xóa thành công",
+      "remove_fail": "Xóa thất bại",
+      "edit_done": "Cập nhật thành công",
+      "edit_fail": "Cập nhật thất bại",
+      "add_fail": "Thêm thất bại",
+      "confirm_account_done": "Xác nhận tài khoản thành công !",
+      "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !"
+    },
+    "alert": {
+      "are_you_sure_delete": "Bạn có muốn xóa <strong>{name}</strong> ?",
+      "no_data": "Không có dữ liệu!",
+      "create_home": "Bạn chưa có thông tin nhà ở !",
+      "are_you_sure_delete_confirm": "Bạn có muốn xóa {name} không ?",
+      "account_not_confirm": "Tài khoản chưa được xác nhận! Bạn hãy xác nhận tài khoản trước !"
+    },
+    "titles": {
+      "confirm_account": "Xác nhận tài khoản"
+    }
+  }
+}

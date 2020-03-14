@@ -3,38 +3,40 @@
     <!-- home detail -->
     <ValidationObserver ref="obs">
       <v-card v-if="isHomeInfoLoaded" slot-scope="{invalid, validated}">
-        <v-subheader>Thông tin nhà ở</v-subheader>
+        <v-card-title>{{$t('labels.home_info')}}</v-card-title>
+        <v-card-subtitle v-if="flag.create_home">
+          <div class="red lighten-1 text-center">
+            <span class="white--text">{{$t('messages.alert.create_home')}}</span>
+          </div>
+        </v-card-subtitle>
         <v-card-text>
-          <validationProvider :name="label.home_name" rules="required" v-slot="{validated, errors}">
+          <validationProvider :name="$t('labels.home_name')" rules="required" v-slot="{errors}">
             <v-text-field
-              :label="label.home_name" 
+              :label="$t('labels.home_name')"
               v-model="home_infos.homeInfo.name" 
-              :readonly="!isAdmin"
-              :success="validated"
+              :readonly="!flag.edit_home_info && !flag.create_home"
               :error-messages="errors"
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
+          <validationProvider :name="$t('labels.address')" rules="required" v-slot="{ errors }" >
             <v-text-field
-              :label="label.address" 
+              :label="$t('labels.address')"
               v-model="home_infos.homeInfo.address" 
-              :readonly="!isAdmin"
-              :success="validated"
+              :readonly="!flag.edit_home_info && !flag.create_home"
               :error-messages="errors"
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="label.address" rules="required" v-slot="{ validated, errors }" >
+          <validationProvider :name="$t('labels.address')" rules="required" v-slot="{ errors }" >
             <v-select
-              v-model="home_infos.admin.name"
+              v-model="home_infos.admin"
               :items="listMemberUser"
               :chips="true"
-              :label="label.admin"
+              :label="$t('labels.admin')"
               item-text="name"
-              item-value="admin_id"
-              :readonly="!isAdmin"
-              :success="validated"
+              return-object
+              :readonly="!flag.edit_home_info && !flag.create_home"
               :error-messages="errors"
             >
               <template v-slot:selection="{ item }">
@@ -46,27 +48,27 @@
           </validationProvider>
         </v-card-text>
         <v-alert
-          v-if="response.responseHomeUpdate.status"
+          v-if="response.response_home_update.status"
           class="ml-2 mr-2"
-          :type="response.responseHomeUpdate.status"
+          :type="response.response_home_update.status"
           border="left"
           outlined
           dense
           text
-        >{{response.responseHomeUpdate.message}}</v-alert>
+        >{{response.response_home_update.message}}</v-alert>
         <v-card-actions v-if="isAdmin">
           <!-- update home info -->
-          <v-btn v-if="!flag.editHomeInfo && !flag.createHome" color="warning" @click.native="flag.editHomeInfo = true">
-            {{button_label.edit}}
+          <v-btn v-if="!flag.edit_home_info && !flag.create_home" color="warning" @click.native="flag.edit_home_info = true">
+            {{$t('buttons.edit')}}
           </v-btn>
-          <v-btn v-if="flag.editHomeInfo" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
+          <v-btn v-if="flag.edit_home_info" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
             <v-icon left dark>mdi-check</v-icon>
-            {{button_label.save}}
+            {{$t('buttons.save')}}
           </v-btn>
           <!-- create new home info -->
-          <v-btn v-if="flag.createHome" color="primary" @click.native="updateHomeInfo" :disabled="invalid || !validated">
+          <v-btn v-if="flag.create_home" color="primary" @click.native="updateHomeInfo" :disabled="invalid || !validated">
             <v-icon left dark>mdi-check</v-icon>
-            {{button_label.save}}
+            {{$t('buttons.save')}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -77,7 +79,7 @@
       <v-card class="mx-auto mt-2">
         <v-list two-line>
           <div class="d-flex pr-5">
-            <v-subheader>Thành viên</v-subheader>
+            <v-subheader>{{$t('labels.member')}}</v-subheader>
             <v-btn
               v-if="flag.flag_edit_member"
               color="blue"
@@ -91,11 +93,12 @@
           <template v-for="item in home_infos.members">
             <v-list-item :key="item.user_id">
               <v-list-item-avatar>
-                <v-img src="@/static/avatar/default_avatar.png"></v-img>
+                <v-img v-if="item.avatar" :src="item.avatar"></v-img>
+                <v-img v-else src="@/static/avatar/default_avatar.png"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title v-html="item.full_name"></v-list-item-title>
-                <v-list-item-subtitle v-if="item.user_id == home_infos.admin.id">Quản lý</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="item.user_id == home_infos.admin.id">{{$t('labels.manager')}}</v-list-item-subtitle>
               </v-list-item-content>
               <v-btn
                 text
@@ -112,24 +115,23 @@
         <!-- dialog remove member -->
         <v-dialog v-model="flag.dialog" persistent max-width="290">
           <v-card>
-            <v-card-title class="headline">Bạn có muốn xóa " {{removeMemberDetail.full_name}} " ?</v-card-title>
+            <v-card-title class="headline" v-html="$t('messages.alert.are_you_sure_delete', {'name': remove_member_detail.full_name})"></v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text @click="removeMember(0)">{{button_label.no}}</v-btn>
-              <v-btn color="green darken-1" text @click="removeMember(1)">{{button_label.yes}}</v-btn>
+              <v-btn color="red darken-1" text @click="removeMember(0)">{{$t('buttons.no')}}</v-btn>
+              <v-btn color="green darken-1" text @click="removeMember(1)">{{$t('buttons.yes')}}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <!-- dialog add member -->
         <v-dialog v-model="flag.dialog_add_member" persistent max-width="290">
           <v-card class="pa-2">
-            <v-card-title class="headline">{{label.add_new_member}}</v-card-title>
+            <v-card-title class="headline">{{$t('labels.add_new_member')}}</v-card-title>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <validationProvider :name="label.address" rules="required|email" v-slot="{ valid, errors }">
+              <validationProvider :name="$t('labels.email')" rules="required|email" v-slot="{ valid, errors }">
                 <v-text-field 
-                  v-model="email" 
-                  :rules="emailRules" 
-                  :label="label.email" 
+                  v-model="email"
+                  :label="$t('labels.email')" 
                   required
                   :success="valid"
                   :error-messages="errors"
@@ -139,8 +141,8 @@
             </v-form>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text @click="addMember(false)">{{button_label.cancel}}</v-btn>
-              <v-btn color="blue darken-1" text @click="addMember(true)">{{button_label.add}}</v-btn>
+              <v-btn color="red darken-1" text @click="addMember(false)">{{$t('buttons.cancel')}}</v-btn>
+              <v-btn color="blue darken-1" text @click="addMember(true)">{{$t('buttons.add')}}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -153,7 +155,7 @@
           block
           color="#EF5350"
           @click="editMember()"
-        >{{button_label.edit_member}}</v-btn>
+        >{{$t('buttons.edit_member')}}</v-btn>
         <v-btn
           v-if="flag.flag_edit_member"
           class="mt-3"
@@ -161,20 +163,19 @@
           block
           color="primary"
           @click="editMemberDone()"
-        >{{button_label.done}}</v-btn>
+        >{{$t('buttons.done')}}</v-btn>
       </div>
     </div>
     <!-- show snackbars -->
     <v-snackbar v-model="snackbar.flag" :color="snackbar.color">
       {{snackbar.message}}
-      <v-btn color="white" text @click="snackbar.flag = false">{{button_label.cancel}}</v-btn>
+      <v-btn color="white" text @click="snackbar.flag = false">{{$t('buttons.cancel')}}</v-btn>
     </v-snackbar>
   </div>
 </template>
 
 
 <script>
-import { button, messages, label } from '@/static/define/const'
 import {
   ValidationProvider,
   ValidationObserver
@@ -186,26 +187,19 @@ export default {
   },
   data: () => ({
     home_infos: {},
-    removeMemberDetail: {},
+    remove_member_detail: {},
     email: "",
     response: {
-      responseHomeUpdate: {}
+      response_home_update: {}
     },
-    button_label: button,
-    label: label,
     flag: {
       flag_edit_member: false,
       dialog: false,
-      removeIndex: -1,
       dialog_add_member: false,
-      createHome: false,
-      editHomeInfo: false
+      create_home: false,
+      edit_home_info: false
     },
     valid: true,
-    emailRules: [
-      v => !!v || messages.error.required,
-      v => /.+@.+\..+/.test(v) || messages.error.email
-    ],
     snackbar: {
       flag: false,
       message: "",
@@ -225,15 +219,16 @@ export default {
         this.home_infos = response.data.data;
       })
       .catch(error => {
-        this.flag.createHome = true
-        let userInfo = this.$store.getters.getCurrentUserInfo
+        this.flag.create_home = true
+        let user_info = this.$store.getters.getCurrentUserInfo
         this.home_infos = {
           admin: {},
           homeInfo: {},
           members: [{
-            'full_name': userInfo.name,
-            'user_email': userInfo.email,
-            'user_id': userInfo.id
+            'full_name': user_info.name,
+            'user_email': user_info.email,
+            'user_id': user_info.id,
+            'avatar': user_info.avatar
           }]
         }
       })
@@ -247,8 +242,8 @@ export default {
       return Object.keys(this.fields).every(key => this.fields[key].valid);
     },
     isAdmin () {
-      let userInfo = this.$store.getters.getCurrentUserInfo
-      if((typeof this.home_infos.homeInfo !== undefined && userInfo.id == this.home_infos.homeInfo.admin_id) || this.flag.createHome) {
+      let user_info = this.$store.getters.getCurrentUserInfo
+      if((typeof this.home_infos.homeInfo !== 'undefined' && user_info.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
         return true
       } else {
         return false
@@ -278,7 +273,7 @@ export default {
       this.flag.flag_edit_member = false;
     },
     showDialog(item) {
-      this.removeMemberDetail = item;
+      this.remove_member_detail = item;
       this.flag.dialog = true;
     },
     //remove member from home
@@ -289,7 +284,7 @@ export default {
           .put(
             "/home/remove_member",
             {
-              remove_user_id: this.removeMemberDetail.user_id
+              remove_user_id: this.remove_member_detail.user_id
             },
             {
               headers: {
@@ -300,7 +295,7 @@ export default {
           .then(response => {
             if (response.status == 200) {
               this.home_infos.splice(
-                this.home_infos.indexOf(this.removeMemberDetail),
+                this.home_infos.indexOf(this.remove_member_detail),
                 1
               );
             }
@@ -310,6 +305,7 @@ export default {
     },
     //add member to home
     addMember(flag) {
+      const $t = this.$t.bind(this)
       if (this.email != "" && flag) {
         const token = localStorage.getItem("tweetr-token");
         axios
@@ -326,7 +322,6 @@ export default {
           )
           .then(response => {
             if(response.status == 400) {
-              console.log("asfsdfds")
             }
             const addMemberData = {
               address: this.home_infos.address,
@@ -337,18 +332,18 @@ export default {
               user_id: response.data.data.id
             }
             this.home_infos.push(addMemberData)
-            this.snackbar.message = messages.success.add_done
+            this.snackbar.message = $t('messages.success.add_done')
             this.snackbar.color = "green"
             this.snackbar.flag = true
             this.flag.dialog_add_member = false;
           })
           .catch((error)  => {
             if(error.response.data.message == 405) {
-              this.snackbar.message = messages.error.not_exist_user
+              this.snackbar.message = $t('messages.error.not_exist_user')
             } else if(error.response.data.message == 404) {
-              this.snackbar.message = messages.error.user_is_ready_in_other_home
+              this.snackbar.message = $t('messages.error.user_is_ready_in_other_home')
             } else if(error.response.data.message = 407) {
-              this.snackbar.message = messages.error.need_create_home
+              this.snackbar.message = $t('messages.error.need_create_home')
             }
             this.flag.dialog_add_member = false
             this.snackbar.flag = true
@@ -363,13 +358,14 @@ export default {
     update home info
     */
     updateHomeInfo() {
-      const token = localStorage.getItem("tweetr-token");
+      const token = localStorage.getItem("tweetr-token")
       axios
         .put(
           "/home/update_home",
           {
-            name: this.homeInfo.home_name,
-            address: this.homeInfo.address
+            name: this.home_infos.homeInfo.name,
+            address: this.home_infos.homeInfo.address,
+            admin_id: this.home_infos.admin.id
           },
           {
             headers: {
@@ -379,9 +375,13 @@ export default {
         )
         .then(response => {
           if (response.status == 200) {
-            this.response.responseHomeUpdate = response.data;
+            this.response.response_home_update = response.data;
+            this.flag.edit_home_info = false
           }
-        });
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     }
   }
 };

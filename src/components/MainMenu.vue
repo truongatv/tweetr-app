@@ -2,8 +2,8 @@
   <v-card class="mx-auto" elevation="5">
     <v-list-item two-line>
       <v-list-item-avatar>
-        <img v-if="user.image" :src=user.image />
-        <img v-else src="@/static/avatar/default_avatar.png" alt="avatar">
+        <img v-if="user.avatar" :src="user.avatar" />
+        <img v-else src="@/static/avatar/default_avatar.png" alt="avatar" />
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>{{user.name}}</v-list-item-title>
@@ -15,9 +15,13 @@
 
     <v-divider />
     <v-list rounded>
-      <v-subheader>MENU</v-subheader>
-      <v-list-item-group v-model="item" color="primary">
-        <v-list-item v-for="(item, i) in items" :key="i" @click="changeMenu(item.component_name)">
+      <v-subheader>{{$t('labels.menu')}}</v-subheader>
+      <v-list-item-group color="primary">
+        <v-list-item
+          v-for="(item, i) in $t('menu')"
+          :key="i"
+          @click="changeMenu(item.component_name)"
+        >
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
@@ -31,13 +35,10 @@
 </template>
 
 <script>
-import { menu } from '@/static/define/const'
 export default {
   data: () => ({
-    item: 1,
-    items: menu,
     current_menu: "",
-    user:{}
+    user: {}
   }),
   created() {
     const token = localStorage.getItem("tweetr-token");
@@ -54,10 +55,10 @@ export default {
   },
   methods: {
     changeMenu(component_name) {
-      this.$store.commit("setCurrentComponent", component_name)
+      this.$store.commit("setCurrentComponent", component_name);
     },
     editProfile() {
-      this.$store.commit("setCurrentComponent", 'Profile')
+      this.$store.commit("setCurrentComponent", "Profile");
     }
   }
 };
