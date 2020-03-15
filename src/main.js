@@ -23,7 +23,7 @@ Object.keys(rules).forEach(rule => {
 
 // add these before Vue is instantiated
 window.axios = axios
-axios.defaults.baseURL = 'http://127.0.0.1:3333'
+axios.defaults.baseURL = 'https://seikahi-api.herokuapp.com/'
 
 // Vue.use(VeeValidate);
 localize('vi', vi_extend);
