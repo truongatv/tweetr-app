@@ -49,7 +49,13 @@
     "search": "Tìm kiếm",
     "date_pay_range": "Tháng thanh toán",
     "select_image": "Chọn một ảnh",
-    "bill": "Hoá đơn"
+    "bill": "Hoá đơn",
+    "using_fee": "Phí sử dụng",
+    "money_to_pay": "Tiền cần trả",
+    "money_to_receive": "Tiền nhận được",
+    "spent": "Đã chi",
+    "general": "Tổng quát",
+    "detail_information": "Chi tiết"
   },
   "buttons": {
     "edit_member": "Thay đổi thành viên",
