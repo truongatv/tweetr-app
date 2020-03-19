@@ -114,7 +114,7 @@
           </template>
         </v-list>
         <!-- dialog remove member -->
-        <v-dialog v-model="flag.dialog" persistent max-width="290">
+        <v-dialog v-model="flag.dialog" max-width="290">
           <v-card>
             <v-card-title class="headline" v-html="$t('messages.alert.are_you_sure_delete', {'name': remove_member_detail.full_name})"></v-card-title>
             <v-card-actions>

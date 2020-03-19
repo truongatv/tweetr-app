@@ -183,7 +183,7 @@ export default {
       const index = this.living_cost_data.indexOf(item);
       if (
         confirm(
-          this.$t("messages.alert.are_you_sure_delete_confirm", {
+          this.$t("messages.alert.are_you_sure_delete", {
             name: item.name
           })
         )

@@ -159,6 +159,7 @@
             color="blue darken-1"
             text
             @click="saveLivingCost(edit)"
+            :loading="loading"
             :disabled="invalid"
           >{{ $t("buttons.save") }}</v-btn>
         </v-card-actions>
@@ -200,7 +201,8 @@ export default {
           color: "#004D40"
         }
       },
-      files: null
+      files: null, 
+      loading: false
     };
   },
   computed: {
@@ -225,6 +227,7 @@ export default {
         return this.dialog;
       },
       async set(newValue) {
+        this.files = null;
         await this.$bus.emit("closeDialog", newValue);
         this.$refs.obs.reset();
         // this.$nextTick(() => {
@@ -266,6 +269,8 @@ export default {
           formData.append("file", this.files);
         }
         formData.append("living_cost", JSON.stringify(this.living_cost));
+        //set wait loading response from api
+        this.loading = true
         if (!edit) {
           axios
             .post("cost/create_cost", formData, {

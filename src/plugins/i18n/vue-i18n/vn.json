@@ -87,7 +87,7 @@
       "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !"
     },
     "alert": {
-      "are_you_sure_delete": "Bạn có muốn xóa <strong>{name}</strong> ?",
+      "are_you_sure_delete": "Bạn có muốn xóa \"{name}\" ?",
       "no_data": "Không có dữ liệu!",
       "create_home": "Bạn chưa có thông tin nhà ở !",
       "are_you_sure_delete_confirm": "Bạn có muốn xóa {name} không ?",
