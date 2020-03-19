@@ -77,7 +77,6 @@
 </template>
 
 <script>
-// import { button, error, label } from '@/static/define/const'
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   pageTitle: "My Profile",
@@ -96,24 +95,16 @@ export default {
       }
     };
   },
-  created() {
-    const token = localStorage.getItem("tweetr-token");
-    axios
-      .get("/account/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(response => {
-        this.user = response.data.data[0];
-      })
-      .catch(error => {});
+  async created() {
+    this.getUserInfo().then(response => {
+      this.user = response
+    })
   },
   methods: {
     openAvatarPicker() {
       document.getElementById("file-upload").click();
     },
-    onFileChange(e) {
+    async onFileChange(e) {
       var self = this;
       var files = e.target.files || e.dataTransfer.files;
       if (files.length > 0) {
@@ -121,7 +112,7 @@ export default {
         //request save ava to api
         let formData = new FormData();
         formData.append("file", files[0]);
-        axios
+        await axios
           .put("account/change_ava", formData, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,11 +129,12 @@ export default {
           document.getElementById("img").setAttribute("src", e.target.result);
         };
         reader.readAsDataURL(e.target.files[0]);
+        this.setStoreUser()
       }
     },
-    updateProfile() {
+    async updateProfile() {
       const token = localStorage.getItem("tweetr-token");
-      axios
+      await axios
         .put(
           "/account/update_profile",
           {
@@ -159,6 +151,25 @@ export default {
           this.response = response.data;
           this.flag.editProfile = false;
         });
+        this.setStoreUser()
+    },
+    setStoreUser() {
+      this.getUserInfo().then(response => {
+        this.$store.commit("setCurrentUserInfo", response)
+      })
+    },
+    getUserInfo() {
+      const token = localStorage.getItem("tweetr-token");
+      return axios
+        .get("/account/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          return response.data.data[0];
+        })
+        .catch(error => {});
     }
   }
 };

@@ -38,20 +38,11 @@
 export default {
   data: () => ({
     current_menu: "",
-    user: {}
   }),
-  created() {
-    const token = localStorage.getItem("tweetr-token");
-    axios
-      .get("/account/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(response => {
-        this.user = response.data.data[0];
-      })
-      .catch(error => {});
+  computed: {
+    user() {
+      return this.$store.getters.getCurrentUserInfo
+    }
   },
   methods: {
     changeMenu(component_name) {

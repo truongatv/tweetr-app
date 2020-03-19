@@ -27,9 +27,9 @@ export default {
       next("/login");
     }
   },
-  created() {
+  async beforeCreate() {
     const token = localStorage.getItem('tweetr-token')
-    axios
+    let response = await axios
       .get("/account/profile", {
         headers: {
           Authorization: `Bearer ${token}`
