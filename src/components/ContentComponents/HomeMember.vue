@@ -53,12 +53,13 @@
           :type="response.response_home_update.status"
           border="left"
           outlined
+          dismissible
           dense
           text
         >{{response.response_home_update.message}}</v-alert>
-        <v-card-actions v-if="isAdmin">
+        <v-card-actions>
           <!-- update home info -->
-          <v-btn v-if="!flag.edit_home_info && !flag.create_home" color="warning" @click.native="flag.edit_home_info = true">
+          <v-btn v-if="!flag.edit_home_info && !flag.create_home && isAdmin" color="warning" @click.native="flag.edit_home_info = true">
             {{$t('buttons.edit')}}
           </v-btn>
           <v-btn v-if="flag.edit_home_info" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
@@ -243,7 +244,7 @@ export default {
     },
     isAdmin () {
       let user_info = this.$store.getters.getCurrentUserInfo
-      if((typeof this.home_infos.homeInfo !== 'undefined' && user_info.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
+      if((typeof this.home_infos.homeInfo !== 'undefined' && user_info.id == this.home_infos.admin.id) || this.flag.create_home) {
         return true
       } else {
         return false

@@ -54,7 +54,7 @@
                   />
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn type="submit" form="signup"  color="primary" :disabled="invalid || !validated">{{$t('buttons.sign_up')}}</v-btn>
+                  <v-btn type="submit" form="signup"  color="primary" :loading="loading" :disabled="invalid || !validated">{{$t('buttons.sign_up')}}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -111,6 +111,7 @@ export default {
         type: ""
       },
       color: 'red',
+      loading: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -123,6 +124,7 @@ export default {
     this.$v.$touch()
     },
     signup() {
+      this.loading = true;
         axios
         .post("/signup", {
           name: this.name,
