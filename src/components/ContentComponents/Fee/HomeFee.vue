@@ -1,9 +1,35 @@
 <template>
   <div>
-    <ListCost
-      :headers="headers"
-      :living_cost_data="living_cost_data"
-    ></ListCost>
+    <v-expansion-panels popout focusable multiple>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          {{$t('labels.general')}}
+          <template v-slot:actions>
+            <v-icon color="primary">$expand</v-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <HomeFeeDetail 
+            :living_cost_data="living_cost_data"
+          >
+          </HomeFeeDetail>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          {{$t('labels.detail_information')}}
+          <template v-slot:actions>
+            <v-icon color="primary">$expand</v-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <ListCost
+            :headers="headers"
+            :living_cost_data="living_cost_data"
+          ></ListCost>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <!-- show snackbars -->
     <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color">
       {{ flag.snackbar.message }}
@@ -16,6 +42,8 @@
 
 <script>
 import ListCost from "@/components/LivingCostComponents/ListCost";
+import HomeFeeDetail from "@/components/LivingCostComponents/HomeFeeDetail";
+
 import FeeCommon from "./FeeCommon";
 export default {
   mixins: [FeeCommon],
@@ -46,7 +74,8 @@ export default {
     };
   },
   components: {
-    ListCost
+    ListCost,
+    HomeFeeDetail
   }
 };
 </script>

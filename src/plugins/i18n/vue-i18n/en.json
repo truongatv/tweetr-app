@@ -49,7 +49,13 @@
     "search": "Search",
     "date_pay_range": "Month range",
     "select_image": "Select photo",
-    "bill": "Bill photo"
+    "bill": "Bill photo",
+    "using_fee": "Using fee",
+    "money_to_pay": "Money to pay",
+    "money_to_receive": "Money to receive",
+    "spent": "Spent",
+    "general": "General",
+    "detail_information": "Detail"
   },
   "buttons": {
     "edit_member": "Edit member",

@@ -253,6 +253,7 @@ export default {
       this.files = null;
       this.$bus.emit("closeDialog", false);
       this.$refs.obs.errors = {};
+      this.loading = false
     },
     //save living cost
     saveLivingCost(edit) {
