@@ -30,7 +30,10 @@
     "edit": "Sửa",
     "email": "E-mail",
     "add_new": "Thêm mới",
+    "current_password": "Mật khẩu hiện tại",
+    "new_password": "Mật khẩu mới",
     "password": "Mật khẩu",
+    "confirm_password": "Nhập lại mật khẩu",
     "detail": "Mô tả",
     "add_new_member": "Thêm thành viên",
     "home_name": "Tên nhà",
@@ -67,10 +70,12 @@
     "save_edit": "Lưu thay đổi",
     "save": "Lưu",
     "edit": "Sửa đổi thông tin",
+    "edit_profile": "Sửa thông tin cá nhân",
     "login": "Đăng nhập",
     "sign_up": "Đăng ký",
     "logout": "Đăng xuất",
-    "change_avatar": "Đổi avatar"
+    "change_avatar": "Đổi avatar",
+    "change_password": "Thay đổi mật khẩu"
   },
   "messages": {
     "error": {
@@ -80,7 +85,8 @@
       "required": "Bạn cần nhập thông tin",
       "need_create_home": "Bạn cần tạo thông tin nhà ở trước",
       "confirm_account_fail": "Xác nhận tài khoản thất bại !",
-      "user_info_error": "Thông tin bạn nhập không đúng !"
+      "user_info_error": "Thông tin bạn nhập không đúng !",
+      "password_not_match": "Mật khẩu hiện tại không đúng"
     },
     "success": {
       "add_done": "Thêm thành công",
@@ -90,7 +96,8 @@
       "edit_fail": "Cập nhật thất bại",
       "add_fail": "Thêm thất bại",
       "confirm_account_done": "Xác nhận tài khoản thành công !",
-      "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !"
+      "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !",
+      "change_password_success": "Thay đổi mật khẩu thành công !"
     },
     "alert": {
       "are_you_sure_delete": "Bạn có muốn xóa \"{name}\" ?",

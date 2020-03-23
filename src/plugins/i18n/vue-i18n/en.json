@@ -30,7 +30,10 @@
     "edit": "Edit",
     "email": "E-mail",
     "add_new": "New",
+    "current_password": "Current password",
+    "new_password": "New password",
     "password": "Password",
+    "confirm_password": "Confirm password",
     "detail": "Detail",
     "add_new_member": "Add new member",
     "home_name": "Home's name",
@@ -67,10 +70,12 @@
     "save_edit": "Save",
     "save": "Save",
     "edit": "Edit Info",
+    "edit_profile": "Edit profile info",
     "login": "Login",
     "sign_up": "Sign Up",
     "logout": "Logout",
-    "change_avatar": "Change avatar"
+    "change_avatar": "Change avatar",
+    "change_password": "Change password"
   },
   "messages": {
     "error": {
@@ -80,7 +85,8 @@
       "required": "You need to enter information",
       "need_create_home": "You need to create housing information first",
       "confirm_account_fail": "Confirm account failed !",
-      "user_info_error": "The information you entered is incorrect !"
+      "user_info_error": "The information you entered is incorrect !",
+      "password_not_match": "Password not match"
     },
     "success": {
       "add_done": "Add done",
@@ -89,7 +95,9 @@
       "edit_done": "Update done",
       "edit_fail": "Update fail",
       "add_fail": "Add fail",
-      "confirm_account_done": "Confirm account success !"
+      "confirm_account_done": "Confirm account success !",
+      "signup_done": "Sign up done !",
+      "change_password_success": "Change password success !"
     },
     "alert": {
       "are_you_sure_delete": "Do you sure remove <strong>{name}</strong> ?",
