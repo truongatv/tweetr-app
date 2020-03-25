@@ -177,11 +177,14 @@
 
 
 <script>
+import UserJs from "@/scripts/userCommon";
+
 import {
   ValidationProvider,
   ValidationObserver
 } from 'vee-validate'
 export default {
+  mixins: [UserJs],
   components: {
     ValidationObserver,
     ValidationProvider
@@ -378,6 +381,8 @@ export default {
           if (response.status == 200) {
             this.response.response_home_update = response.data;
             this.flag.edit_home_info = false
+            //call function save data to store in user.js mixins
+            this.setStoreUser();
           }
         })
         .catch(error => {
