@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-expansion-panels popout focusable multiple>
+    <v-expansion-panels v-model="panel" popout focusable multiple>
+      <!-- general -->
       <v-expansion-panel>
         <v-expansion-panel-header>
           {{$t('labels.general')}}
@@ -15,6 +16,7 @@
           </HomeFeeDetail>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <!-- detail -->
       <v-expansion-panel>
         <v-expansion-panel-header>
           {{$t('labels.detail_information')}}
@@ -44,7 +46,7 @@
 import ListCost from "@/components/LivingCostComponents/ListCost";
 import HomeFeeDetail from "@/components/LivingCostComponents/HomeFeeDetail";
 
-import FeeCommon from "./FeeCommon";
+import FeeCommon from "@/scripts/feeCommon";
 export default {
   mixins: [FeeCommon],
   data() {
@@ -62,6 +64,7 @@ export default {
         { text: $t("labels.price"), value: "price" },
         { text: $t("labels.edit"), value: "edit", sortable: false }
       ],
+      panel: [1],
       living_cost_data: [],
       flag: {
         snackbar: {

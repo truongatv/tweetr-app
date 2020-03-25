@@ -18,7 +18,7 @@
       <v-subheader>{{$t('labels.menu')}}</v-subheader>
       <v-list-item-group color="primary">
         <v-list-item
-          v-for="(item, i) in $t('menu')"
+          v-for="(item, i) in listMenu"
           :key="i"
           @click="changeMenu(item.component_name)"
         >
@@ -42,6 +42,17 @@ export default {
   computed: {
     user() {
       return this.$store.getters.getCurrentUserInfo
+    },
+    listMenu() {
+      const user_info = this.$store.getters.getCurrentUserInfo
+      if(user_info.home) {
+        let menu = Object.assign([], this.$t('menu'))
+        return menu
+      } else {
+        let menu = Object.assign([], this.$t('menu'))
+        menu.pop()
+        return menu
+      }
     }
   },
   methods: {

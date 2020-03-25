@@ -49,7 +49,14 @@ const routes = [
   {
     path: '/sign_up_done',
     name: 'sign_up_done',
-    component: ConfirmAccount
+    component: ConfirmAccount,
+    beforeEnter: (to, from, next) => {
+      if(from.name == 'signup') {
+        next()
+      } else {
+        next("/login")
+      }
+    }
   },
 ]
 

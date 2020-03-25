@@ -15,7 +15,7 @@
 </template>
 <script>
 import ListCost from "@/components/LivingCostComponents/ListCost";
-import FeeCommon from "./FeeCommon";
+import FeeCommon from "@/scripts/feeCommon";
 export default {
   components: {
     ListCost
