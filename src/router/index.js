@@ -7,6 +7,7 @@ import ConfirmAccount from '../views/Auth/ConfirmAccount'
 import ResetPasswordIndex from '../views/Auth/ResetPassword/index'
 import RequestResetPasswordForm from '../views/Auth/ResetPassword/RequestResetPassword'
 import ResetPasswordForm from '../views/Auth/ResetPassword/ResetPassword'
+import PageNotFound from '@/views/PageNotFound'
 
 Vue.use(VueRouter)
 
@@ -58,6 +59,11 @@ const routes = [
       }
     }
   },
+  {
+    path: '*',
+    name: 'page_not_found',
+    component: PageNotFound
+  }
 ]
 
 const router = new VueRouter({
