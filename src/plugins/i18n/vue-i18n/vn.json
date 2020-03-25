@@ -58,7 +58,9 @@
     "money_to_receive": "Tiền nhận được",
     "spent": "Đã chi",
     "general": "Tổng quát",
-    "detail_information": "Chi tiết"
+    "detail_information": "Chi tiết",
+    "forgot_password": "Quên mật khẩu",
+    "reset_password": "Reset password"
   },
   "buttons": {
     "edit_member": "Thay đổi thành viên",
@@ -75,10 +77,11 @@
     "sign_up": "Đăng ký",
     "logout": "Đăng xuất",
     "change_avatar": "Đổi avatar",
-    "change_password": "Thay đổi mật khẩu"
+    "change_password": "Đổi mật khẩu"
   },
   "messages": {
     "error": {
+      "error": "Đã phát sing lỗi",
       "email": "Nhập email",
       "not_exist_user": "Người dùng không tồn tại",
       "user_is_ready_in_other_home": "Người dùng đã ở một nhà nào đó!",
@@ -97,7 +100,9 @@
       "add_fail": "Thêm thất bại",
       "confirm_account_done": "Xác nhận tài khoản thành công !",
       "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !",
-      "change_password_success": "Thay đổi mật khẩu thành công !"
+      "change_password_success": "Thay đổi mật khẩu thành công !",
+      "request_reset_password_done": "Một mail đặt lại mật khẩu đã được gửi đến email của bạn !",
+      "reset_password_done": "Mật khẩu của bạn đã được thay đổi !"
     },
     "alert": {
       "are_you_sure_delete": "Bạn có muốn xóa \"{name}\" ?",
@@ -108,6 +113,11 @@
     },
     "titles": {
       "confirm_account": "Xác nhận tài khoản"
-    }
+    },
+    "loading": "Đang gửi yêu cầu"
+  },
+  "titles": {
+    "success": "Thành công",
+    "error": "Thất bại"
   }
 }

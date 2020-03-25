@@ -58,7 +58,9 @@
     "money_to_receive": "Money to receive",
     "spent": "Spent",
     "general": "General",
-    "detail_information": "Detail"
+    "detail_information": "Detail",
+    "forgot_password": "Forgot Password",
+    "reset_password": "Reset password"
   },
   "buttons": {
     "edit_member": "Edit member",
@@ -79,6 +81,7 @@
   },
   "messages": {
     "error": {
+      "error": "An error has occurred",
       "email": "Email required",
       "not_exist_user": "User not exist",
       "user_is_ready_in_other_home": "The user is already in a home!",
@@ -97,7 +100,9 @@
       "add_fail": "Add fail",
       "confirm_account_done": "Confirm account success !",
       "signup_done": "Sign up done !",
-      "change_password_success": "Change password success !"
+      "change_password_success": "Change password success !",
+      "request_reset_password_done": "A password reset mail has been sent to your email !",
+      "reset_password_done": "Your password has been changed !"
     },
     "alert": {
       "are_you_sure_delete": "Do you sure remove <strong>{name}</strong> ?",
@@ -108,6 +113,11 @@
     },
     "titles": {
       "confirm_account": "Confirm account"
-    }
+    },
+    "loading": "Send requesting"
+  },
+  "titles": {
+    "success": "Success",
+    "error": "Failed"
   }
 }

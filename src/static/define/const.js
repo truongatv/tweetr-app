@@ -6,6 +6,7 @@ export const component = {
 }
 
 export const resultApi = {
+    successStatus: 200,
     userIsNotCreatorCost: 401,
     userNotExistInHome: 402,
     notAdminHome: 403,
