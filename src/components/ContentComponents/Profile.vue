@@ -148,7 +148,10 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import UserJs from "@/scripts/userCommon";
+
 export default {
+  mixins: [UserJs],
   pageTitle: "My Profile",
   components: {
     ValidationObserver,
@@ -199,6 +202,7 @@ export default {
           document.getElementById("img").setAttribute("src", e.target.result);
         };
         reader.readAsDataURL(e.target.files[0]);
+        //call function save data to store in user.js mixins
         this.setStoreUser();
       }
     },
@@ -226,24 +230,6 @@ export default {
           });
       }
       this.setStoreUser();
-    },
-    setStoreUser() {
-      this.getUserInfo().then(response => {
-        this.$store.commit("setCurrentUserInfo", response);
-      });
-    },
-    getUserInfo() {
-      const token = localStorage.getItem("tweetr-token");
-      return axios
-        .get("/account/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(response => {
-          return response.data.data[0];
-        })
-        .catch(error => {});
     },
     async changePassword(token) {
       await axios
