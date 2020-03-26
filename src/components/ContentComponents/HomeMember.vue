@@ -28,7 +28,7 @@
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="$t('labels.address')" rules="required" v-slot="{ errors }" >
+          <validationProvider :name="$t('labels.admin')" rules="required" v-slot="{ errors }" >
             <v-select
               v-model="home_infos.admin"
               :items="listMemberUser"
@@ -43,6 +43,21 @@
                 <v-chip>
                   <span>{{ item.name }}</span>
                 </v-chip>
+              </template>
+            </v-select>
+          </validationProvider>
+          <validationProvider :name="$t('labels.currency')" rules="required" v-slot="{ errors }" >
+            <v-select
+              v-model="home_infos.homeInfo.currency_id"
+              :items="listCurrency"
+              :label="$t('labels.currency')"
+              item-text="name"
+              item-value="id"
+              :readonly="!flag.edit_home_info && !flag.create_home"
+              :error-messages="errors"
+            >
+              <template v-slot:selection="{ item }">
+                <span>{{ item.name }}</span>
               </template>
             </v-select>
           </validationProvider>
@@ -369,7 +384,8 @@ export default {
           {
             name: this.home_infos.homeInfo.name,
             address: this.home_infos.homeInfo.address,
-            admin_id: this.home_infos.admin.id
+            admin_id: this.home_infos.admin.id,
+            currency_id: this.home_infos.homeInfo.currency_id
           },
           {
             headers: {

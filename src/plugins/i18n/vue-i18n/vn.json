@@ -60,7 +60,8 @@
     "general": "Tổng quát",
     "detail_information": "Chi tiết",
     "forgot_password": "Quên mật khẩu",
-    "reset_password": "Reset password"
+    "reset_password": "Reset password",
+    "currency": "Loại tiền"
   },
   "buttons": {
     "edit_member": "Thay đổi thành viên",
