@@ -72,6 +72,14 @@
                   :error-messages="errors"
                 ></v-text-field>
               </ValidationProvider>
+              <!-- currency -->
+              <validationProvider :name="$t('labels.currency')" rules="required" v-slot="{ errors }" >
+                <v-radio-group row v-model="living_cost.currency_id" :error-messages="errors" class="mt-1">
+                  <v-radio label="円" :value="1"></v-radio>
+                  <v-radio label="VND" :value="2"></v-radio>
+                  <v-radio label="USD" :value="3"></v-radio>
+                </v-radio-group>
+              </validationProvider>
               <!-- payer user -->
               <ValidationProvider
                 :name="$t('labels.payer')"

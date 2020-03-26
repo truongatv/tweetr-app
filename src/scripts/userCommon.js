@@ -1,4 +1,24 @@
 export default {
+    computed: {
+        listCurrency() {
+            let currency = new Array();
+            currency.push(
+                {
+                    id: 1,
+                    name: '円'
+                },
+                {
+                    id: 2,
+                    name: 'VND'
+                },
+                {
+                    id: 3,
+                    name: 'USD'
+                }
+            )
+            return currency
+        }
+    },
     methods: {
         setStoreUser() {
             this.getUserInfo().then(response => {
@@ -14,6 +34,7 @@ export default {
                     }
                 })
                 .then(response => {
+                    console.log(response.data)
                     return response.data.data[0];
                 })
                 .catch(error => { });

@@ -2,7 +2,15 @@
   <v-card>
     <v-card-title>
       {{ $t("labels.sum_money") }}:
-      <strong>{{ sumMoney | currency }}</strong>
+      <div v-for="(value, index) in sumMoney" :key="value.id">
+        <v-chip
+          outlined
+          label
+          :color="value.color"
+          v-if="value.sum  > 0"
+          class="mr-1"
+        >{{ value.sum | currency(index) }} </v-chip>
+      </div>
       <v-spacer></v-spacer>
       <!-- popup create, update living cost -->
       <CostPopup :living_cost="living_cost" :dialog="flag.dialog" :edit="flag.edit"></CostPopup>
@@ -49,8 +57,8 @@
       class="elevation-1"
       :search="search"
     >
-     <template v-slot:item.price="{ item }">
-        <span>{{item.price | currency}}</span>
+      <template v-slot:item.price="{ item }">
+        <span>{{item.price | currency(item.currency_id)}}</span>
       </template>
       <template v-slot:item.payer.name="{ item }">
         <v-chip>
@@ -129,9 +137,25 @@ export default {
       return this.$store.getters.getCurrentUserInfo;
     },
     sumMoney() {
-      let sum_money = 0;
+      let sum_money = {
+        1: {
+          sum: 0,
+          type: 1,
+          color: "blue"
+        },
+        2: {
+          sum: 0,
+          type: 2,
+          color: "red"
+        },
+        3: {
+          sum: 0,
+          type: 3,
+          color: "cyan"
+        }
+      };
       this.living_cost_data.map(item => {
-        sum_money += item.price;
+        sum_money[item.currency_id].sum += item.price;
       });
       return sum_money;
     },
@@ -217,15 +241,25 @@ export default {
 
     //set default value living cost
     setDefaultLivingCost() {
+      //get default currency
+      let currency_id = this.getCurrencyId();
       this.living_cost = {
         name: "",
         payer: {},
         price: "",
+        currency_id: currency_id,
         image: "",
         date_pay: new Date().toISOString().substr(0, 10),
         detail: "",
         receiver: []
       };
+    },
+    //get default currency_id
+    getCurrencyId() {
+      let current_user = this.$store.getters.getCurrentUserInfo;
+      if (current_user.home) {
+        return current_user.home.currency_id;
+      } else return current_user.currency_id;
     }
   }
 };
