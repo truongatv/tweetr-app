@@ -34,7 +34,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log(response.data)
                     return response.data.data[0];
                 })
                 .catch(error => { });
