@@ -72,6 +72,14 @@
                   :error-messages="errors"
                 ></v-text-field>
               </ValidationProvider>
+              <!-- currency -->
+              <validationProvider :name="$t('labels.currency')" rules="required" v-slot="{ errors }" >
+                <v-radio-group row v-model="living_cost.currency_id" :error-messages="errors" class="mt-1">
+                  <v-radio label="円" :value="1"></v-radio>
+                  <v-radio label="VND" :value="2"></v-radio>
+                  <v-radio label="USD" :value="3"></v-radio>
+                </v-radio-group>
+              </validationProvider>
               <!-- payer user -->
               <ValidationProvider
                 :name="$t('labels.payer')"
@@ -159,6 +167,7 @@
             color="blue darken-1"
             text
             @click="saveLivingCost(edit)"
+            :loading="loading"
             :disabled="invalid"
           >{{ $t("buttons.save") }}</v-btn>
         </v-card-actions>
@@ -200,7 +209,8 @@ export default {
           color: "#004D40"
         }
       },
-      files: null
+      files: null, 
+      loading: false
     };
   },
   computed: {
@@ -225,6 +235,7 @@ export default {
         return this.dialog;
       },
       async set(newValue) {
+        this.files = null;
         await this.$bus.emit("closeDialog", newValue);
         this.$refs.obs.reset();
         // this.$nextTick(() => {
@@ -250,6 +261,7 @@ export default {
       this.files = null;
       this.$bus.emit("closeDialog", false);
       this.$refs.obs.errors = {};
+      this.loading = false
     },
     //save living cost
     saveLivingCost(edit) {
@@ -266,6 +278,8 @@ export default {
           formData.append("file", this.files);
         }
         formData.append("living_cost", JSON.stringify(this.living_cost));
+        //set wait loading response from api
+        this.loading = true
         if (!edit) {
           axios
             .post("cost/create_cost", formData, {

@@ -19,11 +19,11 @@
                     </v-card-text>
                 </v-col>
                 <!-- details -->
-                <v-col cols="4" >
+                <v-col cols="4" v-if="item.detail">
                     <v-subheader>{{$t('labels.detail')}}</v-subheader>
                 </v-col>
-                <v-col cols="8">
-                    <v-textarea
+                <v-col cols="8" v-if="item.detail">
+                    <v-textarea 
                         :value="item.detail"
                         readonly
                         solo

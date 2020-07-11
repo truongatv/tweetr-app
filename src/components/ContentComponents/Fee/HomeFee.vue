@@ -1,9 +1,37 @@
 <template>
   <div>
-    <ListCost
-      :headers="headers"
-      :living_cost_data="living_cost_data"
-    ></ListCost>
+    <v-expansion-panels v-model="panel" popout focusable multiple>
+      <!-- general -->
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          {{$t('labels.general')}}
+          <template v-slot:actions>
+            <v-icon color="primary">$expand</v-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <HomeFeeDetail 
+            :living_cost_data="living_cost_data"
+          >
+          </HomeFeeDetail>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- detail -->
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          {{$t('labels.detail_information')}}
+          <template v-slot:actions>
+            <v-icon color="primary">$expand</v-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <ListCost
+            :headers="headers"
+            :living_cost_data="living_cost_data"
+          ></ListCost>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <!-- show snackbars -->
     <v-snackbar v-model="flag.snackbar.flag" :color="flag.snackbar.color">
       {{ flag.snackbar.message }}
@@ -16,7 +44,9 @@
 
 <script>
 import ListCost from "@/components/LivingCostComponents/ListCost";
-import FeeCommon from "./FeeCommon";
+import HomeFeeDetail from "@/components/LivingCostComponents/HomeFeeDetail";
+
+import FeeCommon from "@/scripts/feeCommon";
 export default {
   mixins: [FeeCommon],
   data() {
@@ -34,6 +64,7 @@ export default {
         { text: $t("labels.price"), value: "price" },
         { text: $t("labels.edit"), value: "edit", sortable: false }
       ],
+      panel: [1],
       living_cost_data: [],
       flag: {
         snackbar: {
@@ -46,7 +77,8 @@ export default {
     };
   },
   components: {
-    ListCost
+    ListCost,
+    HomeFeeDetail
   }
 };
 </script>

@@ -18,7 +18,7 @@
       <v-subheader>{{$t('labels.menu')}}</v-subheader>
       <v-list-item-group color="primary">
         <v-list-item
-          v-for="(item, i) in $t('menu')"
+          v-for="(item, i) in listMenu"
           :key="i"
           @click="changeMenu(item.component_name)"
         >
@@ -38,20 +38,22 @@
 export default {
   data: () => ({
     current_menu: "",
-    user: {}
   }),
-  created() {
-    const token = localStorage.getItem("tweetr-token");
-    axios
-      .get("/account/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(response => {
-        this.user = response.data.data[0];
-      })
-      .catch(error => {});
+  computed: {
+    user() {
+      return this.$store.getters.getCurrentUserInfo
+    },
+    listMenu() {
+      const user_info = this.$store.getters.getCurrentUserInfo
+      if(user_info.home) {
+        let menu = Object.assign([], this.$t('menu'))
+        return menu
+      } else {
+        let menu = Object.assign([], this.$t('menu'))
+        menu.pop()
+        return menu
+      }
+    }
   },
   methods: {
     changeMenu(component_name) {

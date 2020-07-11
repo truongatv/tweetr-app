@@ -1,16 +1,6 @@
 {
   "menu": [
     {
-      "text": "Thông tin cá nhân",
-      "icon": "mdi-account",
-      "component_name": "Profile"
-    },
-    {
-      "text": "Quản lý",
-      "icon": "mdi-clock",
-      "component_name": "HomeMember"
-    },
-    {
       "text": "Phí cá nhân",
       "icon": "mdi-account",
       "component_name": "PersonalFee"
@@ -19,6 +9,16 @@
       "text": "Phí gia đình",
       "icon": "mdi-home",
       "component_name": "HomeFee"
+    },
+    {
+      "text": "Thông tin cá nhân",
+      "icon": "mdi-account",
+      "component_name": "Profile"
+    },
+    {
+      "text": "Quản lý",
+      "icon": "mdi-clock",
+      "component_name": "HomeMember"
     }
   ],
   "labels": {
@@ -30,7 +30,10 @@
     "edit": "Sửa",
     "email": "E-mail",
     "add_new": "Thêm mới",
+    "current_password": "Mật khẩu hiện tại",
+    "new_password": "Mật khẩu mới",
     "password": "Mật khẩu",
+    "confirm_password": "Nhập lại mật khẩu",
     "detail": "Mô tả",
     "add_new_member": "Thêm thành viên",
     "home_name": "Tên nhà",
@@ -49,7 +52,16 @@
     "search": "Tìm kiếm",
     "date_pay_range": "Tháng thanh toán",
     "select_image": "Chọn một ảnh",
-    "bill": "Hoá đơn"
+    "bill": "Hoá đơn",
+    "using_fee": "Phí sử dụng",
+    "money_to_pay": "Tiền cần trả",
+    "money_to_receive": "Tiền nhận được",
+    "spent": "Đã chi",
+    "general": "Tổng quát",
+    "detail_information": "Chi tiết",
+    "forgot_password": "Quên mật khẩu",
+    "reset_password": "Reset password",
+    "currency": "Loại tiền"
   },
   "buttons": {
     "edit_member": "Thay đổi thành viên",
@@ -61,20 +73,24 @@
     "save_edit": "Lưu thay đổi",
     "save": "Lưu",
     "edit": "Sửa đổi thông tin",
+    "edit_profile": "Sửa thông tin cá nhân",
     "login": "Đăng nhập",
     "sign_up": "Đăng ký",
     "logout": "Đăng xuất",
-    "change_avatar": "Đổi avatar"
+    "change_avatar": "Đổi avatar",
+    "change_password": "Đổi mật khẩu"
   },
   "messages": {
     "error": {
+      "error": "Đã phát sing lỗi",
       "email": "Nhập email",
       "not_exist_user": "Người dùng không tồn tại",
       "user_is_ready_in_other_home": "Người dùng đã ở một nhà nào đó!",
       "required": "Bạn cần nhập thông tin",
       "need_create_home": "Bạn cần tạo thông tin nhà ở trước",
       "confirm_account_fail": "Xác nhận tài khoản thất bại !",
-      "user_info_error": "Thông tin bạn nhập không đúng !"
+      "user_info_error": "Thông tin bạn nhập không đúng !",
+      "password_not_match": "Mật khẩu hiện tại không đúng"
     },
     "success": {
       "add_done": "Thêm thành công",
@@ -84,10 +100,13 @@
       "edit_fail": "Cập nhật thất bại",
       "add_fail": "Thêm thất bại",
       "confirm_account_done": "Xác nhận tài khoản thành công !",
-      "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !"
+      "signup_done": "Đăng ký tài khoản thành công !. Một mail xác nhận tài khoản đã được gửi cho bạn, vui lòng kiểm tra họp thư !",
+      "change_password_success": "Thay đổi mật khẩu thành công !",
+      "request_reset_password_done": "Một mail đặt lại mật khẩu đã được gửi đến email của bạn !",
+      "reset_password_done": "Mật khẩu của bạn đã được thay đổi !"
     },
     "alert": {
-      "are_you_sure_delete": "Bạn có muốn xóa <strong>{name}</strong> ?",
+      "are_you_sure_delete": "Bạn có muốn xóa \"{name}\" ?",
       "no_data": "Không có dữ liệu!",
       "create_home": "Bạn chưa có thông tin nhà ở !",
       "are_you_sure_delete_confirm": "Bạn có muốn xóa {name} không ?",
@@ -95,6 +114,11 @@
     },
     "titles": {
       "confirm_account": "Xác nhận tài khoản"
-    }
+    },
+    "loading": "Đang gửi yêu cầu"
+  },
+  "titles": {
+    "success": "Thành công",
+    "error": "Thất bại"
   }
 }

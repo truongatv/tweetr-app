@@ -48,6 +48,9 @@
                 </v-card-text>
                 <v-spacer />
                 <v-card-actions>
+                  <div>
+                    <p class="text-left"><a href="/reset_password">{{$t('labels.forgot_password')}}</a></p>
+                  </div>
                   <v-spacer />
                   <v-btn
                     type="submit"

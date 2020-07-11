@@ -28,7 +28,7 @@
             >
             </v-text-field>
           </validationProvider>
-          <validationProvider :name="$t('labels.address')" rules="required" v-slot="{ errors }" >
+          <validationProvider :name="$t('labels.admin')" rules="required" v-slot="{ errors }" >
             <v-select
               v-model="home_infos.admin"
               :items="listMemberUser"
@@ -46,6 +46,21 @@
               </template>
             </v-select>
           </validationProvider>
+          <validationProvider :name="$t('labels.currency')" rules="required" v-slot="{ errors }" >
+            <v-select
+              v-model="home_infos.homeInfo.currency_id"
+              :items="listCurrency"
+              :label="$t('labels.currency')"
+              item-text="name"
+              item-value="id"
+              :readonly="!flag.edit_home_info && !flag.create_home"
+              :error-messages="errors"
+            >
+              <template v-slot:selection="{ item }">
+                <span>{{ item.name }}</span>
+              </template>
+            </v-select>
+          </validationProvider>
         </v-card-text>
         <v-alert
           v-if="response.response_home_update.status"
@@ -53,12 +68,13 @@
           :type="response.response_home_update.status"
           border="left"
           outlined
+          dismissible
           dense
           text
         >{{response.response_home_update.message}}</v-alert>
-        <v-card-actions v-if="isAdmin">
+        <v-card-actions>
           <!-- update home info -->
-          <v-btn v-if="!flag.edit_home_info && !flag.create_home" color="warning" @click.native="flag.edit_home_info = true">
+          <v-btn v-if="!flag.edit_home_info && !flag.create_home && isAdmin" color="warning" @click.native="flag.edit_home_info = true">
             {{$t('buttons.edit')}}
           </v-btn>
           <v-btn v-if="flag.edit_home_info" color="primary" @click.native="updateHomeInfo" :disabled="invalid">
@@ -113,7 +129,7 @@
           </template>
         </v-list>
         <!-- dialog remove member -->
-        <v-dialog v-model="flag.dialog" persistent max-width="290">
+        <v-dialog v-model="flag.dialog" max-width="290">
           <v-card>
             <v-card-title class="headline" v-html="$t('messages.alert.are_you_sure_delete', {'name': remove_member_detail.full_name})"></v-card-title>
             <v-card-actions>
@@ -176,11 +192,14 @@
 
 
 <script>
+import UserJs from "@/scripts/userCommon";
+
 import {
   ValidationProvider,
   ValidationObserver
 } from 'vee-validate'
 export default {
+  mixins: [UserJs],
   components: {
     ValidationObserver,
     ValidationProvider
@@ -243,7 +262,7 @@ export default {
     },
     isAdmin () {
       let user_info = this.$store.getters.getCurrentUserInfo
-      if((typeof this.home_infos.homeInfo !== 'undefined' && user_info.id == this.home_infos.homeInfo.admin_id) || this.flag.create_home) {
+      if((typeof this.home_infos.homeInfo !== 'undefined' && user_info.id == this.home_infos.admin.id) || this.flag.create_home) {
         return true
       } else {
         return false
@@ -365,7 +384,8 @@ export default {
           {
             name: this.home_infos.homeInfo.name,
             address: this.home_infos.homeInfo.address,
-            admin_id: this.home_infos.admin.id
+            admin_id: this.home_infos.admin.id,
+            currency_id: this.home_infos.homeInfo.currency_id
           },
           {
             headers: {
@@ -377,6 +397,8 @@ export default {
           if (response.status == 200) {
             this.response.response_home_update = response.data;
             this.flag.edit_home_info = false
+            //call function save data to store in user.js mixins
+            this.setStoreUser();
           }
         })
         .catch(error => {

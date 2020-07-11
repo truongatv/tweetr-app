@@ -1,15 +1,5 @@
 {
-  "menu": [
-    {
-      "text": "Profile",
-      "icon": "mdi-account",
-      "component_name": "Profile"
-    },
-    {
-      "text": "Home control",
-      "icon": "mdi-clock",
-      "component_name": "HomeMember"
-    },
+  "menu": [  
     {
       "text": "Personal Fee",
       "icon": "mdi-account",
@@ -19,6 +9,16 @@
       "text": "Home Fee",
       "icon": "mdi-home",
       "component_name": "HomeFee"
+    },
+    {
+      "text": "Profile",
+      "icon": "mdi-account",
+      "component_name": "Profile"
+    },
+    {
+      "text": "Home control",
+      "icon": "mdi-clock",
+      "component_name": "HomeMember"
     }
   ],
   "labels": {
@@ -30,7 +30,10 @@
     "edit": "Edit",
     "email": "E-mail",
     "add_new": "New",
+    "current_password": "Current password",
+    "new_password": "New password",
     "password": "Password",
+    "confirm_password": "Confirm password",
     "detail": "Detail",
     "add_new_member": "Add new member",
     "home_name": "Home's name",
@@ -49,7 +52,16 @@
     "search": "Search",
     "date_pay_range": "Month range",
     "select_image": "Select photo",
-    "bill": "Bill photo"
+    "bill": "Bill photo",
+    "using_fee": "Using fee",
+    "money_to_pay": "Money to pay",
+    "money_to_receive": "Money to receive",
+    "spent": "Spent",
+    "general": "General",
+    "detail_information": "Detail",
+    "forgot_password": "Forgot Password",
+    "reset_password": "Reset password",
+    "currency": "Currency"
   },
   "buttons": {
     "edit_member": "Edit member",
@@ -61,20 +73,24 @@
     "save_edit": "Save",
     "save": "Save",
     "edit": "Edit Info",
+    "edit_profile": "Edit profile info",
     "login": "Login",
     "sign_up": "Sign Up",
     "logout": "Logout",
-    "change_avatar": "Change avatar"
+    "change_avatar": "Change avatar",
+    "change_password": "Change password"
   },
   "messages": {
     "error": {
+      "error": "An error has occurred",
       "email": "Email required",
       "not_exist_user": "User not exist",
       "user_is_ready_in_other_home": "The user is already in a home!",
       "required": "You need to enter information",
       "need_create_home": "You need to create housing information first",
       "confirm_account_fail": "Confirm account failed !",
-      "user_info_error": "The information you entered is incorrect !"
+      "user_info_error": "The information you entered is incorrect !",
+      "password_not_match": "Password not match"
     },
     "success": {
       "add_done": "Add done",
@@ -83,7 +99,11 @@
       "edit_done": "Update done",
       "edit_fail": "Update fail",
       "add_fail": "Add fail",
-      "confirm_account_done": "Confirm account success !"
+      "confirm_account_done": "Confirm account success !",
+      "signup_done": "Sign up done !",
+      "change_password_success": "Change password success !",
+      "request_reset_password_done": "A password reset mail has been sent to your email !",
+      "reset_password_done": "Your password has been changed !"
     },
     "alert": {
       "are_you_sure_delete": "Do you sure remove <strong>{name}</strong> ?",
@@ -94,6 +114,11 @@
     },
     "titles": {
       "confirm_account": "Confirm account"
-    }
+    },
+    "loading": "Send requesting"
+  },
+  "titles": {
+    "success": "Success",
+    "error": "Failed"
   }
 }
