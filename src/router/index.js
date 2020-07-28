@@ -7,6 +7,8 @@ import ConfirmAccount from '../views/Auth/ConfirmAccount'
 import ResetPasswordIndex from '../views/Auth/ResetPassword/index'
 import RequestResetPasswordForm from '../views/Auth/ResetPassword/RequestResetPassword'
 import ResetPasswordForm from '../views/Auth/ResetPassword/ResetPassword'
+import PageNotFound from '@/views/PageNotFound'
+import Intro from '@/views/Intro'
 
 Vue.use(VueRouter)
 
@@ -15,6 +17,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/intro',
+    name: 'intro',
+    component: Intro
   },
   {
     path: '/signup',
@@ -58,6 +65,11 @@ const routes = [
       }
     }
   },
+  {
+    path: '*',
+    name: 'page_not_found',
+    component: PageNotFound
+  }
 ]
 
 const router = new VueRouter({

@@ -1,15 +1,5 @@
 {
-  "menu": [
-    {
-      "text": "Profile",
-      "icon": "mdi-account",
-      "component_name": "Profile"
-    },
-    {
-      "text": "Home control",
-      "icon": "mdi-clock",
-      "component_name": "HomeMember"
-    },
+  "menu": [  
     {
       "text": "Personal Fee",
       "icon": "mdi-account",
@@ -19,6 +9,16 @@
       "text": "Home Fee",
       "icon": "mdi-home",
       "component_name": "HomeFee"
+    },
+    {
+      "text": "Profile",
+      "icon": "mdi-account",
+      "component_name": "Profile"
+    },
+    {
+      "text": "Home control",
+      "icon": "mdi-clock",
+      "component_name": "HomeMember"
     }
   ],
   "labels": {
@@ -60,7 +60,8 @@
     "general": "General",
     "detail_information": "Detail",
     "forgot_password": "Forgot Password",
-    "reset_password": "Reset password"
+    "reset_password": "Reset password",
+    "currency": "Currency"
   },
   "buttons": {
     "edit_member": "Edit member",

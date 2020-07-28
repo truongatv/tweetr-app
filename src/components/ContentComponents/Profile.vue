@@ -34,19 +34,27 @@
                 disabled
               ></v-text-field>
               <!-- email  -->
-              <ValidationProvider
-                :name="$t('labels.email')"
-                rules="required|email"
-                v-slot="{ validated, errors }"
-              >
-                <v-text-field
-                  v-model="user.email"
-                  :label="$t('labels.email')"
+              <v-text-field
+                v-model="user.email"
+                :label="$t('labels.email')"
+                :readonly="!flag.edit_profile"
+                disabled
+              ></v-text-field>
+              <validationProvider :name="$t('labels.currency')" rules="required" v-slot="{ errors }" >
+                <v-select
+                  v-model="user.currency_id"
+                  :items="listCurrency"
+                  :label="$t('labels.currency')"
+                  item-text="name"
+                  item-value="id"
                   :readonly="!flag.edit_profile"
-                  :success="validated"
                   :error-messages="errors"
-                ></v-text-field>
-              </ValidationProvider>
+                >
+                  <template v-slot:selection="{ item }">
+                    <span>{{ item.name }}</span>
+                  </template>
+                </v-select>
+              </validationProvider>
             </div>
             <div v-if="flag.edit_password">
               <!-- current_password  -->
@@ -216,7 +224,8 @@ export default {
             "/account/update_profile",
             {
               name: this.user.name,
-              email: this.user.email
+              email: this.user.email,
+              currency_id: this.user.currency_id
             },
             {
               headers: {

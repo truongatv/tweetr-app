@@ -11,8 +11,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value) in getGeneralInfo" :key="value.id" class="spacer">
-          <th>
+        <tr v-for="(value) in getGeneralInfo" :key="value.id">
+          <td>
             <v-chip>
               <v-avatar left>
                 <v-img v-if="value.avatar" :src="value.avatar"></v-img>
@@ -20,13 +20,51 @@
               </v-avatar>
               {{ value.name }}
             </v-chip>
-          </th>
-          <th>{{value.used | currency}}</th>
-          <th v-if="value.used - value.payed > 0">{{value.used - value.payed | currency}}</th>
-          <th v-else>0</th>
-          <th v-if="value.used - value.payed < 0">{{value.payed - value.used | currency}}</th>
-          <th v-else>0</th>
-          <th>{{value.payed | currency}}</th>
+          </td>
+          <td>
+            <div v-for="(v, i) in value.used" :key="v.type">
+              <v-chip
+                :color="v.color"
+                outlined
+                label
+                v-if="v.sum > 0"
+                class="ma-1"
+              >{{ v.sum | currency(i)}}</v-chip>
+            </div>
+          </td>
+          <td>
+            <div v-for="(v, i) in value.used" :key="v.type">
+              <v-chip
+                outlined
+                label
+                :color="v.color"
+                v-if="v.sum - value.payed[i].sum > 0"
+                class="ma-1"
+              >{{v.sum - value.payed[i].sum | currency(i)}}</v-chip>
+            </div>
+          </td>
+          <td>
+            <div v-for="(v, i) in value.used" :key="v.type">
+              <v-chip
+                outlined
+                label
+                :color="v.color"
+                v-if=" value.payed[i].sum - v.sum > 0"
+                class="ma-1"
+              >{{ value.payed[i].sum - v.sum | currency(i)}}</v-chip>
+            </div>
+          </td>
+          <td>
+            <div v-for="(v, i) in value.payed" :key="v.type">
+              <v-chip
+                outlined
+                label
+                :color="v.color"
+                v-if="v.sum > 0"
+                class="ma-1"
+              >{{ v.sum | currency(i)}}</v-chip>
+            </div>
+          </td>
         </tr>
       </tbody>
     </template>
@@ -61,12 +99,15 @@ export default {
         let number = value.receiver.length;
         // console.log(number)
         value.receiver.map(detail => {
-          this.home_member[detail.id].used += value.price / number;
+          console.log(this.home_member[detail.id]);
+          this.home_member[detail.id].used[value.currency_id].sum +=
+            value.price / number;
         });
         /**
          * cal money need pay
          */
-        this.home_member[value.payer.id].payed += value.price;
+        this.home_member[value.payer.id].payed[value.currency_id].sum +=
+          value.price;
       });
       return this.home_member;
     }
@@ -88,8 +129,40 @@ export default {
               name: value.name,
               email: value.email,
               avatar: value.avatar,
-              used: 0,
-              payed: 0
+              used: {
+                1: {
+                  sum: 0,
+                  type: 1,
+                  color: "blue"
+                },
+                2: {
+                  sum: 0,
+                  type: 2,
+                  color: "red"
+                },
+                3: {
+                  sum: 0,
+                  type: 3,
+                  color: "cyan"
+                }
+              },
+              payed: {
+                1: {
+                  sum: 0,
+                  type: 1,
+                  color: "blue"
+                },
+                2: {
+                  sum: 0,
+                  type: 2,
+                  color: "red"
+                },
+                3: {
+                  sum: 0,
+                  type: 3,
+                  color: "cyan"
+                }
+              }
             };
           });
           this.is_loaded = true;
@@ -107,11 +180,42 @@ export default {
       this.home_member[value.payer.id].payed += value.price;
     },
     resetDataHomeMember() {
-      console.log(this.home_member);
       let self = this;
       Object.keys(this.home_member).forEach(function(item) {
-        self.home_member[item].used = 0;
-        self.home_member[item].payed = 0;
+        self.home_member[item].used = {
+          1: {
+            sum: 0,
+            type: 1,
+            color: "blue"
+          },
+          2: {
+            sum: 0,
+            type: 2,
+            color: "red"
+          },
+          3: {
+            sum: 0,
+            type: 3,
+            color: "cyan"
+          }
+        };
+        self.home_member[item].payed = {
+          1: {
+            sum: 0,
+            type: 1,
+            color: "blue"
+          },
+          2: {
+            sum: 0,
+            type: 2,
+            color: "red"
+          },
+          3: {
+            sum: 0,
+            type: 3,
+            color: "cyan"
+          }
+        };
       });
     }
   }
