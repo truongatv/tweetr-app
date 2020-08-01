@@ -24,7 +24,9 @@ Object.keys(rules).forEach(rule => {
 
 // add these before Vue is instantiated
 window.axios = axios
-axios.defaults.baseURL = 'http://127.0.0.1:3333'
+// axios.defaults.baseURL = "http://seikatsuhi.ap-northeast-1.elasticbeanstalk.com";
+axios.defaults.baseURL = "http://192.168.99.100:3333";
+
 
 // Vue.use(VeeValidate);
 localize('vi', vi_extend);

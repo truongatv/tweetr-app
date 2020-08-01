@@ -15,7 +15,7 @@
                       <v-text-field
                         :label="$t('labels.full_name')"
                         :name="$t('labels.full_name')"
-                        prepend-inner-icon="mdi-account-card-details"
+                        prepend-inner-icon="mdi-account"
                         type="text"
                         :success="valid"
                         :error-messages="errors"
